@@ -1,10 +1,10 @@
 {
   "name": "ayong-UI",
   "version": "1.0.0",
-  "main": "./dist/AyongUI.cjs.js",
-  "module": "./dist/AyongUI.es.js",
-  "browser": "./dist/AyongUI.umd.js",
-  "typings": "./dist/button.d.ts",
+//  "main": "./dist/AyongUI.cjs.js",
+//  "module": "./dist/AyongUI.es.js",
+//  "browser": "./dist/AyongUI.umd.js",
+//  "typings": "./dist/button.d.ts",
   "scripts": {
     "build": "vite build",
     "prepublishOnly": "npm run build"

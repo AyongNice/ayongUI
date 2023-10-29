@@ -1,5 +1,4 @@
-import './index.css'
-
+import but from './index.module.less';
 //封装Button组件
 
 interface ButtonProps {
@@ -14,9 +13,13 @@ interface ButtonProps {
 export default function Button(props: ButtonProps = {}) {
     const {type, size, disabled, text, onClick} = props;
     return (
-        <button className={`ayong-btn ayong-btn-${type} ayong-btn-${size}`} disabled={disabled} onClick={onClick}>
+        <button className={but.ayongBtn} disabled={disabled} onClick={onClick}>
             {text}
         </button>
+
     )
 }
 export type {ButtonProps};
+
+
+
