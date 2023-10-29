@@ -9,6 +9,22 @@ Ayong UI 是一个功能丰富的 React 组件库，提供了一系列用于构�
 3. 简洁易用：Ayong UI 遵循直观的设计原则，使组件易于理解和使用。
 
 ## 组件列表
+1. button按钮
+2. table表格
+3. popup弹框
+4. icon图标
+5. Dropdown下拉
+6. Pagination分页器
+7. Form 表单
+8. input 输入框
+9. Switch 开关
+10. Upload 上传
+11. 、Alert 提示
+12. Dialog 对话框
+13. Progress 进度条
+14. Carousel 录播图
+15. Radio 单选框
+16. Tooltip 提示
 
 ### 目前组件第一阶段开发中 尽情期待上线....
 
