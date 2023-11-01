@@ -1,0 +1,56 @@
+//公共样式文件
+
+//主题色
+@theme: #519fdd;
+
+//安全
+@safe: #545b5f;
+
+//危险
+@dangerous: #880909;
+
+//警告
+@warn: #a26a15;
+
+@font-color: #fff;
+@font-size: 15px;
+:root {
+  --ayong-primary-color: @theme; /* 全局主题色 */
+  --ayong-safe: @safe;
+  --ayong-dangerous: @dangerous;
+  --ayong-warn: @warn;
+  --ayong-font-color: @font-color;
+  --ayong-font-size: @font-size;
+}
+
+
+/**
+// 导出变量 可以在 JSX中 引入该 less变量 通过 命名空间
+例如
+ import styles from '../../config/style.module.less';
+ styles.theme
+ */
+
+:export {
+  theme: @theme;
+  dangerous: @dangerous;
+  warn: @warn;
+}
+
+
+a {
+  text-decoration: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  //取消默认样式
+
+
+  //按压颜色变浅色
+  &:active {
+    opacity: 0.8;
+  }
+
+}

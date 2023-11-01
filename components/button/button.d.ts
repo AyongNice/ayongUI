@@ -1,13 +1,15 @@
 import React from "react";
 
-declare module 'Button' {
-    export interface ButtonProps {
-        type?: 'primary' | 'default' | 'danger';
-        size?: 'lg' | 'sm';
-        disabled?: boolean;
-        text?: string;
-        onClick?: () => void;
-    }
-
-    export function Button(props: ButtonProps): React.FC<Props>;
+export interface ButtonProps {
+    className: any;
+    children: unknown;
+    background?: string | number;
+    color?: string | number;
+    type?: 'primary' | 'default' | 'danger';
+    size?: 'large' | 'default' | 'small';
+    disabled?: boolean;
+    text?: string;
+    onClick?: () => void;
 }
+
+export function Button(props: ButtonProps): React.FC<Props>;

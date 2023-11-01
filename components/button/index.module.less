@@ -1,5 +1,38 @@
-@import "../../config/style.less";
+@import "../../config/style.module.less";
 
 .ayongBtn {
-  background: @theme;
+  background: var(--ayong-primary-color);
+  color: var(--ayong-font-color);
+  font-size: var(--ayong-font-size);
+}
+
+.button-container {
+  position: relative;
+  text-align: center;
+}
+
+/* 初始按钮样式 */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #0074cc;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* 扩展效果 */
+.expanded button {
+  animation: expandEffect 1s;
+}
+
+@keyframes expandEffect {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
