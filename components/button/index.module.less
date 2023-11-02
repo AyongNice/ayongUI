@@ -4,6 +4,19 @@
   background: var(--ayong-primary-color);
   color: var(--ayong-font-color);
   font-size: var(--ayong-font-size);
+  border-radius: var(--ayong-border-radius);
+
+  &:active { //按压颜色变浅色
+    opacity: 0.8;
+  }
+}
+
+.notAllowed {
+  cursor: not-allowed;
+
+  &:active { //重置按压变化
+    opacity: 1;
+  }
 }
 
 //button大小 使用padding 通过组件props参数枚举到对应 className
@@ -19,34 +32,43 @@
   padding: var(--ayong-large-size);
 }
 
-
 .button-container {
   position: relative;
   text-align: center;
 }
 
-/* 初始按钮样式 */
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #0074cc;
-  color: #fff;
-  border: none;
-  cursor: pointer;
+//button {
+//  padding: 10px 20px;
+//  font-size: 16px;
+//  background-color: #0074cc;
+//  color: #fff;
+//  border: none;
+//  cursor: pointer;
+//  position: relative;
+//  overflow: hidden;
+//  z-index: 1;
+//  transition: transform 0.3s, opacity 0.3s;
+//}
+
+/* 按钮点击效果 */
+button::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 116, 204, 0.5);
   border-radius: 5px;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
-/* 扩展效果 */
-.expanded button {
-  animation: expandEffect 1s;
+.button-container.clicked button {
+  transform: scale(1.2); /* 按钮主体扩散效果 */
 }
 
-@keyframes expandEffect {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
+.button-container.clicked button::before {
+  transform: scale(2); /* 残影扩散效果 */
+  opacity: 1;
 }
+

@@ -10,6 +10,7 @@ export interface ButtonProps {
     disabled?: boolean;
     text?: string;
     onClick?: () => void;
+    time: number;
 }
 
 export function Button(props: ButtonProps): React.FC<Props>;
