@@ -7,20 +7,8 @@ import {
 
 import {ButtonProps} from "./button";
 import {useEffect, useRef, useState} from "react";
+import {useDebounce} from '../../utils/index.ts'
 
-// 自定义Hook，用于处理按钮防抖
-function useDebounce(fn: Function, delay: number) {
-    const refTimer = useRef<number>();
-
-    return function f(...args: any) {
-        if (refTimer.current) {
-            clearTimeout(refTimer.current);
-        }
-        refTimer.current = setTimeout(() => {
-            fn(args);
-        }, delay);
-    }
-}
 
 export default function Button(props: ButtonProps = {}) {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
