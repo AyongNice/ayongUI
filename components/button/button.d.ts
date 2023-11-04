@@ -5,7 +5,7 @@ export interface ButtonProps {
     children: unknown;
     background?: string | number;
     color?: string | number;
-    type?: 'primary' | 'default' | 'danger';
+    type?: 'primary' | 'default' | 'dashed';
     size?: 'large' | 'default' | 'small';
     disabled?: boolean;
     text?: string;

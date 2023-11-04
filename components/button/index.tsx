@@ -1,4 +1,7 @@
 import but from './index.module.less';
+import butType from './button.module.less'
+
+console.log(but)
 //封装Button组件
 // @ts-ignore
 import {
@@ -6,14 +9,14 @@ import {
 } from '../../config/style-const.ts'
 
 import {ButtonProps} from "./button";
-import {useEffect, useRef, useState} from "react";
+import {useState} from "react";
 import {useDebounce} from '../../utils/index.ts'
 
 
 export default function Button(props: ButtonProps = {}) {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const {
-        type,
+        type = 'default',
         size = 'default',
         children,
         className = '',
@@ -39,7 +42,7 @@ export default function Button(props: ButtonProps = {}) {
      * 参数className > 默认使用组件classname > 参数样式
      *
      */
-    const combinedClassName = `${but.ayongBtn} ${className} ${but[size]} ${but[type]} ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
+    const combinedClassName = `${but.ayongBtn} ${className} ${but[size]} ${butType[type]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
     return (
         <button className={combinedClassName} onClick={time ? useDebounce(ayongClick, time) : ayongClick}
                 disabled={disabled}>

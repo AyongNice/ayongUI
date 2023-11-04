@@ -1,16 +1,19 @@
 @import "../../config/style.module.less";
 
 .ayongBtn {
-  background: var(--ayong-primary-color);
-  color: var(--ayong-font-color);
   font-size: var(--ayong-font-size);
   border-radius: var(--ayong-border-radius);
 
   &:active { //按压颜色变浅色
+    opacity: 0.5;
+  }
+
+  &:hover { //触摸颜色变浅色
     opacity: 0.8;
   }
 }
 
+//禁用手图标
 .notAllowed {
   cursor: not-allowed;
 
@@ -36,6 +39,7 @@
   position: relative;
   text-align: center;
 }
+
 
 //button {
 //  padding: 10px 20px;
