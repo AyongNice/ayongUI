@@ -18,12 +18,16 @@ export default function Button(props: ButtonProps = {}) {
     const {
         type = 'default',
         size = 'default',
+        shape = 'default',
         children,
+        href = '',
+        htmlType = 'button',
         className = '',
         disabled, text,
+        time = 0,
+        icon = '',
         onClick = () => {
         },
-        time = 0
     } = props;
     const handleButtonClick = () => {
         // 当按钮被点击时，设置 isExpanded 为 true，触发扩展效果
@@ -36,17 +40,21 @@ export default function Button(props: ButtonProps = {}) {
     const ayongClick = () => {
         handleButtonClick()
         onClick()
+        href && window.open(href);
     }
     /**
      * 默认使用组件classname  参数className 覆盖默认样式
      * 参数className > 默认使用组件classname > 参数样式
      *
      */
-    const combinedClassName = `${but.ayongBtn} ${className} ${but[size]} ${butType[type]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
+    const combinedClassName = `${but.ayongBtn} ${className} ${but[size]} ${butType[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
     return (
         <button className={combinedClassName} onClick={time ? useDebounce(ayongClick, time) : ayongClick}
-                disabled={disabled}>
-            {children}
+                disabled={disabled}
+                type={htmlType}
+
+        >
+            {icon}{children}
         </button>
 
     )

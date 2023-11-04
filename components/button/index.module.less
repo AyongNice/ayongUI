@@ -3,6 +3,7 @@
 .ayongBtn {
   font-size: var(--ayong-font-size);
   border-radius: var(--ayong-border-radius);
+  padding: var(--ayong-default-size);
 
   &:active { //按压颜色变浅色
     opacity: 0.5;
@@ -24,7 +25,7 @@
 
 //button大小 使用padding 通过组件props参数枚举到对应 className
 .default {
-  padding: var(--ayong-default-size);
+
 }
 
 .small {
@@ -34,6 +35,24 @@
 .large {
   padding: var(--ayong-large-size);
 }
+
+.circle {
+  //自适应圆形 通过padding
+  padding: 10px 10px;
+  border-radius: 50%;
+}
+
+//直角按钮
+
+.strong {
+  border-radius: 0;
+}
+
+
+.round {
+  border-radius: 999px;
+}
+
 
 .button-container {
   position: relative;
