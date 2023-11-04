@@ -4,6 +4,9 @@
   font-size: var(--ayong-font-size);
   border-radius: var(--ayong-border-radius);
   padding: var(--ayong-default-size);
+  border: 1px solid var(--ayong-primary-color);
+  color: var(--ayong-primary-color);
+  background: none;
 
   &:active { //按压颜色变浅色
     opacity: 0.5;
@@ -27,6 +30,42 @@
 .default {
 
 }
+
+.primary {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-primary-color);
+  background: var(--ayong-primary-color);
+}
+
+.dashed {
+  //虚线 边框
+  border: 1px dashed var(--ayong-primary-color);
+  color: var(--ayong-primary-color);
+  background: none;
+
+}
+
+//危险按钮
+.dangerous {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-dangerous);
+  background: var(--ayong-dangerous);
+}
+
+//警告按钮
+.warn {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-warn);
+  background: var(--ayong-warn);
+}
+
+//安全健康按钮
+.safe {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-safe);
+  background: var(--ayong-safe);
+}
+
 
 .small {
   padding: var(--ayong-small-size);

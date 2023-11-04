@@ -1,5 +1,4 @@
 import but from './index.module.less';
-import butType from './button.module.less'
 
 console.log(but)
 //封装Button组件
@@ -13,7 +12,7 @@ import {useState} from "react";
 import {useDebounce} from '../../utils/index.ts'
 
 
-export default function Button(props: ButtonProps = {}) {
+export default function Button(props: ButtonProps) {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const {
         type = 'default',
@@ -29,7 +28,7 @@ export default function Button(props: ButtonProps = {}) {
         onClick = () => {
         },
     } = props;
-    const handleButtonClick = () => {
+    const handleButtonClick = (): void => {
         // 当按钮被点击时，设置 isExpanded 为 true，触发扩展效果
         setIsExpanded(true);
         // 在一段时间后重置 isExpanded，以便可以再次触发效果
@@ -37,7 +36,7 @@ export default function Button(props: ButtonProps = {}) {
             setIsExpanded(false);
         }, 1000); // 1秒后重置
     };
-    const ayongClick = () => {
+    const ayongClick = (): void => {
         handleButtonClick()
         onClick()
         href && window.open(href);
@@ -47,12 +46,11 @@ export default function Button(props: ButtonProps = {}) {
      * 参数className > 默认使用组件classname > 参数样式
      *
      */
-    const combinedClassName = `${but.ayongBtn} ${className} ${but[size]} ${butType[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
+    const combinedClassName: string = `${but.ayongBtn} ${className} ${but[size]} ${but[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
     return (
         <button className={combinedClassName} onClick={time ? useDebounce(ayongClick, time) : ayongClick}
                 disabled={disabled}
                 type={htmlType}
-
         >
             {icon}{children}
         </button>
