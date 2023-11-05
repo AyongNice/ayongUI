@@ -1,7 +1,9 @@
 "use strict";//开启严格模式
 export {default as Button} from './components/button';
 export type {ButtonProps} from './types/button.d.ts';
-// export {default as Icon} from './components/icon/icon';
+export {Alipay, Alert} from './components/icon/index.ts';
+export type {IconProps} from './types/icon.d.ts';
+
 // export {default as Input} from './components/input/input';
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
