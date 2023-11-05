@@ -1,8 +1,8 @@
-"use strict";//开启严格模式
-export {default as Button} from './components/button';
-export type {ButtonProps} from './types/button.d.ts';
-export {Alipay, Alert} from './components/icon/index.ts';
-export type {IconProps} from './types/icon.d.ts';
+"use strict"; //开启严格模式
+export { default as Button } from "./components/button";
+export type { ButtonProps } from "./types/button.d.ts";
+export { Alipay, Alert, PreviousStep } from "./components/icon/index.ts";
+export type { IconProps } from "./types/icon.d.ts";
 
 // export {default as Input} from './components/input/input';
 // export {default as Radio} from './components/radio/radio';
