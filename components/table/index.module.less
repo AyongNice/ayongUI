@@ -1,0 +1,44 @@
+table {
+  //去除默认样式
+  border-collapse: collapse;
+  border-spacing: 0;
+  //设置表格宽度
+
+}
+
+/* Table Container */
+.tableContainer {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Table */
+.customTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background-color: #fff;
+}
+
+.customTable th, .custom-table td {
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.customTable th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
+
+.customTable tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.customTable tbody tr:hover {
+  background-color: #e0e0e0;
+}

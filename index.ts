@@ -1,8 +1,10 @@
 "use strict"; //开启严格模式
-export { default as Button } from "./components/button";
-export type { ButtonProps } from "./types/button.d.ts";
-export { Alipay, Alert, PreviousStep } from "./components/icon/index.ts";
-export type { IconProps } from "./types/icon.d.ts";
+export {default as Button} from "./components/button";
+export type {ButtonProps} from "./types/button.d.ts";
+export {Alipay, Alert, PreviousStep} from "./components/icon/index.ts";
+export type {IconProps} from "./components//icon/icon.d.ts";
+export {default as Table} from './components/table';
+export type {TableProps} from './components/table/table.d.ts';
 
 // export {default as Input} from './components/input/input';
 // export {default as Radio} from './components/radio/radio';
@@ -15,7 +17,6 @@ export type { IconProps } from "./types/icon.d.ts";
 // export {default as DateTimePicker} from './components/date-time-picker/date-time-picker';
 // export {default as Upload} from './components/upload/upload';
 // export {default as Form} from './components/form/form';
-// export {default as Table} from './components/table/table';
 // export {default as Pagination} from './components/pagination/pagination';
 // export {default as Tree} from './components/tree/tree';
 // export {default as TreeSelect} from './components/tree-select/tree-select';
