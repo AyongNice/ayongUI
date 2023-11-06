@@ -18,8 +18,9 @@ interface Column {
 
 // 定义Table组件的属性类型
 interface TableProps {
-    data?: DataItem[];
-    columns?: Column[];
+    className?: string;// 样式类名
+    data?: DataItem[];// 数据
+    columns?: Column[];// 列数据
 }
 
 // 定义Column组件的属性类型

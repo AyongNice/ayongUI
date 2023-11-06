@@ -1,8 +1,10 @@
 import React from "react";
 import table from './index.module.less'
-import {TableProps, Column} from "./table";
+import {TableProps, Column, DataItem} from "./table";
 
-function Table({columns, children, data}: TableProps) {
+// console.log(table)
+
+function Table({columns, children, data, className}: TableProps) {
     let tableColumns: Column[] = [];
 
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
@@ -20,20 +22,21 @@ function Table({columns, children, data}: TableProps) {
             }
         });
     }
+    const styleClassName: string = `${table.table} ${className} `;
 
     return (
-        <table className={table.tableContainer}>
-            <thead className={table.customTable}>
+        <table className={styleClassName}>
+            <thead>
             <tr>
-                {tableColumns.map((column) => (
+                {tableColumns.map((column: Column) => (
                     <th key={column.key}>{column.title}</th>
                 ))}
             </tr>
             </thead>
             <tbody>
-            {data.map((item) => (
+            {data.map((item: DataItem) => (
                 <tr key={item.key}>
-                    {tableColumns.map((column) => (
+                    {tableColumns.map((column: Column) => (
                         <td key={column.key}>
                             {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
                         </td>

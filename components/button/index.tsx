@@ -46,9 +46,9 @@ export default function Button(props: ButtonProps) {
      * 参数className > 默认使用组件classname > 参数样式
      *
      */
-    const combinedClassName: string = `${but.ayongBtn} ${className} ${but[size]} ${but[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
+    const styleClassName: string = `${but.ayongBtn} ${className} ${but[size]} ${but[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
     return (
-        <button className={combinedClassName} onClick={time ? useDebounce(ayongClick, time) : ayongClick}
+        <button className={styleClassName} onClick={time ? useDebounce(ayongClick, time) : ayongClick}
                 disabled={disabled}
                 type={htmlType}
         >
