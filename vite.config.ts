@@ -8,20 +8,48 @@ export default defineConfig({
     plugins: [reactRefresh(),
         dts(),
         {
-            // 在构建前执行的任务
-            name: 'theme-merge',
-            configureServer(server) {
+            name: 'custom-output', // 自定义输出插件
+            generateBundle(_, bundle) {
+                const formatOutputDirs = {
+                    js: 'js', // ES module 输出文件夹
+                    mjs: 'mjs', // CommonJS 输出文件夹
+                    umd: 'umd', // UMD 输出文件夹
+                };
 
-            }
-        }
+                // 遍历生成的文件
+                for (const fileName in bundle) {
+                    if (bundle[fileName].type === 'chunk') {
+                        const format = fileName.split('.')[1]; // 提取格式
+                        console.log('format', format)
+                        const outputDir = formatOutputDirs[format];
+                        console.log('outputDir', outputDir)
+
+
+                        if (outputDir) {
+                            // 拷贝文件到指定文件夹
+                            this.emitFile({
+                                type: 'asset',
+                                fileName: path.join(outputDir, 'index.js'),
+                                source: bundle[fileName].code,
+                            });
+                            delete bundle[fileName];
+                        }
+                    }
+                }
+            },
+        },
     ],
     //打包压缩
     build: {
+        build: {
+            outDir: 'dist'
+        },
         lib: {
             entry: path.resolve(__dirname, './index.ts'), // 组件库入口文件
             name: 'AyongUI', // 组件库的全局名称
             formats: ['es', 'cjs', 'umd'], // 输出格式
-            fileName: (format) => `AyongUI.${format}.js`,
+            entryFileNames: 'index.js', // 输出文件名，[format] 会被替换为 es、cjs、umd
+            // format: 'es', // 输出格式，默认为 ES module
         },
         rollupOptions: {
             // 外部依赖，如React、ReactDOM，以避免将它们打包到组件库中

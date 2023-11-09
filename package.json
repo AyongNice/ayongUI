@@ -1,9 +1,9 @@
 {
   "name": "ayongUI",
   "version": "1.0.0",
-  "main": "./dist/AyongUI.cjs.js",
-  "module": "./dist/AyongUI.es.js",
-  "browser": "./dist/AyongUI.umd.js",
+  "main": "./dist/mjs/index.js",
+  "module": "./dist/js/index.js",
+  "browser": "./dist/umd/index.j",
   "typings": "./dist/index.d.ts",
   "scripts": {
     "build": "vite build",
