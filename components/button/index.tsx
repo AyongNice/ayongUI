@@ -7,7 +7,7 @@ import {
     widthMap
 } from '../../config/style-const.ts'
 
-import {ButtonProps} from "./button";
+import {ButtonProps} from "./index.d.ts";
 import {useState} from "react";
 import {useDebounce} from '../../utils/index.ts'
 
