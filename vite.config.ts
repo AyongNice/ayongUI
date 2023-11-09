@@ -11,8 +11,8 @@ export default defineConfig({
             name: 'custom-output', // 自定义输出插件
             generateBundle(_, bundle) {
                 const formatOutputDirs = {
-                    js: 'js', // ES module 输出文件夹
-                    mjs: 'mjs', // CommonJS 输出文件夹
+                    es: 'es', // ES module 输出文件夹
+                    cjs: 'cjs', // CommonJS 输出文件夹
                     umd: 'umd', // UMD 输出文件夹
                 };
 
@@ -41,15 +41,13 @@ export default defineConfig({
     ],
     //打包压缩
     build: {
-        build: {
-            outDir: 'dist'
-        },
+
         lib: {
             entry: path.resolve(__dirname, './index.ts'), // 组件库入口文件
             name: 'AyongUI', // 组件库的全局名称
             formats: ['es', 'cjs', 'umd'], // 输出格式
-            entryFileNames: 'index.js', // 输出文件名，[format] 会被替换为 es、cjs、umd
-            // format: 'es', // 输出格式，默认为 ES module
+            // entryFileNames: 'index.js', // 输出文件名，[format] 会被替换为 es、cjs、umd
+            fileName: (format) => `AyongUI.${format}.js`,
         },
         rollupOptions: {
             // 外部依赖，如React、ReactDOM，以避免将它们打包到组件库中

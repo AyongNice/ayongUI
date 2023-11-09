@@ -1,6 +1,5 @@
 import but from './index.module.less';
 
-console.log(but)
 //封装Button组件
 // @ts-ignore
 import {
