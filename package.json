@@ -2,7 +2,7 @@
   "name": "ayongUI",
   "version": "1.0.0",
   "main": "./dist/AyongUI.cjs.js",
-  "module": "dist/AyongUI.es.js",
+  "module": "./dist/AyongUI.es.js",
   "browser": "./dist/AyongUI.umd.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
