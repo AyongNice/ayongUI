@@ -1,6 +1,6 @@
 import React from "react";
 import icon from "../../index.module.less";
-import {IconProps} from "../../icon";
+import {IconProps} from "../../index";
 
 const Alert = (props: IconProps) => {
     const {

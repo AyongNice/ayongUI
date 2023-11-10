@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import table from './index.module.less'
-import {TableProps, Column, DataItem} from "./table";
+import {TableProps, Column, DataItem} from "./index";
 
 // console.log(table)
 

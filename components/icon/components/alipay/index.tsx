@@ -1,5 +1,5 @@
 import React from "react";
-import { IconProps } from "../../icon";
+import { IconProps } from "../../index";
 import icon from "../../index.module.less";
 
 const Alipay = (props: IconProps) => {

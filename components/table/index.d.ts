@@ -1,4 +1,5 @@
-import {ReactNode} from 'react';
+import React, {ReactNode} from 'react';
+
 
 // 定义数据项的类型
 interface DataItem {
@@ -30,9 +31,11 @@ interface ColumnProps {
     render?: (data: any, record: DataItem) => ReactNode;
     key?: string;
 }
-
-declare module 'your-component-library' {
-    export function Table({data, columns}: TableProps): JSX.Element;
+// declare const Table: React.FC<TableProps>;
+// declare const  Column: React.FC<ColumnProps>;
+// export default Table;
+declare module 'Table' {
+    export function Table({data, columns}: TableProps): React.FC;
 
     export function Column({title, dataIndex, render, key}: ColumnProps): null;
 
