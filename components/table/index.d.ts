@@ -4,6 +4,7 @@ import React, {ReactNode} from 'react';
 // 定义数据项的类型
 export interface DataItem {
     key: string;
+
     [propName: string]: any;
 }
 
@@ -18,8 +19,9 @@ export interface Column {
 export interface ColumnGroup {
     key: string;
     title: string;
-    children: Column[];
+    children: Column[]; //数组   集合
 }
+
 
 // 定义Table组件的属性类型
 export interface TableProps {
