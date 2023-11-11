@@ -22,6 +22,11 @@ export interface ColumnGroup {
     children: Column[]; //数组   集合
 }
 
+interface Expandable {
+    expandedRowRender: () => React.FC | React.FC;
+    onExpand: () => void;
+    expandedRowKeys: string[];
+}
 
 // 定义Table组件的属性类型
 export interface TableProps {
@@ -30,6 +35,7 @@ export interface TableProps {
     columns?: Column[];// 列数据
     draggable?: boolean;// 是否可拖拽
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;// 拖拽后的回调
+    expandable?: Expandable;
 }
 
 // 定义Column组件的属性类型

@@ -1,11 +1,10 @@
 import React, {useState} from "react";
 import table from './index.module.less'
-import {TableProps, Column, DataItem, ColumnGroup} from "./index";
+import {TableProps, Column, DataItem, ColumnGroup} from "./index.d.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 
 // console.log(table)
 function renderSubHeaders(columns: Column[]) {
-    console.log('columns', columns)
     return (
         <>
             {columns.map((column: Column) => (
@@ -18,12 +17,20 @@ function renderSubHeaders(columns: Column[]) {
 }
 
 function Table({
-                   columns, children, data, className, draggable = false, onDdragAfter = () => {
-    }
+                   columns,
+                   children,
+                   data,
+                   className,
+                   draggable = false,
+                   onDdragAfter = () => {
+                   },
+                   expandable
                }: TableProps) {
 
     let _tableColumns: Column[] = [];
-
+    let colSpanSize: number = 0;
+    const {expandedRowRender, expandedRowKeys, onExpand} = expandable || {};
+    console.log(1, expandedRowRender, expandedRowKeys, onExpand, expandable)
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     if (columns) {
         _tableColumns = columns;
@@ -44,6 +51,7 @@ function Table({
                     type: 'columnGroup',
                     children: React.Children.map(child.props.children, (columnChild) => {
                         if (columnChild.type.name === 'Column') {
+                            colSpanSize = child.props.children.length;
                             return {
                                 title: columnChild.props.title,
                                 dataIndex: columnChild.props.dataIndex,
@@ -62,7 +70,8 @@ function Table({
     const [tableData, setTableData] = useState<DataItem[]>(data as DataItem[]);
     const [activeTR, setActiveTR] = useState<null | number>(null);
     const [activeTD, setActiveTD] = useState<null | string>(null);
-    console.log('tableColumns', tableColumns)
+
+
     const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, index: number): void => {
         if (!draggable) return;
         setActiveTD(tableColumns[index].dataIndex);
@@ -104,41 +113,51 @@ function Table({
 
     const styleClassName: string = `${table.table} ${className} `;
 
+
     return (
         <table className={styleClassName}>
             <thead>
-            <tr>
-                {tableColumns.map((column: Column | ColumnGroup, index: number) => (
-                    <React.Fragment key={column.key}>
-                        {column.type === 'columnGroup' && (
-                            // 如果是列分组，则递归渲染子级表头
-                            <>
-                                <th colSpan={(column as ColumnGroup).children.length}>
-                                    {column.title}
-                                </th>
-                            </>
-                        )}
-                    </React.Fragment>
-                ))}
-            </tr>
+
             <tr>
                 {tableColumns.map((column: Column | ColumnGroup, index: number) => (
                     <React.Fragment key={column.key}>
                         {column.type === 'columnGroup' ?
                             // 如果是列分组，则递归渲染子级表头
-                            <React.Fragment>
-                                {renderSubHeaders((column as ColumnGroup).children, (column as ColumnGroup).children.length)}
-                            </React.Fragment>
-                            : <th
+
+                            <th
                                 draggable={draggable}
+                                colSpan={(column as ColumnGroup).children.length}
+                                className={table.textAlignCenter}
                                 onDragStart={(e) => handleDragStart(e, index)}
                                 onDragOver={(e) => handleDragOver(e, index)}
                                 onDrop={(e) => handleDrop(e, index)}
                             >
                                 {column.title}
-                            </th>}
+                            </th>
 
+                            : <th
+                                draggable={draggable}
+                                rowSpan={colSpanSize}
+                                className={table.tdHeight}
+                                onDragStart={(e) => handleDragStart(e, index)}
+                                onDragOver={(e) => handleDragOver(e, index)}
+                                onDrop={(e) => handleDrop(e, index)}
+                            >
+                                {column.title}
+                            </th>
+                        }
 
+                    </React.Fragment>
+                ))}
+            </tr>
+
+            <tr>
+                {tableColumns.map((column: Column | ColumnGroup, index: number) => (
+                    <React.Fragment key={column.key}>
+                        {column.type === 'columnGroup' && (
+                            // 如果是列分组，则递归渲染子级表头
+                            renderSubHeaders((column as ColumnGroup).children, (column as ColumnGroup).children.length)
+                        )}
                     </React.Fragment>
                 ))}
             </tr>
@@ -166,7 +185,18 @@ function Table({
                                                     key={subColumn.key}
                                                     className={activeTD === subColumn.dataIndex ? table.aticve : ''}
                                                 >
-                                                    {subColumn.render ? subColumn.render(item[subColumn.dataIndex], item) : item[subColumn.dataIndex]}
+                                                    <React.Fragment>
+                                                        {expandedRowRender && (
+                                                            <span
+                                                                className={table.expandIcon}
+                                                                onClick={() => onExpand && onExpand(item, index)}
+                                                            >
+                                                        {expandedRowKeys}
+                                                                {/*{expandedRowKeys ? expandedRowKeys?.include(item.key) ? '-' : '+' : ''}*/}
+                                                    </span>
+                                                        )}
+                                                        {subColumn.render ? subColumn.render(item[subColumn.dataIndex], item) : item[subColumn.dataIndex]}
+                                                    </React.Fragment>
                                                 </td>
                                             ))}
                                         </>
@@ -174,9 +204,21 @@ function Table({
                                         // 如果是单独的列，则渲染一个单独的表格单元格
                                         <td
                                             key={column.key}
-                                            className={activeTD === column.dataIndex ? table.aticve : ''}
+                                            className={activeTD === column.dataIndex ? `${table.aticve}` : ''}
                                         >
-                                            {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
+                                            <React.Fragment>
+                                                {expandedRowRender && (
+                                                    <span
+                                                        className={table.expandIcon}
+                                                        onClick={() => onExpand && onExpand(item, index)}
+                                                    >
+                                                        {expandedRowKeys}
+                                                        {/*{expandedRowKeys && expandedRowKeys.include(item.key) ? '-' : '+'}*/}
+                                                    </span>
+                                                )}
+                                                {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
+
+                                            </React.Fragment>
                                         </td>
                                     )}
                                 </React.Fragment>
