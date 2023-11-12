@@ -30,7 +30,7 @@ function Table({
     let _tableColumns: Column[] = [];
     let colSpanSize: number = 0;
     const {expandedRowRender, expandedRowKeys, onExpand} = expandable || {};
-    console.log(1, expandedRowRender, expandedRowKeys, onExpand, expandable)
+    console.log(1, expandedRowKeys)
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     if (columns) {
         _tableColumns = columns;
