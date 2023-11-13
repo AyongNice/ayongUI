@@ -1,7 +1,10 @@
 "use strict"; //开启严格模式
 export {default as Button} from "./components/button";
 export type {ButtonProps} from "./components/button";
-export {Alipay, Alert, PreviousStep} from "./components/icon/index.ts";
+export {
+    Alipay, Alert, PreviousStep, FileCopy
+    , CodeDisplay, LabelersLists, Collapse, Unfold,UserHollow,EyesOpen,EyesClosed,Setup
+} from "./components/icon/index.ts";
 export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';
 export type {TableProps} from './components/table';
