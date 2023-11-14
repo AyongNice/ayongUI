@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import table from './index.module.less'
-import {TableProps, Column, DataItem, ColumnGroup} from "./index.d.ts";
+import {TableProps, Column, DataItem, ColumnGroup} from "./index";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
+import {Button} from "../../index.ts";
 
 // console.log(table)
 function renderSubHeaders(columns: Column[]) {
@@ -21,6 +22,8 @@ function Table({
                    children,
                    data,
                    className,
+                   tbodyClassName,
+                   theadClassNmae,
                    draggable = false,
                    onDdragAfter = () => {
                    },
@@ -30,7 +33,7 @@ function Table({
     let _tableColumns: Column[] = [];
     let colSpanSize: number = 0;
     const {expandedRowRender, expandedRowKeys, onExpand} = expandable || {};
-    console.log(1, expandedRowRender, expandedRowKeys, onExpand, expandable)
+    console.log(1, expandedRowKeys)
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     if (columns) {
         _tableColumns = columns;
@@ -116,9 +119,12 @@ function Table({
 
     return (
         <table className={styleClassName}>
-            <thead>
 
+            <thead>
             <tr>
+                <ConditionalRender mode='if' show={expandedRowRender}>
+                    <th rowSpan={colSpanSize} className={theadClassNmae}></th>
+                </ConditionalRender>
                 {tableColumns.map((column: Column | ColumnGroup, index: number) => (
                     <React.Fragment key={column.key}>
                         {column.type === 'columnGroup' ?
@@ -127,7 +133,7 @@ function Table({
                             <th
                                 draggable={draggable}
                                 colSpan={(column as ColumnGroup).children.length}
-                                className={table.textAlignCenter}
+                                className={`${table.textAlignCenter}${theadClassNmae}`}
                                 onDragStart={(e) => handleDragStart(e, index)}
                                 onDragOver={(e) => handleDragOver(e, index)}
                                 onDrop={(e) => handleDrop(e, index)}
@@ -138,7 +144,7 @@ function Table({
                             : <th
                                 draggable={draggable}
                                 rowSpan={colSpanSize}
-                                className={table.tdHeight}
+                                className={`${theadClassNmae}`}
                                 onDragStart={(e) => handleDragStart(e, index)}
                                 onDragOver={(e) => handleDragOver(e, index)}
                                 onDrop={(e) => handleDrop(e, index)}
@@ -149,7 +155,9 @@ function Table({
 
                     </React.Fragment>
                 ))}
+
             </tr>
+
 
             <tr>
                 {tableColumns.map((column: Column | ColumnGroup, index: number) => (
@@ -163,69 +171,58 @@ function Table({
             </tr>
 
             </thead>
-            <tbody>
+            <tbody className={tbodyClassName}>
             <ConditionalRender mode='if' show={tableData.length !== 0}>
-                <ConditionalRender mode='if' show={tableData.length !== 0}>
-                    {tableData.map((item: DataItem, index: number) => (
-                        <tr
-                            key={item.key}
-                            draggable={draggable}
-                            className={activeTR === index ? table.aticve : ''}
-                            onDragStart={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragStartData(e, index)}
-                            onDragOver={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragOver(e, index)}
-                            onDrop={(e: React.DragEvent<HTMLTableRowElement>,) => handleDropData(e, index)}
-                        >
-                            {tableColumns.map((column: Column | ColumnGroup) => (
-                                <React.Fragment key={column.key}>
-                                    {column.type === 'columnGroup' ? (
-                                        // 如果是列分组，则递归渲染子列
-                                        <>
-                                            {column.children.map((subColumn: Column) => (
-                                                <td
-                                                    key={subColumn.key}
-                                                    className={activeTD === subColumn.dataIndex ? table.aticve : ''}
-                                                >
-                                                    <React.Fragment>
-                                                        {expandedRowRender && (
-                                                            <span
-                                                                className={table.expandIcon}
-                                                                onClick={() => onExpand && onExpand(item, index)}
-                                                            >
-                                                        {expandedRowKeys}
-                                                                {/*{expandedRowKeys ? expandedRowKeys?.include(item.key) ? '-' : '+' : ''}*/}
-                                                    </span>
-                                                        )}
-                                                        {subColumn.render ? subColumn.render(item[subColumn.dataIndex], item) : item[subColumn.dataIndex]}
-                                                    </React.Fragment>
-                                                </td>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        // 如果是单独的列，则渲染一个单独的表格单元格
-                                        <td
-                                            key={column.key}
-                                            className={activeTD === column.dataIndex ? `${table.aticve}` : ''}
-                                        >
-                                            <React.Fragment>
-                                                {expandedRowRender && (
-                                                    <span
-                                                        className={table.expandIcon}
-                                                        onClick={() => onExpand && onExpand(item, index)}
-                                                    >
-                                                        {expandedRowKeys}
-                                                        {/*{expandedRowKeys && expandedRowKeys.include(item.key) ? '-' : '+'}*/}
-                                                    </span>
-                                                )}
-                                                {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
+                {tableData.map((item: DataItem, index: number) => (
+                    <tr
+                        key={item.key}
+                        draggable={draggable}
+                        className={activeTR === index ? table.aticve : ''}
+                        onDragStart={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragStartData(e, index)}
+                        onDragOver={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragOver(e, index)}
+                        onDrop={(e: React.DragEvent<HTMLTableRowElement>,) => handleDropData(e, index)}
+                    >
+                        <ConditionalRender mode='if' show={expandedRowRender}>
+                            <td>
+                                <Button
+                                    size='mini'
+                                    className={table.unfold}>{Array.isArray(expandedRowKeys) ? expandedRowKeys.includes(1) ? '-' : '+' : ''}</Button>
+                            </td>
+                        </ConditionalRender>
 
-                                            </React.Fragment>
-                                        </td>
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </tr>
-                    ))}
-                </ConditionalRender>
+                        {tableColumns.map((column: Column | ColumnGroup, index: number) => (
+                            <React.Fragment key={column.key}>
+                                {column.type === 'columnGroup' ? (
+                                    // 如果是列分组，则递归渲染子列
+                                    <>
+                                        {column.children.map((subColumn: Column) => (
+                                            <td
+                                                key={subColumn.key}
+                                                className={activeTD === subColumn.dataIndex ? table.aticve : ''}
+                                            >
+                                                <React.Fragment>
+                                                    {subColumn.render ? subColumn.render(item[subColumn.dataIndex], item) : item[subColumn.dataIndex]}
+                                                    {Array.isArray(expandedRowKeys) ? typeof expandedRowRender === 'function' ? expandedRowRender() : expandedRowRender : ''}
+
+                                                </React.Fragment>
+                                            </td>
+                                        ))}
+                                    </>
+                                ) : (
+                                    // 如果是单独的列，则渲染一个单独的表格单元格
+                                    <td
+                                        key={column.key}
+                                        className={activeTD === column.dataIndex ? `${table.aticve}` : ''}
+                                    >
+
+                                        {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
+                                        {Array.isArray(expandedRowKeys) ? typeof expandedRowRender === 'function' ? expandedRowRender() : expandedRowRender : ''}
+                                    </td>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </tr>
+                ))}
 
             </ConditionalRender>
             <ConditionalRender mode='if' show={false}>

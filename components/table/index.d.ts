@@ -36,6 +36,8 @@ export interface TableProps {
     draggable?: boolean;// 是否可拖拽
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;// 拖拽后的回调
     expandable?: Expandable;
+    tbodyClassName: string;
+    theadClassNmae: string;
 }
 
 // 定义Column组件的属性类型
