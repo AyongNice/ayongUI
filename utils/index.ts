@@ -12,3 +12,13 @@ export function useDebounce(fn: Function, delay: number) {
         }, delay);
     }
 }
+
+/**
+ * @description: 日志打印工具
+ * @param test {boolean} 是否打印
+ * @param arg {any[]} 参数
+ */
+export const log = (test: boolean, ...arg: any[]) => {
+    if (!test) return;
+    console.log(arg)
+}

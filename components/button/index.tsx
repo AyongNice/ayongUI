@@ -14,6 +14,7 @@ import {useDebounce} from '../../utils/index.ts'
 export default function Button(props: ButtonProps) {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const {
+        style = {},
         type = 'default',
         size = 'default',
         shape = 'default',
@@ -47,9 +48,12 @@ export default function Button(props: ButtonProps) {
      */
     const styleClassName: string = `${but.ayongBtn} ${className} ${but[size]} ${but[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
     return (
-        <button className={styleClassName} onClick={time ? useDebounce(ayongClick, time) : ayongClick}
-                disabled={disabled}
-                type={htmlType}
+        <button
+            style={style}
+            className={styleClassName}
+            onClick={time ? useDebounce(ayongClick, time) : ayongClick}
+            disabled={disabled}
+            type={htmlType}
         >
             {icon}{children}
         </button>

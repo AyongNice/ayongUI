@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface ButtonProps {
+    style?: React.CSSProperties; // 自定义样式
     time?: number; // 防抖时间设置 0 为不防抖
     href?: string; // 跳转连接
     className?: string; // 自定义样式类名
@@ -13,7 +14,6 @@ export interface ButtonProps {
     htmlType?: 'button' | 'submit' | 'reset'; // 原生button类型
     onClick?: () => void; // 点击事件
 }
-
 
 
 declare const Button: React.FC<ButtonProps>;
