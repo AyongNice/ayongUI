@@ -1,3 +1,4 @@
+import {RadioProps} from "./radio";
 export default function Radio(props: RadioProps) {
   const {
     label,
