@@ -48,9 +48,21 @@ export interface ColumnProps {
     key?: string;
 }
 
-// declare const Table: React.FC<TableProps>;
-// declare const  Column: React.FC<ColumnProps>;
-// export default Table;
+export interface UnfoldTdProps {
+    expandable?: Expandable;
+    ayonEexpandedRowKeys?: string[];
+    index?: number;
+    item?: DataItem;
+    toggleExpand?: (key: string) => void;
+}
+
+export interface DraggableProps {
+    draggable?: boolean;
+    onDdragAfter?: (data: DataItem[], column: Column[]) => void;
+    initialData?: DataItem[];
+    initialColumns?: Column[];
+}
+
 declare module 'Table' {
     export function Table({data, columns}: TableProps): React.FC;
 
