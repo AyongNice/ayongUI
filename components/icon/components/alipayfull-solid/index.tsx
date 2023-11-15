@@ -1,7 +1,6 @@
 import React from "react";
 import { IconProps } from "../../index";
 import icon from "../../index.module.less";
-
 const Alipayfull = (props: IconProps) => {
     const { className = "", style = {}, onClick = () => {} } = props;
     const styleClassName: string = `${icon.default} ${className}`;
@@ -21,5 +20,4 @@ const Alipayfull = (props: IconProps) => {
         </svg>
     );
 };
-
 export default Alipayfull;

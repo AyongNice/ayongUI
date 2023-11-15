@@ -18,8 +18,7 @@ export { default as Fileput } from "./components/file-frame"; // 文件
 export { default as Download } from "./components/download-frame"; // 下载
 export { default as Upload } from "./components/upload-frame"; // 上传
 export { default as Wechat } from "./components/wechat-frame"; // 微信
-export { default as Weibo } from "./components/weibo-frame"; // 微信
-
+export { default as Weibo } from "./components/weibo-frame"; // 微博
 /*
 * 实体icon
 */
