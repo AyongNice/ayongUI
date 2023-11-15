@@ -23,6 +23,6 @@ export { default as Weibo } from "./components/weibo-frame"; // 微信
 /*
 * 实体icon
 */
-export { default as Alertfull } from "./components/alipayfull-solid"; //支付宝
+export { default as Alipayfull } from "./components/alipayfull-solid"; //支付宝
 export { default as Wechatfull } from "./components/wechatfull-solid"; // 微信
 export { default as Weibofull } from "./components/weibofull-solid"; // 微博

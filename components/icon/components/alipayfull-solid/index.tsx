@@ -2,7 +2,7 @@ import React from "react";
 import { IconProps } from "../../index";
 import icon from "../../index.module.less";
 
-const Alertfull = (props: IconProps) => {
+const Alipayfull = (props: IconProps) => {
     const { className = "", style = {}, onClick = () => {} } = props;
     const styleClassName: string = `${icon.default} ${className}`;
     return (
@@ -22,4 +22,4 @@ const Alertfull = (props: IconProps) => {
     );
 };
 
-export default Alertfull;
+export default Alipayfull;
