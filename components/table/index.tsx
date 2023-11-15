@@ -200,10 +200,11 @@ function Table({
                             <ConditionalRender mode='if'
                                                show={(Array.isArray(expandedRowKeys))}>
                                 <td>
-                                    {expandable?.expandedRowKeys.map((rowKeys: number | string) => {
+                                    {expandable?.expandedRowKeys.map((rowKeys: number | string, rowKeysIndex: number) => {
                                         return Number(rowKeys) === index ? <Button
                                             size='mini'
                                             style={{width: ' 20px'}}
+                                            key={rowKeysIndex}
                                             onClick={() => toggleExpand(index)}
                                             className={table.unfold}>{Array.isArray(expandedRowKeys) ? ayonEexpandedRowKeys.includes(index) ? '-' : '+' : ''}</Button> : null
                                     })}
@@ -245,12 +246,13 @@ function Table({
                         </tr>
 
                         <ConditionalRender mode='if' show={ayonEexpandedRowKeys.includes(index)}>
-                            {expandable?.expandedRowKeys.map((rowKeys: number | string) => {
-                                return Number(rowKeys) === index ? <tr style={{width: '100%', border: 0}}>
-                                    <td colSpan={5}>
-                                        {ayonEexpandedRowKeys.includes(index) ? typeof expandedRowRender === 'function' ? expandedRowRender(item) : expandedRowRender : ''}
-                                    </td>
-                                </tr> : null
+                            {expandable?.expandedRowKeys.map((rowKeys: number | string, rowKeysIndex: number) => {
+                                return Number(rowKeys) === index ?
+                                    <tr key={rowKeysIndex} style={{width: '100%', border: 0}}>
+                                        <td colSpan={5}>
+                                            {ayonEexpandedRowKeys.includes(index) ? typeof expandedRowRender === 'function' ? expandedRowRender(item) : expandedRowRender : ''}
+                                        </td>
+                                    </tr> : null
                             })}
                         </ConditionalRender>
 
