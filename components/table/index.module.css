@@ -1,0 +1,72 @@
+/* Table Container */
+.table {
+  width: 100%;
+  border-radius: 6px;
+  margin: 20px 0;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-spacing: 0;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Custom Table */
+}
+.table tr {
+  padding: 10px;
+}
+.table thead {
+  width: 100%;
+  text-align: left;
+  background-color: #fff;
+  border: none;
+}
+.table thead tr {
+  box-sizing: border-box;
+  padding: 0 18px;
+}
+.table thead tbody tr:hover {
+  background-color: #e0e0e0;
+}
+.table thead tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+.table thead th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+  border: none;
+}
+.table thead th,
+.table thead .custom-table td {
+  padding: 12px 15px;
+}
+.table tbody tr {
+  height: 50px;
+  border-bottom: 0.7px solid var(--ayong-premium-grey);
+  border-top: 0.7px solid var(--ayong-premium-grey);
+  border-collapse: collapse;
+  box-sizing: border-box;
+  padding: 0 18px;
+}
+.table tbody td {
+  font-weight: 400;
+  font-size: var(--ayong-table-font-size);
+  color: var(--ayong-table-font-color);
+  box-sizing: border-box;
+  padding: 0 18px;
+}
+.aticve {
+  background-color: var(--ayong-premium-grey);
+  opacity: 0.5;
+}
+.textAlignCenter {
+  text-align: center;
+}
+.expandBox {
+  position: relative;
+}
+.expandIcon {
+  position: absolute;
+  white-space: nowrap;
+}
+/*# sourceMappingURL=index.module.css.map */

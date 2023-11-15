@@ -3,7 +3,9 @@ export {default as Button} from "./components/button";
 export type {ButtonProps} from "./components/button";
 export {
     Alipay, Alert, PreviousStep, FileCopy
-    , CodeDisplay, LabelersLists, Collapse, Unfold,UserHollow,EyesOpen,EyesClosed,Setup
+    , CodeDisplay, LabelersLists, Collapse, Unfold, UserHollow
+    , EyesOpen, EyesClosed, Setup, Alertfull,Advance,Wechatfull,
+    Fileput,Download,Upload,Wechat,Weibofull,Weibo
 } from "./components/icon/index.ts";
 export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';
