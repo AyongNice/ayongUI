@@ -119,6 +119,7 @@ function Table({
                             <UnfoldButton
                                 index={index}
                                 expandable={expandable}
+                                item={item}
                                 toggleExpand={toggleExpand}
                                 ayonEexpandedRowKeys={ayonEexpandedRowKeys}
                             />

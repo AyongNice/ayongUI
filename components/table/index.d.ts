@@ -23,11 +23,6 @@ export interface ColumnGroup {
     children: Column[]; //数组   集合
 }
 
-interface Expandable {
-    expandedRowRender: () => React.FC | React.FC;
-    onExpand: () => void;
-    expandedRowKeys: string[];
-}
 
 // 定义Table组件的属性类型
 export interface TableProps {
@@ -49,14 +44,37 @@ export interface ColumnProps {
     key?: string;
 }
 
+interface expandIconProps {
+    expanded: boolean;
+    record: number;
+    onExpand: () => void;
+}
+
+/**
+ * 定义展开组件的类型
+ */
+interface Expandable {
+    expandedRowRender: () => React.FC | React.FC;// 展开的行内容
+    onExpandChange: (expand: boolean) => void;//点击展开的回调
+    expandedRowKeys: string[];// 展开的行
+    expandIcon: (props: expandIconProps) => ReactNode;// 展开的图标
+
+}
+
+/**
+ * 定义展开组件组件的属性类型
+ */
 export interface UnfoldTdProps {
     expandable?: Expandable;
     ayonEexpandedRowKeys?: string[];
     index?: number;
-    item?: DataItem;
+    item?: DataItem;// 当前行的数据
     toggleExpand?: (key: string) => void;
 }
 
+/**
+ * 拖拽组件的属性类型
+ */
 export interface DraggableProps {
     draggable?: boolean;
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;
@@ -64,10 +82,13 @@ export interface DraggableProps {
     initialColumns?: Column[];
 }
 
+/**
+ * 分组组件的属性类型
+ */
 export interface GroupTbodyProps {
     tableColumns: Column[];
     item: DataItem[];
-    activeTD: string | null;
+    activeTD: string | null;// 当前拖拽的列
 }
 
 declare module 'Table' {
