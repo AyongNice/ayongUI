@@ -1,4 +1,5 @@
 import React, {ReactNode} from 'react';
+import GroupTbody from "./components/gtoup-tbody/group-tbody";
 
 
 // 定义数据项的类型
@@ -61,6 +62,12 @@ export interface DraggableProps {
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;
     initialData?: DataItem[];
     initialColumns?: Column[];
+}
+
+export interface GroupTbodyProps {
+    tableColumns: Column[];
+    item: DataItem[];
+    activeTD: string | null;
 }
 
 declare module 'Table' {

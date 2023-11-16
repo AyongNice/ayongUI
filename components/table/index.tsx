@@ -5,17 +5,18 @@ import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import UnfoldTd from "./components/unfold-td/unfold-td.tsx"; // 展开渲染组件
 import UnfoldButton from "./components/unfold-button/unfold-button.tsx"; //展开折叠按钮组件
 import Empty from "./components/empty/empty.tsx";//空数据
-import GroupTh from "./components/group-th/group-th.tsx"; //分组 th组件
+import GroupChildTh from "./components/group-child-th/group-child-th.tsx"; //分组 th组件
 import useDragDrop from "./draggable.ts"; //分组 th组件
 
-import {groupHandle} from "./group-handle.ts"; //分组 th组件
+import {groupHandle} from "./group-handle.ts";
+import GroupTbody from "./components/gtoup-tbody/group-tbody.tsx"; //分组 th组件
 function Table({
                    columns,
                    children,
                    data,
                    className,
                    tbodyClassName,
-                   theadClassNmae,
+                   theadClassName,
                    draggable = false,
                    onDdragAfter = () => {
                    },
@@ -60,51 +61,48 @@ function Table({
         setAyonExpandedRowKeys(newExpandedRowKeys);
     };
 
-
+    const getClassName = (column: Column | ColumnGroup, isColumnGroup: boolean) => {
+        let classNames = theadClassName;
+        if (isColumnGroup) {
+            classNames += ` ${table.textAlignCenter}`;
+        }
+        return classNames;
+    };
+    const getColSpan = (column: Column | ColumnGroup) => {
+        return column.type === 'columnGroup' ? (column as ColumnGroup).children.length : void 1;
+    };
+    const getRowSpan = (column: Column | ColumnGroup) => {
+        return column.type === 'columnGroup' ? void 1 : colSpanSize;
+    };
     return (
         <table className={styleClassName}>
             <thead>
             <tr>
 
                 <ConditionalRender mode='if' show={expandedRowRender}>
-                    <th style={{width: ' 39px'}} rowSpan={colSpanSize} className={theadClassNmae}/>
+                    <th style={{width: ' 39px'}} rowSpan={colSpanSize} className={theadClassName}/>
                 </ConditionalRender>
 
                 {tableColumns.map((column: Column | ColumnGroup, index: number) => (
                     <React.Fragment key={column.key}>
-                        {column.type === 'columnGroup' ?
-                            // 如果是列分组，则递归渲染子级表头
-
-                            <th
-                                draggable={draggable}
-                                colSpan={(column as ColumnGroup).children.length}
-                                className={`${table.textAlignCenter}${theadClassNmae}`}
-                                onDragStart={(e) => handleDragStart(e, index)}
-                                onDragOver={(e) => handleDragOver(e, index)}
-                                onDrop={(e) => handleDrop(e, index)}
-                            >
-                                {column.title}
-                            </th>
-
-                            : <th
-                                draggable={draggable}
-                                rowSpan={colSpanSize}
-                                className={`${theadClassNmae}`}
-                                onDragStart={(e) => handleDragStart(e, index)}
-                                onDragOver={(e) => handleDragOver(e, index)}
-                                onDrop={(e) => handleDrop(e, index)}
-                            >
-                                {column.title}
-                            </th>
-                        }
+                        <th
+                            draggable={draggable}
+                            colSpan={getColSpan(column)}
+                            rowSpan={getRowSpan(column)}
+                            className={getClassName(column, column.type === 'columnGroup')}
+                            onDragStart={(e) => handleDragStart(e, index)}
+                            onDragOver={handleDragOver}
+                            onDrop={(e) => handleDrop(e, index)}
+                        >
+                            {column.title}
+                        </th>
 
                     </React.Fragment>
                 ))}
 
             </tr>
 
-
-            <GroupTh tableColumns={tableColumns}/>
+            <GroupChildTh tableColumns={tableColumns}/>
 
             </thead>
             <tbody className={tbodyClassName}>
@@ -115,7 +113,7 @@ function Table({
                             draggable={draggable}
                             className={activeTR === index ? table.aticve : ''}
                             onDragStart={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragStartData(e, index)}
-                            onDragOver={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragOver(e, index)}
+                            onDragOver={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragOver(e)}
                             onDrop={(e: React.DragEvent<HTMLTableRowElement>,) => handleDropData(e, index)}
                         >
                             <UnfoldButton
@@ -124,36 +122,9 @@ function Table({
                                 toggleExpand={toggleExpand}
                                 ayonEexpandedRowKeys={ayonEexpandedRowKeys}
                             />
-                            {tableColumns.map((column: Column | ColumnGroup) => (
-                                <React.Fragment key={column.key}>
-                                    {column.type === 'columnGroup' ? (
-                                        // 如果是列分组，则递归渲染子列
-                                        <React.Fragment>
-                                            {column.children.map((subColumn: Column) => (
-                                                <td
-                                                    key={subColumn.key}
-                                                    className={activeTD === subColumn.dataIndex ? table.aticve : ''}
-                                                >
-                                                    <React.Fragment>
-                                                        {subColumn.render ? subColumn.render(item[subColumn.dataIndex], item) : item[subColumn.dataIndex]}
-                                                    </React.Fragment>
-                                                </td>
-                                            ))}
-                                        </React.Fragment>
-                                    ) : (
-                                        // 如果是单独的列，则渲染一个单独的表格单元格
-                                        <React.Fragment>
-                                            <td
-                                                key={column.key}
-                                                className={activeTD === column.dataIndex ? `${table.aticve}` : ''}
-                                            >
-                                                {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
-                                            </td>
-                                        </React.Fragment>
 
-                                    )}
-                                </React.Fragment>
-                            ))}
+                            <GroupTbody tableColumns={tableColumns} item={item} activeTD={activeTD}/>
+
                         </tr>
                         <UnfoldTd
                             item={item}
