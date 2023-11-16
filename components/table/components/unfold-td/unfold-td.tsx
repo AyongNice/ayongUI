@@ -1,11 +1,12 @@
 import ConditionalRender from "../../../conditional-render/conditional-render.tsx";
-import {Column, UnfoldTdProps} from "../../index";
+import {Column, DataItem, UnfoldTdProps} from "../../index";
 
 const UnfoldTd = ({expandable = {}, ayonEexpandedRowKeys, index, item}: UnfoldTdProps) => {
     const {expandedRowRender, expandedRowKeys} = expandable;
-    const renderExpandContent = (index: number, column: Column): string => {
+    const renderExpandContent = (index: number, item: DataItem): string => {
         if (Array.isArray(expandedRowKeys) && expandedRowKeys.includes(index)) {
-            return typeof expandedRowRender === 'function' ? expandedRowRender(column) : expandedRowRender;
+            console.log('expandedRowRender---item', item)
+            return typeof expandedRowRender === 'function' ? expandedRowRender(item) : expandedRowRender;
         }
         return '';
     };
