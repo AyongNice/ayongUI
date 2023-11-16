@@ -23,6 +23,7 @@ export { default as Taobao } from "./components/taobao-frame"; // 淘宝
 export { default as Android } from "./components/android-frame"; // 安卓
 export { default as Google } from "./components/google-frame"; // 谷歌
 export { default as Plusround } from "./components/plusround-frame"; // 加号圆
+export { default as Minusround } from "./components/minusround-frame"; // 加号圆
 /*
 * 实体icon
 */
@@ -34,3 +35,4 @@ export { default as Taobaoful } from "./components/taobao-solid"; // 淘宝
 export { default as Androidfu } from "./components/android-solid"; // 安卓
 export { default as Googlefu } from "./components/google-solid"; // 谷歌
 export { default as Plusrofu } from "./components/plusround-solid"; // 加号圆
+export { default as Minusrfu } from "./components/minusround-solid"; // 减号圆
