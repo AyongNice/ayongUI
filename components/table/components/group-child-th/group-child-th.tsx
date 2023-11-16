@@ -18,7 +18,7 @@ function renderSubHeaders(columns: Column[]) {
     );
 }
 
-const GroupTh = ({tableColumns}: { tableColumns: Column[] }) => (
+const GroupChildTh = ({tableColumns}: { tableColumns: Column[] }) => (
     <tr>
         {tableColumns.map((column: Column | ColumnGroup) => (
             <React.Fragment key={column.key}>
@@ -30,4 +30,4 @@ const GroupTh = ({tableColumns}: { tableColumns: Column[] }) => (
         ))}
     </tr>
 )
-export default GroupTh;
+export default GroupChildTh;
