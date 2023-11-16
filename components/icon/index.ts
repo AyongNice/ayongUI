@@ -19,9 +19,18 @@ export { default as Download } from "./components/download-frame"; // 下载
 export { default as Upload } from "./components/upload-frame"; // 上传
 export { default as Wechat } from "./components/wechat-frame"; // 微信
 export { default as Weibo } from "./components/weibo-frame"; // 微博
+export { default as Taobao } from "./components/taobao-frame"; // 淘宝
+export { default as Android } from "./components/android-frame"; // 安卓
+export { default as Google } from "./components/google-frame"; // 谷歌
+export { default as Plusround } from "./components/plusround-frame"; // 加号圆
 /*
 * 实体icon
 */
 export { default as Alipayfull } from "./components/alipayfull-solid"; //支付宝
 export { default as Wechatfull } from "./components/wechatfull-solid"; // 微信
 export { default as Weibofull } from "./components/weibofull-solid"; // 微博
+export { default as Fulcopy } from "./components/copy-solid"; // 文件拷贝
+export { default as Taobaoful } from "./components/taobao-solid"; // 淘宝
+export { default as Androidfu } from "./components/android-solid"; // 安卓
+export { default as Googlefu } from "./components/google-solid"; // 谷歌
+export { default as Plusrofu } from "./components/plusround-solid"; // 加号圆

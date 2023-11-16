@@ -5,7 +5,8 @@ export {
     Alipay, Alert, PreviousStep, FileCopy
     , CodeDisplay, LabelersLists, Collapse, Unfold, UserHollow
     , EyesOpen, EyesClosed, Setup, Alipayfull,Advance,Wechatfull,
-    Fileput,Download,Upload,Wechat,Weibofull,Weibo
+    Fileput,Download,Upload,Wechat,Weibofull,Weibo,Fulcopy,Taobao,
+    Taobaoful,Android,Androidfu,Google,Googlefu,Plusround,Plusrofu
 } from "./components/icon/index.ts";
 export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';

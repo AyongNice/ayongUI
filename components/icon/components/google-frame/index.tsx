@@ -1,8 +1,7 @@
 import React from "react";
 import { IconProps } from "../../index";
 import icon from "../../index.module.less";
-
-const Unfold = (props: IconProps) => {
+const Google = (props: IconProps) => {
     const { className = "", style = {}, onClick = () => {} } = props;
     const styleClassName: string = `${icon.default} ${className}`;
     return (
@@ -17,10 +16,8 @@ const Unfold = (props: IconProps) => {
             focusable="false"
             data-icon="ayong"
         >
-            <path d="M328 544h368c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H328c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8z" /><path d="M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" />
+            <path d="M881 442.4H519.7v148.5h206.4c-8.9 48-35.9 88.6-76.6 115.8-34.4 23-78.3 36.6-129.9 36.6-99.9 0-184.4-67.5-214.6-158.2-7.6-23-12-47.6-12-72.9s4.4-49.9 12-72.9c30.3-90.6 114.8-158.1 214.7-158.1 56.3 0 106.8 19.4 146.6 57.4l110-110.1c-66.5-62-153.2-100-256.6-100-149.9 0-279.6 86-342.7 211.4-26 51.8-40.8 110.4-40.8 172.4S151 632.8 177 684.6C240.1 810 369.8 896 519.7 896c103.6 0 190.4-34.4 253.8-93 72.5-66.8 114.4-165.2 114.4-282.1 0-27.2-2.4-53.3-6.9-78.5z" />
         </svg>
     );
 };
-
-
-export default Unfold;
+export default Google;
