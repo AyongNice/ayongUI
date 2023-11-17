@@ -57,7 +57,6 @@ interface Expandable {
     onExpandChange: (expand: boolean) => void;//点击展开的回调
     expandedRowKeys: string[];// 展开的行
     expandIcon: (props: expandIconProps) => ReactNode;// 展开的图标
-
 }
 
 /**

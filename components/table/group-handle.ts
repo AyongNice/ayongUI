@@ -19,7 +19,7 @@ export function groupHandle({columns, children}: GroupHandleProps): Group {
     } else if (children) {
         return {
             columns: React.Children.map(children, (child) => {
-                if (child.type.name === 'Column') {
+                if (child.type.displayName === 'Column') {
                     return {
                         title: child.props.title,
                         dataIndex: child.props.dataIndex,
@@ -33,7 +33,7 @@ export function groupHandle({columns, children}: GroupHandleProps): Group {
                         title: child.props.title,
                         type: 'columnGroup',
                         children: React.Children.map(child.props.children, (columnChild) => {
-                            if (columnChild.type.name === 'Column') {
+                            if (columnChild.type.displayName === 'Column') {
                                 colSpanSize = child.props.children.length;
                                 return {
                                     title: columnChild.props.title,
