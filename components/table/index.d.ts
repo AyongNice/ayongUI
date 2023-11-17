@@ -5,7 +5,6 @@ import GroupTbody from "./components/gtoup-tbody/group-tbody";
 // 定义数据项的类型
 export interface DataItem {
     key: string;
-
     [propName: string]: any;
 }
 

@@ -11,7 +11,7 @@ export {
 } from "./components/icon/index.ts";
 export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';
-export type {TableProps} from './components/table';
+export type {TableProps} from './components/table/index.d.ts';
 
 // export {default as Input} from './components/input/input';
 // export {default as Radio} from './components/radio/radio';
