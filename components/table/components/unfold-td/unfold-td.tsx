@@ -5,12 +5,10 @@ const UnfoldTd = ({expandable = {}, ayonEexpandedRowKeys, index, item}: UnfoldTd
     const {expandedRowRender, expandedRowKeys} = expandable;
     const renderExpandContent = (index: number, item: DataItem): string => {
         if (Array.isArray(expandedRowKeys) && expandedRowKeys.includes(index)) {
-            console.log('expandedRowRender---item', item)
             return typeof expandedRowRender === 'function' ? expandedRowRender(item) : expandedRowRender;
         }
         return '';
     };
-    console.log('UnfoldTd', ayonEexpandedRowKeys)
 
     return (
         <ConditionalRender mode='if' show={expandedRowRender && ayonEexpandedRowKeys.includes(index)}>

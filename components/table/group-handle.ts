@@ -13,7 +13,6 @@ interface Group {
 
 // @ts-ignore
 export function groupHandle({columns, children}: GroupHandleProps): Group {
-    console.log('columns', columns)
     let colSpanSize: number = 0;
     if (columns) {
         return {columns, colSpanSize};
