@@ -1,10 +1,12 @@
 import React, {ReactNode} from 'react';
 import GroupTbody from "./components/gtoup-tbody/group-tbody";
+import {ButtonProps} from "../button";
 
 
 // 定义数据项的类型
 export interface DataItem {
     key: string;
+
     [propName: string]: any;
 }
 
@@ -89,12 +91,16 @@ export interface GroupTbodyProps {
     activeTD: string | null;// 当前拖拽的列
 }
 
-declare module 'Table' {
-    export function Table({data, columns}: TableProps): React.FC;
+declare const Table: React.FC<TableProps>;
 
-    export function Column({title, dataIndex, render, key}: ColumnProps): null;
+export default Table;
 
-    namespace Table {
-        export const Column: typeof Column;
-    }
-}
+// declare module 'Table' {
+//     export function Table({data, columns}: TableProps): React.FC;
+//
+//     export function Column({title, dataIndex, render, key}: ColumnProps): null;
+//
+//     namespace Table {
+//         export const Column: typeof Column;
+//     }
+// }

@@ -26,12 +26,13 @@ function Table({
     let _tableColumns: Column[] = [];
     let colSpanSize: number = 0;
     const {expandedRowRender} = expandable || {};
+    console.log('原始-_columns--', children)
 
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     const groupHandleData = groupHandle({columns, children});
     _tableColumns = groupHandleData.columns;
     colSpanSize = groupHandleData.colSpanSize;
-
+    console.log('分组后-_tableColumns--', _tableColumns)
     const [ayonEexpandedRowKeys, setAyonExpandedRowKeys] = useState<Array<number | string>>([]);
     const styleClassName: string = `${table.table} ${className} `;
 
@@ -47,7 +48,7 @@ function Table({
         handleDropData,
     } = useDragDrop({_tableColumns, data, draggable, onDdragAfter});
 
-
+    // console.log('分组后---', tableColumns, tableData)
     const toggleExpand = (rowIndex: number): void => {
         const newExpandedRowKeys = [...ayonEexpandedRowKeys];
         if (newExpandedRowKeys.includes(rowIndex)) {
@@ -145,13 +146,22 @@ function Table({
     );
 }
 
-function Column({title, dataIndex, render}) {
+// JSX函数
+interface ColumnFunction extends React.FC {
+    displayName: string;//防止编译命名冲突
+}
+
+// @ts-ignore
+const Column: ColumnFunction = ({title, dataIndex, render}) => {
     return null; // 列定义不需要在这里渲染
 }
 
-function ColumnGroup({title, children}) {
+// @ts-ignore
+const ColumnGroup: ColumnFunction = ({title, children}) => {
     return null; // 列定义不需要在这里渲染
 }
+ColumnGroup.displayName = 'ColumnGroup';
+Column.displayName = 'Column';
 
 Table.ColumnGroup = ColumnGroup;
 
