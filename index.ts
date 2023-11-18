@@ -7,7 +7,8 @@ export {
     , EyesOpen, EyesClosed, Setup, Alipayfull,Advance,Wechatfull,
     Fileput,Download,Upload,Wechat,Weibofull,Weibo,Fulcopy,Taobao,
     Taobaoful,Android,Androidfu,Google,Googlefu,Plusround,Plusrofu,
-    Minusround,Minusrfu
+    Minusround,Minusrfu,Upward,Upwardfu,Downward,Downwardfu,Downwleft,
+    Downwleftfu,Downwright,Downwrightfu
 } from "./components/icon/index.ts";
 export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';
