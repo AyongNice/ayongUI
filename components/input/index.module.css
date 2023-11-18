@@ -1,0 +1,126 @@
+:root {
+  --ayong-primary-color: #8aabec;
+  /* 全局主题色 */
+  --ayong-safe: #8e8e8e;
+  --ayong-dangerous: #ad0000;
+  --ayong-warn: #947904;
+  --ayong-font-color: #fff;
+  --ayong-font-size: 15px;
+  --ayong-default-size: 7px;
+  --ayong-small-size: 3.5px;
+  --ayong-large-size: 12px;
+  --ayong-border-radius: 5px;
+  --ayong-icon-size: 25px;
+  --ayong-table-font-color: #222731;
+  --ayong-table-font-size: 14px;
+  --ayong-premium-grey: #dcdcdc;
+  --ayong-mini-size: 0 5px;
+}
+a {
+  text-decoration: inherit;
+}
+button {
+  cursor: pointer;
+  border: none;
+}
+/**
+// 导出变量 可以在 JSX中 引入该 less变量 通过 命名空间
+例如
+ import styles from '../../config/style.module.less';
+ styles.theme
+ */
+:export {
+  theme: #8aabec;
+  dangerous: #ad0000;
+  warn: #947904;
+}
+.ayongInput {
+  font-size: var(--ayong-font-size);
+  border-radius: var(--ayong-border-radius);
+  padding: var(--ayong-default-size);
+  border: 1px solid var(--ayong-primary-color);
+  color: var(--ayong-primary-color);
+  background: none;
+}
+.ayongInput:active {
+  opacity: 0.5;
+}
+.ayongInput:hover {
+  opacity: 0.8;
+}
+.notAllowed {
+  cursor: not-allowed;
+}
+.notAllowed:active {
+  opacity: 1;
+}
+.primary {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-primary-color);
+  background: var(--ayong-primary-color);
+}
+.dashed {
+  border: 1px dashed var(--ayong-primary-color);
+  color: var(--ayong-primary-color);
+  background: none;
+}
+.dangerous {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-dangerous);
+  background: var(--ayong-dangerous);
+}
+.warn {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-warn);
+  background: var(--ayong-warn);
+}
+.safe {
+  color: var(--ayong-font-color);
+  border: 1px solid var(--ayong-safe);
+  background: var(--ayong-safe);
+}
+.small {
+  padding: var(--ayong-small-size);
+}
+.large {
+  padding: var(--ayong-large-size);
+}
+.mini {
+  padding: var(--ayong-mini-size);
+}
+.circle {
+  padding: 10px 10px;
+  border-radius: 50%;
+}
+.strong {
+  border-radius: 0;
+}
+.round {
+  border-radius: 999px;
+}
+.button-container {
+  position: relative;
+  text-align: center;
+}
+/* 按钮点击效果 */
+button::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 116, 204, 0.5);
+  border-radius: 5px;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.button-container.clicked button {
+  transform: scale(1.2);
+  /* 按钮主体扩散效果 */
+}
+.button-container.clicked button::before {
+  transform: scale(2);
+  /* 残影扩散效果 */
+  opacity: 1;
+}
+/*# sourceMappingURL=index.module.css.map */

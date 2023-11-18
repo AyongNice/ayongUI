@@ -13,7 +13,9 @@ export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';
 export type {TableProps} from './components/table/index.d.ts';
 
-// export {default as Input} from './components/input/input';
+export {default as Input} from './components/input';
+export type {InputProps} from './components/input/index.d.ts';
+
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
 // export {default as Select} from './components/select/select';
