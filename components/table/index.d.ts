@@ -46,6 +46,7 @@ export interface GroupTbodyProps {
     tableColumns: Column[];
     item: DataItem[];
     activeTD: string | null;// 当前拖拽的列
+    tbodyStyle: string;
 }
 
 // 定义数据项的类型
@@ -78,8 +79,8 @@ export interface TableProps {
     draggable?: boolean;// 是否可拖拽
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;// 拖拽后的回调
     expandable?: Expandable;
-    tbodyClassName: string;
-    theadClassNmae: string;
+    tbodyStyle: string;
+    theadStyle: string;
 }
 
 // 定义Column组件的属性类型

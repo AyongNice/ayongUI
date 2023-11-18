@@ -11,6 +11,8 @@ export const useDragDrop = ({
                                 onDdragAfter = () => {
                                 }
                             }: DraggableProps) => {
+
+
     const [tableColumns, setTableColumns] = useState<Column[]>(_tableColumns);
     const [tableData, setTableData] = useState<DataItem[]>(data as DataItem[]);
     const [activeTR, setActiveTR] = useState<null | number>(null);

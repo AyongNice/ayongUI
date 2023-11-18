@@ -14,9 +14,10 @@ function Table({
                    columns,
                    children,
                    data,
+                   cellActiveClassName = () => {
+                   },
                    className,
-                   tbodyClassName,
-                   theadClassName,
+                   tbodyStyle,
                    draggable = false,
                    onDdragAfter = () => {
                    },
@@ -26,21 +27,41 @@ function Table({
     let _tableColumns: Column[] = [];
     let colSpanSize: number = 0;
     const {expandedRowRender} = expandable || {};
-    console.log('原始-_columns--', children)
+
 
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     const groupHandleData = groupHandle({columns, children});
     _tableColumns = groupHandleData.columns;
     colSpanSize = groupHandleData.colSpanSize;
-    console.log('分组后-_tableColumns--', _tableColumns)
+
     const [ayonEexpandedRowKeys, setAyonExpandedRowKeys] = useState<Array<number | string>>([]);
     const styleClassName: string = `${table.table} ${className} `;
+
+    const _sortOrderMap: { [key: string]: string } = {};
+
+    /** 默认排序功能 **/
+    _tableColumns.forEach((column: Column | ColumnGroup) => {
+        if (column.type !== 'columnGroup') {
+            const {sorter, dataIndex, defaultSortOrder} = column;
+            if (sorter && typeof sorter === 'function') {
+                _sortOrderMap[dataIndex] = defaultSortOrder ? defaultSortOrder === 'ascend' ? 'descend' : 'ascend' : 'default';
+
+                if (defaultSortOrder === 'ascend') {
+                    data = [...data].sort(sorter)
+                }
+                if (defaultSortOrder === 'descend') {
+                    data = [...data].sort((a, b) => sorter(b, a)); // 反转排序逻辑
+                }
+            }
+        }
+    })
 
     const {
         tableColumns,
         tableData,
         activeTR,
         activeTD,
+        setTableData,
         handleDragStart,
         handleDragStartData,
         handleDragOver,
@@ -48,7 +69,47 @@ function Table({
         handleDropData,
     } = useDragDrop({_tableColumns, data, draggable, onDdragAfter});
 
-    // console.log('分组后---', tableColumns, tableData)
+    const [sortField, setSortField] = useState(null);
+    const [sortOrderMap, stateSortOrderMap] = useState<{ [key: string]: string }>(_sortOrderMap);//排序状态
+
+    const handleSort = (column: Column) => {
+        // 提取当前列的 sorter 函数
+        const {sorter, dataIndex, defaultSortOrder} = column;
+        if (sorter && typeof sorter === 'function') {
+            stateSortOrderMap((prevState) => {
+                const map = {...sortOrderMap}
+                map[dataIndex] = map[dataIndex] ? map[dataIndex] === 'ascend' ? 'descend' : 'ascend' : defaultSortOrder === 'ascend' ? 'descend' : 'ascend'
+                return map
+            });
+            setSortField(column.dataIndex);
+            if (sortOrderMap[dataIndex] === 'ascend') {
+                setTableData((prevState) => {
+                    return [...prevState].sort(sorter);
+                });
+            }
+            if (sortOrderMap[dataIndex] === 'descend') {
+                setTableData((prevState) => {
+                    return [...prevState].sort((a, b) => sorter(b, a)); // 反转排序逻辑
+                });
+            }
+
+        }
+    };
+    const getClassName = (column: Column | ColumnGroup, isColumnGroup: boolean) => {
+        return isColumnGroup ? table.textAlignCenter : '';
+    };
+    const getColSpan = (column: Column | ColumnGroup) => {
+        return column.type === 'columnGroup' ? (column as ColumnGroup).children.length : void 1;
+    };
+    const getRowSpan = (column: Column | ColumnGroup) => {
+        return column.type === 'columnGroup' ? void 1 : colSpanSize;
+    };
+
+    const tableStyle = (item: DataItem, index: number) => {
+        const _className = cellActiveClassName(item, index);
+        return activeTR === index ? table.aticve + _className : _className
+
+    }
     const toggleExpand = (rowIndex: number): void => {
         const newExpandedRowKeys = [...ayonEexpandedRowKeys];
         if (newExpandedRowKeys.includes(rowIndex)) {
@@ -62,26 +123,12 @@ function Table({
         setAyonExpandedRowKeys(newExpandedRowKeys);
     };
 
-    const getClassName = (column: Column | ColumnGroup, isColumnGroup: boolean) => {
-        let classNames = theadClassName;
-        if (isColumnGroup) {
-            classNames += ` ${table.textAlignCenter}`;
-        }
-        return classNames;
-    };
-    const getColSpan = (column: Column | ColumnGroup) => {
-        return column.type === 'columnGroup' ? (column as ColumnGroup).children.length : void 1;
-    };
-    const getRowSpan = (column: Column | ColumnGroup) => {
-        return column.type === 'columnGroup' ? void 1 : colSpanSize;
-    };
     return (
         <table className={styleClassName}>
             <thead>
             <tr>
-
                 <ConditionalRender mode='if' show={expandedRowRender}>
-                    <th style={{width: ' 39px'}} rowSpan={colSpanSize} className={theadClassName}/>
+                    <th style={{width: ' 39px'}} rowSpan={colSpanSize}/>
                 </ConditionalRender>
 
                 {tableColumns.map((column: Column | ColumnGroup, index: number) => (
@@ -96,6 +143,15 @@ function Table({
                             onDrop={(e) => handleDrop(e, index)}
                         >
                             {column.title}
+                            {column.sorter && (
+                                <span
+                                    onClick={() => handleSort(column)}
+                                    style={{marginLeft: '5px', cursor: 'pointer'}}
+                                >
+                                    {sortOrderMap[column.dataIndex] && sortOrderMap[column.dataIndex] === 'default' ? '↕' : sortOrderMap[column.dataIndex] === 'ascend' ? '↑' : sortOrderMap[column.dataIndex] === 'descend' ? '↓' : ''}
+                                </span>
+                            )}
+
                         </th>
 
                     </React.Fragment>
@@ -106,13 +162,13 @@ function Table({
             <GroupChildTh tableColumns={tableColumns}/>
 
             </thead>
-            <tbody className={tbodyClassName}>
+            <tbody>
             <ConditionalRender mode='if' show={tableData.length !== 0}>
                 {tableData.map((item: DataItem, index: number) => (
                     <React.Fragment key={item.key}>
                         <tr
                             draggable={draggable}
-                            className={activeTR === index ? table.aticve : ''}
+                            className={tableStyle(item, index)}
                             onDragStart={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragStartData(e, index)}
                             onDragOver={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragOver(e)}
                             onDrop={(e: React.DragEvent<HTMLTableRowElement>,) => handleDropData(e, index)}
@@ -125,7 +181,11 @@ function Table({
                                 ayonEexpandedRowKeys={ayonEexpandedRowKeys}
                             />
 
-                            <GroupTbody tableColumns={tableColumns} item={item} activeTD={activeTD}/>
+                            <GroupTbody
+                                item={item}
+                                tbodyStyle={tbodyStyle}
+                                tableColumns={tableColumns}
+                                activeTD={activeTD}/>
 
                         </tr>
                         <UnfoldTd
