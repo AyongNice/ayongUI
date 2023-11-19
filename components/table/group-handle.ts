@@ -27,7 +27,7 @@ export function groupHandle({columns, children}: GroupHandleProps): Group {
                         key: child.key,
                     };
                 }
-                if (child.type.name === 'ColumnGroup') {
+                if (child.type.displayName === 'ColumnGroup') {
                     // 递归处理 ColumnGroup 中的列信息
                     return {
                         title: child.props.title,
