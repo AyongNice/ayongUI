@@ -1,4 +1,6 @@
 "use strict"; //开启严格模式
+import {Arrowbuttomfu} from "./components/icon/index.ts";
+
 export {default as Button} from "./components/button";
 export type {ButtonProps} from "./components/button";
 export {
@@ -8,7 +10,8 @@ export {
     Fileput,Download,Upload,Wechat,Weibofull,Weibo,Fulcopy,Taobao,
     Taobaoful,Android,Androidfu,Google,Googlefu,Plusround,Plusrofu,
     Minusround,Minusrfu,Upward,Upwardfu,Downward,Downwardfu,Downwleft,
-    Downwleftfu,Downwright,Downwrightfu
+    Downwleftfu,Downwright,Downwrightfu,Arrotopfu,Arrowbuttomfu,
+    Arroleft,Arroright,Shrinks,Dilate,Rewind,Forward
 } from "./components/icon/index.ts";
 export type {IconProps} from "./components/icon";
 export {default as Table} from './components/table';

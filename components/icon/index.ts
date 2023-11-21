@@ -24,10 +24,13 @@ export { default as Android } from "./components/android-frame"; // 安卓
 export { default as Google } from "./components/google-frame"; // 谷歌
 export { default as Plusround } from "./components/plusround-frame"; // 加号圆
 export { default as Minusround } from "./components/minusround-frame"; // 减号圆
-export { default as Upward } from "./components/upward-frame"; // 向上圆
-export { default as Downward } from "./components/downward-frame"; // 向下圆
-export { default as Downwleft } from "./components/downleft-frame"; // 向左圆
-export { default as Downwright } from "./components/downright-frame"; // 向右圆
+export { default as Upward } from "./components/upward-frame"; // 向上箭头圆
+export { default as Downward } from "./components/downward-frame"; // 向下箭头圆
+export { default as Downwleft } from "./components/downleft-frame"; // 向左箭头圆
+export { default as Downwright } from "./components/downright-frame"; // 向右箭头圆
+export { default as Shrinks } from "./components/shrinks-frame"; // 向内收缩
+export { default as Dilate } from "./components/dilate-frome"; // 向外扩张
+
 /*
 * 实体icon
 */
@@ -40,7 +43,13 @@ export { default as Androidfu } from "./components/android-solid"; // 安卓
 export { default as Googlefu } from "./components/google-solid"; // 谷歌
 export { default as Plusrofu } from "./components/plusround-solid"; // 加号圆
 export { default as Minusrfu } from "./components/minusround-solid"; // 减号圆
-export { default as Upwardfu } from "./components/upward-solid"; // 向上圆
-export { default as Downwardfu } from "./components/downward-solid"; // 向下圆
-export { default as Downwleftfu } from "./components/downleft-solid"; // 向左圆
-export { default as Downwrightfu } from "./components/downright-solid"; // 向右圆
+export { default as Upwardfu } from "./components/upward-solid"; // 向上箭头圆
+export { default as Downwardfu } from "./components/downward-solid"; // 向下箭头圆
+export { default as Downwleftfu } from "./components/downleft-solid"; // 向左箭头圆
+export { default as Downwrightfu } from "./components/downright-solid"; // 向右箭头圆
+export { default as Arrotopfu } from "./components/arrotop-solid"; // 向上箭头
+export { default as Arrowbuttomfu } from "./components/arrobuttom-solid"; // 向下箭头
+export { default as Arroleft } from "./components/arroleft-solid"; // 向左箭头
+export { default as Arroright } from "./components/arroright-solid"; // 向右箭头
+export { default as Rewind } from "./components/rewind-solid"; // 快退
+export { default as Forward } from "./components/forward-solid"; // 快进
