@@ -31,7 +31,8 @@
     "components/**/*.tsx",
     "/**/*.ts",
     "types",
-    "components/**/*.d.ts"
+    "components/**/*.d.ts",
+    "./typings/index.d.ts"
   ],
   "exclude": [
     "node_modules"
