@@ -40,7 +40,6 @@ export function getOffsetByPlacement(
 	let offsetX: number = 0;
 	let offsetY: number = 0;
 	if (placement) {
-		const points = generatePointsFromPlacement(placement);
 		switch (placement) {
 			case 'topLeft':
 				offsetX = -anotherX / 2;

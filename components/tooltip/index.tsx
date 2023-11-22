@@ -28,7 +28,7 @@ const Tooltip: React.FC<TooltipProps> = (props: TooltipProps) => {
 		onClick = () => {},
 		popup = defaultPopup,
 		trigger = ['hover'],
-		placement = 'bottom',
+		placement = 'top',
 	} = props;
 
 	const [visible, setVisible] = useState(false);
