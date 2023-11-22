@@ -1,6 +1,4 @@
 "use strict"; //开启严格模式
-import {Arrowbuttomfu} from "./components/icon/index.ts";
-
 export {default as Button} from "./components/button";
 export type {ButtonProps} from "./components/button";
 export {
@@ -19,6 +17,7 @@ export type {TableProps} from './components/table/index.d.ts';
 
 export {default as Input} from './components/input';
 export type {InputProps} from './components/input/index.d.ts';
+export {setThemeVariables} from './utils/index.ts'
 
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';

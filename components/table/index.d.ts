@@ -3,17 +3,17 @@ import GroupTbody from "./components/gtoup-tbody/group-tbody";
 import {ButtonProps} from "../button";
 
 interface expandIconProps {
-    expanded: boolean;
-    record: number;
-    onExpand: () => void;
+    expanded: boolean;//当前展开状态 true展开;false关闭
+    record: number;//当前展开下标
+    onExpand: (record: number) => void;//必传字段用于动态改变icon状态
 }
 
 /**
  * 定义展开组件的类型
  */
 interface Expandable {
-    expandedRowRender: () => React.FC | React.FC;// 展开的行内容
-    onExpandChange: (expand: boolean) => void;//点击展开的回调
+    expandedRowRender: (item: DataItem) => React.FC | React.FC;// 展开的行内容
+    onExpandChange: (index: number, state: boolean) => void;//点击展开的回调
     expandedRowKeys: string[];// 展开的行
     expandIcon: (props: expandIconProps) => ReactNode;// 展开的图标
 }
@@ -78,9 +78,7 @@ export interface TableProps {
     columns?: Column[];// 列数据
     draggable?: boolean;// 是否可拖拽
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;// 拖拽后的回调
-    expandable?: Expandable;
-    tbodyStyle: string;
-    theadStyle: string;
+    expandable?: Expandable;//扩展展开参数
 }
 
 // 定义Column组件的属性类型

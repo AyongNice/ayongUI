@@ -31,13 +31,23 @@ function Table({
 
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     const groupHandleData = groupHandle({columns, children});
+
     _tableColumns = groupHandleData.columns;
     colSpanSize = groupHandleData.colSpanSize;
 
     const [ayonEexpandedRowKeys, setAyonExpandedRowKeys] = useState<Array<number | string>>([]);
+
     const styleClassName: string = `${table.table} ${className} `;
 
+
+    /** 每一列排序状态 **/
     const _sortOrderMap: { [key: string]: string } = {};
+
+    /**
+     * age:状态
+     * 身高:状态
+     *数据处理的第三步骤
+     */
 
     /** 默认排序功能 **/
     _tableColumns.forEach((column: Column | ColumnGroup) => {
@@ -69,7 +79,6 @@ function Table({
         handleDropData,
     } = useDragDrop({_tableColumns, data, draggable, onDdragAfter});
 
-    const [sortField, setSortField] = useState(null);
     const [sortOrderMap, stateSortOrderMap] = useState<{ [key: string]: string }>(_sortOrderMap);//排序状态
 
     const handleSort = (column: Column) => {
@@ -81,7 +90,6 @@ function Table({
                 map[dataIndex] = map[dataIndex] ? map[dataIndex] === 'ascend' ? 'descend' : 'ascend' : defaultSortOrder === 'ascend' ? 'descend' : 'ascend'
                 return map
             });
-            setSortField(column.dataIndex);
             if (sortOrderMap[dataIndex] === 'ascend') {
                 setTableData((prevState) => {
                     return [...prevState].sort(sorter);
@@ -105,7 +113,12 @@ function Table({
         return column.type === 'columnGroup' ? void 1 : colSpanSize;
     };
 
-    const tableStyle = (item: DataItem, index: number) => {
+    /**
+     * 融合 动态设置 tr的样式 + 拖拽的 动态样式
+     * @param item
+     * @param index
+     */
+    const tableStyle = (item: DataItem, index: number): string => {
         const _className = cellActiveClassName(item, index);
         return activeTR === index ? table.aticve + _className : _className
 
