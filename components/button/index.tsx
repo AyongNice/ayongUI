@@ -1,5 +1,5 @@
 import but from './index.module.less';
-
+import React, {memo, useEffect} from "react";
 //封装Button组件
 // @ts-ignore
 import {
@@ -11,7 +11,7 @@ import {useState} from "react";
 import {useDebounce} from '../../utils/index.ts'
 
 
-export default function Button(props: ButtonProps) {
+const Button = React.memo((props: ButtonProps) => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const {
         style = {},
@@ -28,6 +28,7 @@ export default function Button(props: ButtonProps) {
         onClick = () => {
         },
     } = props;
+    console.log('Button', onClick, +new Date())
     const handleButtonClick = (): void => {
         // 当按钮被点击时，设置 isExpanded 为 true，触发扩展效果
         setIsExpanded(true);
@@ -36,6 +37,7 @@ export default function Button(props: ButtonProps) {
             setIsExpanded(false);
         }, 1000); // 1秒后重置
     };
+
     const ayongClick = (): void => {
         handleButtonClick()
         onClick()
@@ -59,7 +61,7 @@ export default function Button(props: ButtonProps) {
         </button>
 
     )
-}
+})
 
-
+export default Button
 
