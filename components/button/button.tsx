@@ -1,12 +1,12 @@
 import but from './index.module.less';
-import React, {memo, useEffect} from "react";
+import React from "react";
 //封装Button组件
 // @ts-ignore
 import {
     widthMap
 } from '../../config/style-const.ts'
 
-import {ButtonProps} from "./index.d.ts";
+import {ButtonProps} from "./index";
 import {useState} from "react";
 import {useDebounce} from '../../utils/index.ts'
 

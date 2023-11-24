@@ -1,7 +1,7 @@
 // dragDropUtils.ts
 
 import React, {useState} from 'react';
-import {Column, Column, DataItem, DraggableProps} from "/index";
+import {Column, DataItem, DraggableProps} from "./index";
 
 
 export const useDragDrop = ({

@@ -1,6 +1,6 @@
 import styles from './index.module.less';
 import { useState } from 'react';
-import { InputProps } from './index.d.ts';
+import { InputProps } from './index';
 
 export default function Input(props: InputProps) {
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);

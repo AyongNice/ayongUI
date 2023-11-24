@@ -2,7 +2,7 @@ import ConditionalRender from "../../../conditional-render/conditional-render.ts
 import {Column, UnfoldTdProps} from "../../index";
 import table from "../../index.module.less";
 import unfold from './index.module.less'
-import Button from "../../../button/index.tsx";
+import Button from "../../../button/button.tsx";
 import React from "react";
 
 const UnfoldButton = ({

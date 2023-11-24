@@ -1,4 +1,4 @@
-import {MessageProps} from './index.d.ts';
+import {MessageProps} from './index';
 
 const Message = ({}: MessageProps) => {
     return (
