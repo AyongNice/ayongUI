@@ -1,9 +1,10 @@
 import React, { ReactNode, useState, useRef, useLayoutEffect } from 'react';
-import RcTrigger from 'rc-trigger';
-import 'rc-trigger/assets/index.css';
+// import RcTrigger from 'rc-trigger';
+// import 'rc-trigger/assets/index.css';
+import Trigger from './components/trigger/trigger.tsx';
 import { TooltipProps } from './index.d.ts';
 import toolTip from './index.module.less';
-// import domAlign from 'dom-align';
+
 import {
 	generatePointsFromPlacement,
 	getOffsetByPlacement,
@@ -66,7 +67,7 @@ const Tooltip: React.FC<TooltipProps> = (props: TooltipProps) => {
 		toolTip[size]
 	} ${toolTip[type]} ${toolTip[shape]}  ${disabled && toolTip.notAllowed} `;
 	return (
-		<RcTrigger
+		<Trigger
 			popupPlacement={placement}
 			action={trigger}
 			popupTransitionName={null}
@@ -91,7 +92,7 @@ const Tooltip: React.FC<TooltipProps> = (props: TooltipProps) => {
 			>
 				{children}
 			</div>
-		</RcTrigger>
+		</Trigger>
 	);
 };
 
