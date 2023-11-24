@@ -38,7 +38,7 @@ Ayong UI 是一个功能丰富的 React 组件库，提供了一系列用于构�
 ———style.module.less 全局样式
 ———style-const.ts    全局样式TS常量
 ———— utils 工具类
-———— index.ts 组件总入口文件
+———— index.ts 组件总入口文件所有组件导出地方
 ———— package.json 组件依赖文件
 ———— tsconfig.json 组件TS配置
 ———— tsconfig.node.json 组件TS-node配置
