@@ -117,7 +117,6 @@ const TriggerWrap: React.FC<TriggerWrapProps> = (props) => {
 				position: 'relative',
 				width: 'min-content',
 				height: 'min-content',
-				background: 'red',
 			}}
 		>
 			{children}
@@ -132,6 +131,7 @@ const TriggerWrap: React.FC<TriggerWrapProps> = (props) => {
 						zIndex: 9999,
 						visibility: visible ? 'visible' : 'hidden',
 						transform: visible ? 'fade-in 2s' : 'fade-out 2s',
+						whiteSpace: 'nowrap',
 					}}
 				>
 					<div
@@ -144,7 +144,6 @@ const TriggerWrap: React.FC<TriggerWrapProps> = (props) => {
 							zIndex: 9999,
 							border: `${arrowWidth}px solid transparent`,
 							borderTopColor: 'var(--ayong-tooltip-bg-color)',
-							zIndex: 9999,
 							transform: arrowOffset[2],
 							visibility: visible ? 'visible' : 'hidden',
 						}}

@@ -1,25 +1,68 @@
-"use strict"; //开启严格模式
-export {default as Button} from "./components/button/button";
-export type {ButtonProps} from "./components/button";
+'use strict'; //开启严格模式
+export { default as Button } from './components/button/button';
+export type { ButtonProps } from './components/button';
 export {
-    Alipay, Alert, PreviousStep, FileCopy
-    , CodeDisplay, LabelersLists, Collapse, Unfold, UserHollow
-    , EyesOpen, EyesClosed, Setup, Alipayfull, Advance, Wechatfull,
-    Fileput, Download, Upload, Wechat, Weibofull, Weibo, Fulcopy, Taobao,
-    Taobaoful, Android, Androidfu, Google, Googlefu, Plusround, Plusrofu,
-    Minusround, Minusrfu, Upward, Upwardfu, Downward, Downwardfu, Downwleft,
-    Downwleftfu, Downwright, Downwrightfu, Arrotopfu, Arrowbuttomfu,
-    Arroleft, Arroright, Shrinks, Dilate, Rewind, Forward
-} from "./components/icon/icon.ts";
-export type {IconProps} from "./components/icon";
-export {default as Table} from './components/table/table.tsx';
-export type {TableProps} from './components/table/index';
+	Alipay,
+	Alert,
+	PreviousStep,
+	FileCopy,
+	CodeDisplay,
+	LabelersLists,
+	Collapse,
+	Unfold,
+	UserHollow,
+	EyesOpen,
+	EyesClosed,
+	Setup,
+	Alipayfull,
+	Advance,
+	Wechatfull,
+	Fileput,
+	Download,
+	Upload,
+	Wechat,
+	Weibofull,
+	Weibo,
+	Fulcopy,
+	Taobao,
+	Taobaoful,
+	Android,
+	Androidfu,
+	Google,
+	Googlefu,
+	Plusround,
+	Plusrofu,
+	Minusround,
+	Minusrfu,
+	Upward,
+	Upwardfu,
+	Downward,
+	Downwardfu,
+	Downwleft,
+	Downwleftfu,
+	Downwright,
+	Downwrightfu,
+	Arrotopfu,
+	Arrowbuttomfu,
+	Arroleft,
+	Arroright,
+	Shrinks,
+	Dilate,
+	Rewind,
+	Forward,
+} from './components/icon/icon.ts';
+export type { IconProps } from './components/icon';
+export { default as Table } from './components/table/table.tsx';
+export type { TableProps } from './components/table/index';
 
-export {default as Input} from './components/input/input';
-export type {InputProps} from './components/input/index.d.ts';
-export {setThemeVariables} from './utils/index.ts'
-export {default as Message} from './components/message/message.tsx';
-export type {MessageProps} from './components/message/index.d.ts';
+export { default as Input } from './components/input/input.tsx';
+export type { InputProps } from './components/input/index.d.ts';
+export { setThemeVariables } from './utils/index.ts';
+export { default as Message } from './components/message/message.tsx';
+export type { MessageProps } from './components/message/index.d.ts';
+
+export { default as Tooltip } from './components/tooltip/tooltip.tsx';
+export type { TooltipProps } from './components/tooltip/index.d.ts';
 
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
