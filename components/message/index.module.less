@@ -3,6 +3,7 @@
   position: fixed;
   top: 0;
   left: 50%;
+  transform: translateX(-50%);
   opacity: 0;
   color: var(--ayong-message-border-color);
   background-color: var(--ayong-message-bg-color);
@@ -32,26 +33,27 @@
 //写个动画 从上到下 间隔0.5秒 从下到上 然后渐变消失 0.5秒
 @keyframes slideIn {
   0% {
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
+
   }
   10% {
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
     opacity: 1;
   }
   40% {
-    transform: translateY(100%);
+    transform: translateY(100%) translateX(-50%);
     opacity: 1;
   }
   50% {
-    transform: translateY(100%);
+    transform: translateY(100%) translateX(-50%);
     opacity: 1;
   }
   90% {
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
     opacity: 1;
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
     opacity: 0;
   }
 }
