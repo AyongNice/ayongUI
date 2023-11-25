@@ -4,7 +4,7 @@
   "main": "./dist/AyongUI.cjs.js",
   "module": "./dist/AyongUI.es.js",
   "browser": "./dist/AyongUI.umd.js",
-  "typings": "./dist/index.d.ts",
+  "typings": "./index.d.ts",
   "scripts": {
     "build": "vite build",
     "prepublishOnly": "npm run build"

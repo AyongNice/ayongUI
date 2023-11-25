@@ -61,9 +61,9 @@ export default defineConfig({
                 // include: ['lodash'], // 禁用单独的 chunk 文件
             },
         },
-        optimizeDeps: {
-            include: ['lodash'], // 配置需要合并的模块
-        },
+        // optimizeDeps: {
+        //     include: ['lodash'], // 配置需要合并的模块
+        // },
     },
 
 })

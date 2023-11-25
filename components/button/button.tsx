@@ -28,7 +28,6 @@ const Button = React.memo((props: ButtonProps) => {
         onClick = () => {
         },
     } = props;
-    console.log('Button', onClick, +new Date())
     const handleButtonClick = (): void => {
         // 当按钮被点击时，设置 isExpanded 为 true，触发扩展效果
         setIsExpanded(true);

@@ -1,11 +1,11 @@
-//@import "../../config/style.module.less";
+@import "../../config/style.module.less";
 
 .ayongBtn {
   font-size: var(--ayong-font-size);
   border-radius: var(--ayong-border-radius);
   padding: var(--ayong-default-size);
-  border: 1px solid var(--ayong-primary-color);
-  color: var(--ayong-primary-color);
+  border: 1px solid var(--ayong-primary);
+  color: var(--ayong-primary);
   background: none;
 
   &:active { //按压颜色变浅色
@@ -35,23 +35,23 @@
 
 .primary {
   color: var(--ayong-font-color);
-  border: 1px solid var(--ayong-primary-color);
-  background: var(--ayong-primary-color);
+  border: 1px solid var(--ayong-primary);
+  background: var(--ayong-primary);
 }
 
 .dashed {
   //虚线 边框
-  border: 1px dashed var(--ayong-primary-color);
-  color: var(--ayong-primary-color);
+  border: 1px dashed var(--ayong-primary);
+  color: var(--ayong-primary);
   background: none;
 
 }
 
 //危险按钮
-.dangerous {
+.error {
   color: var(--ayong-font-color);
-  border: 1px solid var(--ayong-dangerous);
-  background: var(--ayong-dangerous);
+  border: 1px solid var(--ayong-error);
+  background: var(--ayong-error);
 }
 
 //警告按钮
