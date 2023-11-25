@@ -1,4 +1,4 @@
-
+@ayong-message-bg-color: var(--ayong-message-border-color); // 设置变量初始值
 .ayongMessage {
   position: fixed;
   top: 0;
@@ -15,18 +15,21 @@
 }
 
 .success {
-  border-color: var(--ayong-primary); //颜色加深
+  color: #fff;
+  border-color: darken(#8aabec, 10%); //颜色加深
   background: var(--ayong-primary);
 }
 
 .warning {
-  border-color: var(--ayong-warn);
+  color: #fff;
+  border-color: darken(#947904, 10%); //颜色加深
   background: var(--ayong-warn);
 }
 
 .error {
-  border-color: var(--ayong-dangerous);
-  background: var(--ayong-dangerous);
+  color: #fff;
+  border-color: darken(#ad0000, 10%); //颜色加深
+  background: var(--ayong-error);
 }
 
 
