@@ -50,6 +50,18 @@ export {
 	Dilate,
 	Rewind,
 	Forward,
+	Doubleright,
+	Doubleleft,
+	Aligntop,
+	Alignbottom,
+	Aligncenter,
+	Enter,
+	Rollback,
+	Retweet,
+	Swap,
+	Swapleft,
+	Swapright,
+	Tick
 } from './components/icon/icon.ts';
 export type { IconProps } from './components/icon';
 export { default as Table } from './components/table/index.tsx';

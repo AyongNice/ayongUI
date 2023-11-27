@@ -1,0 +1,108 @@
+//@import "../../config/style.module.less";
+/* Table Container */
+.table {
+  width: 100%;
+  border-radius: 6px;
+  margin: 20px 0;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-spacing: 0;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* Custom Table */
+
+  tr {
+    padding: 10px;
+  }
+
+  thead {
+    width: 100%;
+    color: var(--ayong-table-font-color);
+    border: none;
+    font-weight: 600;
+    text-align: left;
+    background-color: var(--ayong-table-thead-color);
+
+    tr {
+      box-sizing: border-box;
+      padding: 0 18px;
+    }
+
+    tbody tr:hover {
+      background-color: #e0e0e0;
+    }
+
+    tbody tr:nth-child(odd) {
+      //background-color: #f9f9f9;
+    }
+
+    th {
+
+      border: none;
+    }
+
+    th, .custom-table td {
+      padding: 12px 15px;
+
+    }
+
+  }
+
+  tbody {
+
+    color: var(--ayong-table-font-color);
+
+    tr {
+      height: 50px;
+      border-bottom: 0.7px solid var(--ayong-premium-grey);
+      border-top: 0.7px solid var(--ayong-premium-grey);
+      border-collapse: collapse;
+      box-sizing: border-box;
+      padding: 0 18px;
+
+      &:hover {
+        //字体颜色加深 透明度降低
+        color: var(--ayong-table-font-color);
+        opacity: 0.5;
+        background-color: var(--ayong-premium-grey);
+      }
+    }
+
+    td {
+      font-weight: 400;
+      font-size: var(--ayong-table-font-size);
+      box-sizing: border-box;
+      padding: 0 18px;
+    }
+
+  }
+
+}
+
+.aticve {
+  background-color: var(--ayong-premium-grey);
+  opacity: 0.5;
+}
+
+//单列高度
+.textAlignCenter {
+  text-align: center;
+}
+
+.expandBox {
+  position: relative;
+}
+
+.expandIcon {
+  position: absolute;
+  //不允许换行
+  white-space: nowrap;
+}
+
+
+.we {
+  color: #8aabec;
+}
+

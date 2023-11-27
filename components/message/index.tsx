@@ -4,7 +4,7 @@ import styleMessage from './index.module.less';
 import {NotificationProps, NotificationState, MessageProps} from './index'
 import {Minusround, Upward} from "../icon/icon.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
-import './index.less';
+import './index.module.less';
 // 创建一个div添加到body中
 const createNotificationPortal = () => {
     const dom = document.getElementById('notification-portal');
