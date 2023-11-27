@@ -55,14 +55,14 @@ export type { IconProps } from './components/icon';
 export { default as Table } from './components/table/index.tsx';
 export type { TableProps } from './components/table/index.d';
 
-export { default as Input } from './components/input/input.tsx';
-export type { InputProps } from './components/input/index.d.ts';
+export { default as Input } from './components/input/index.tsx';
+export type { InputProps } from './components/input/index.d';
 export { setThemeVariables } from './utils/index.ts';
-export { default as Message } from './components/message/message.tsx';
-export type { MessageProps } from './components/message/index.d.ts';
+export { default as Message } from './components/message/index.tsx';
+export type { MessageProps } from './components/message/index.d';
 
-export { default as Tooltip } from './components/tooltip/tooltip.tsx';
-export type { TooltipProps } from './components/tooltip/index.d.ts';
+export { default as Tooltip } from './components/tooltip/index.tsx';
+export type { TooltipProps } from './components/tooltip/index.d';
 
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
