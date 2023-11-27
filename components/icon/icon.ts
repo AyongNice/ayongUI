@@ -13,7 +13,7 @@ export { default as Unfold } from "./components/unfold-frame"; // 展开
 export { default as UserHollow } from "./components/user-frame"; // 用户
 export { default as EyesOpen } from "./components/eyesopen-frame"; // 打开眼睛
 export { default as EyesClosed } from "./components/eyes-frame"; // 关闭眼睛
-export { default as Setup } from "./components/setup-frame"; // 设置
+export { default as Setting } from "./components/setting-frame"; // 设置
 export { default as Fileput } from "./components/file-frame"; // 文件
 export { default as Download } from "./components/download-frame"; // 下载
 export { default as Upload } from "./components/upload-frame"; // 上传
@@ -41,6 +41,11 @@ export { default as Retweet } from "./components/retweet-frame"; // 循环
 export { default as Swap } from "./components/swap-frame"; // 交换
 export { default as Swapleft } from "./components/swapleft-frame"; // 交换左
 export { default as Swapright } from "./components/swapright-frame"; // 交换右
+export { default as Delete } from "./components/delete-frame"; // 删除
+export { default as Search } from "./components/search-frame"; // 搜索
+export { default as Transfer} from "./components/transfer-frame"; // 转账
+export { default as Unlock} from "./components/unlock-frame"; // 解锁
+export { default as Save} from "./components/save-frame"; // 保存
 /*
 * 实体icon
 */
@@ -64,3 +69,6 @@ export { default as Arroright } from "./components/arroright-solid"; // 向右�
 export { default as Rewind } from "./components/rewind-solid"; // 快退
 export { default as Forward } from "./components/forward-solid"; // 快进
 export { default as Tick } from "./components/tick-solid"; // 对勾
+export { default as Wrong } from "./components/wrong-solid"; // 错
+export { default as Lament } from "./components/lament-solid"; // 感叹号
+export { default as Illustrate } from "./components/illustrate-solid"; // 感叹号

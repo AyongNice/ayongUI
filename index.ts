@@ -13,7 +13,7 @@ export {
 	UserHollow,
 	EyesOpen,
 	EyesClosed,
-	Setup,
+	Setting,
 	Alipayfull,
 	Advance,
 	Wechatfull,
@@ -61,7 +61,15 @@ export {
 	Swap,
 	Swapleft,
 	Swapright,
-	Tick
+	Tick,
+	Wrong,
+	Lament,
+	Illustrate,
+	Delete,
+	Search,
+	Transfer,
+	Unlock,
+	Save,
 } from './components/icon/icon.ts';
 export type { IconProps } from './components/icon';
 export { default as Table } from './components/table/index.tsx';
