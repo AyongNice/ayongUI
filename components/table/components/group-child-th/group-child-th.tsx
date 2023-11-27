@@ -1,6 +1,6 @@
 import ConditionalRender from "../../../conditional-render/conditional-render.tsx";
 import React from "react";
-import {Column, ColumnGroup} from "../../index";
+import {Column, ColumnGroup} from "../../index.d";
 
 /**
  * 表头分组组件 th

@@ -1,6 +1,6 @@
 'use strict'; //开启严格模式
-export { default as Button } from './components/button/button';
-export type { ButtonProps } from './components/button';
+export { default as Button } from './components/button/index';
+export type { ButtonProps } from './components/button/index.d';
 export {
 	Alipay,
 	Alert,
@@ -52,8 +52,8 @@ export {
 	Forward,
 } from './components/icon/icon.ts';
 export type { IconProps } from './components/icon';
-export { default as Table } from './components/table/table.tsx';
-export type { TableProps } from './components/table/index';
+export { default as Table } from './components/table/index.tsx';
+export type { TableProps } from './components/table/index.d';
 
 export { default as Input } from './components/input/input.tsx';
 export type { InputProps } from './components/input/index.d.ts';

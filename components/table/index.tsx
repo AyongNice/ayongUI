@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import table from './index.module.less'
-import {TableProps, Column, DataItem, ColumnGroup} from "./index";
+import {TableProps, Column, DataItem, ColumnGroup} from "./index.d";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import UnfoldTd from "./components/unfold-td/unfold-td.tsx"; // 展开渲染组件
 import UnfoldButton from "./components/unfold-button/unfold-button.tsx"; //展开折叠按钮组件
@@ -10,7 +10,7 @@ import useDragDrop from "./draggable.ts"; //分组 th组件
 
 import {groupHandle} from "./group-handle.ts";
 import GroupTbody from "./components/gtoup-tbody/group-tbody.tsx"; //分组 th组件
-function Table({
+function Index({
                    columns,
                    children,
                    data,
@@ -236,10 +236,10 @@ const ColumnGroup: ColumnFunction = ({title, children}) => {
 ColumnGroup.displayName = 'ColumnGroup';
 Column.displayName = 'Column';
 
-Table.ColumnGroup = ColumnGroup;
+Index.ColumnGroup = ColumnGroup;
 
-Table.Column = Column;
+Index.Column = Column;
 
-export default Table;
+export default Index;
 
 

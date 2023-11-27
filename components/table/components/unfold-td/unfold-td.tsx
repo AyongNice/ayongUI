@@ -1,5 +1,5 @@
 import ConditionalRender from "../../../conditional-render/conditional-render.tsx";
-import {Column, DataItem, UnfoldTdProps} from "../../index";
+import {DataItem, UnfoldTdProps} from "../../index.d";
 
 const UnfoldTd = ({expandable = {}, ayonEexpandedRowKeys, index, item}: UnfoldTdProps) => {
     const {expandedRowRender, expandedRowKeys} = expandable;

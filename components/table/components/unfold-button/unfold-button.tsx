@@ -1,8 +1,8 @@
 import ConditionalRender from "../../../conditional-render/conditional-render.tsx";
-import {Column, UnfoldTdProps} from "../../index";
+import { UnfoldTdProps} from "../../index.d";
 import table from "../../index.module.less";
 import unfold from './index.module.less'
-import Button from "../../../button/button.tsx";
+import Index from "../../../button/index.tsx";
 import React from "react";
 
 const UnfoldButton = ({
@@ -37,7 +37,7 @@ const UnfoldButton = ({
                                 })}
                             </React.Fragment>
                             : (
-                                <Button
+                                <Index
                                     size="mini"
                                     style={{width: '20px'}}
                                     key={rowKeysIndex}
@@ -47,7 +47,7 @@ const UnfoldButton = ({
                                     }`}
                                 >
                                     {stateExpandedRowKeys ? '-' : '+'}
-                                </Button>
+                                </Index>
                             )
                     ) : null;
                 })}

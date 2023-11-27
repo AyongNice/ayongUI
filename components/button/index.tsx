@@ -1,17 +1,17 @@
 import but from './index.module.less';
-import React from "react";
+
 //封装Button组件
 // @ts-ignore
 import {
     widthMap
 } from '../../config/style-const.ts'
 
-import {ButtonProps} from "./index";
+import {ButtonProps} from "./index.d"
 import {useState} from "react";
 import {useDebounce} from '../../utils/index.ts'
+// import './index.less'
 
-
-const Button = React.memo((props: ButtonProps) => {
+const Index = (props: ButtonProps) => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const {
         style = {},
@@ -47,7 +47,30 @@ const Button = React.memo((props: ButtonProps) => {
      * 参数className > 默认使用组件classname > 参数样式
      *
      */
-    const styleClassName: string = `${but.ayongBtn} ${className} ${but[size]} ${but[type]} ${but[shape]}  ${disabled && but.notAllowed} ${isExpanded ? 'clicked' : ''}`;
+        // const styleClassName: string = `${but.button} ${className} ${but[size] || ''} ${but[type] || ''} ${but[shape] || ''}${disabled && but.notAllowed || ''} ${isExpanded ? 'clicked' : ''}`;
+
+        // const styleClassName = `ayongBtn ${size} ${type} ${shape} ${disabled && 'notAllowed'} ${isExpanded ? 'clicked' : ''} ${'ayongBtn'+className}`
+    const dynamicStyles = {
+            button: but.button,
+            size: but[size] || '',
+            type: but[type] || '',
+            shape: but[shape] || '',
+            notAllowed: disabled && but.notAllowed || '',
+            clicked: isExpanded ? 'clicked' : '',
+            ayongBtn: className
+        };
+
+    const styleClassName: string = Object.values(dynamicStyles).join(' ');
+    //
+    // const [_className, setClassName] = useState<string>(styleClassName)
+    //
+    // useEffect(() => {
+    //     setClassName(() => {
+    //         return styleClassName
+    //     })
+    // }, [className, shape, size, type, disabled, isExpanded])
+
+
     return (
         <button
             style={style}
@@ -60,7 +83,7 @@ const Button = React.memo((props: ButtonProps) => {
         </button>
 
     )
-})
+}
 
-export default Button
+export default Index
 

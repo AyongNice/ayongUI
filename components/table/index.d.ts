@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import GroupTbody from "./components/gtoup-tbody/group-tbody";
-import {ButtonProps} from "../button";
+import {ButtonProps} from "../button/index.tsx";
 
 interface expandIconProps {
     expanded: boolean;//当前展开状态 true展开;false关闭

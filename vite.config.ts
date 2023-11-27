@@ -54,10 +54,10 @@ export default defineConfig({
             external: ['react', 'react-dom'],
             output: {
                 // 全局变量名称，umd 格式必须设置
-                globals: {
-                    react: 'React',
-                    'react-dom': 'ReactDOM',
-                },
+                // globals: {
+                //     react: 'React',
+                //     'react-dom': 'ReactDOM',
+                // },
                 // include: ['lodash'], // 禁用单独的 chunk 文件
             },
         },

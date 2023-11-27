@@ -4,14 +4,14 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  opacity: 0;
   color: var(--ayong-message-border-color);
   background-color: var(--ayong-message-bg-color);
   border: 2px solid var(--ayong-message-border-color);
-  padding: 10px 30px;
+  padding: 10px 15px;
   border-radius: var(--ayong-radius);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   animation: slideIn 3s cubic-bezier(0.42, 0, 0, 0.99);
+
 }
 
 .success {
@@ -32,6 +32,19 @@
   background: var(--ayong-error);
 }
 
+.close {
+  width: 15px !important;
+  height: 15px !important;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.tag {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
 
 //写个动画 从上到下 间隔0.5秒 从下到上 然后渐变消失 0.5秒
 @keyframes slideIn {

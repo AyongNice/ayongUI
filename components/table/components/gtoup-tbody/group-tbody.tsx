@@ -1,6 +1,6 @@
 import React from "react";
 import table from "../../index.module.less";
-import {Column, ColumnGroup, GroupTbodyProps} from "../../index";
+import {Column, ColumnGroup, GroupTbodyProps} from "../../index.d";
 
 
 const GroupTbody = ({tableColumns, item, activeTD}: GroupTbodyProps) => (
