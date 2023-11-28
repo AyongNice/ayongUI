@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import styleMessage from './index.module.less';
 import {NotificationProps, NotificationState, MessageProps, type} from './index.d'
-import {Minusround, Upward} from "../icon/icon.ts";
+import {Wrong, Tick,Lament} from "../icon/icon.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import './index.module.less';
 // 创建一个div添加到body中
@@ -30,7 +30,7 @@ const Notification: React.FC<NotificationProps> = ({
                                                        duration = 3
                                                    }: NotificationProps) => {
     const [show, setShow] = useState<boolean>(true);
-    const onMessageClose = () => {
+    const onMessageClose = (): void => {
         setShow(false);
         onAyongClose();
     }
@@ -40,20 +40,28 @@ const Notification: React.FC<NotificationProps> = ({
         warning: '#faad14',
         error: '#f5222d'
     }
-    const iconClassNmae = styleMessage[type as type];
-    console.log(duration)
+
+    const iconClassName: string = styleMessage[type as type];
+    const leftIcon={
+        info:  React.createElement(Lament, {className:`${styleMessage.tag} ${iconClassName}`}),
+        success: React.createElement(Tick,{className:`${styleMessage.tag} ${iconClassName}`}),
+        warning: React.createElement(Lament,{className:`${styleMessage.tag} ${iconClassName}`}),
+        error: React.createElement(Wrong,{className:`${styleMessage.tag} ${iconClassName}`}),
+    }
+
     return (
         <ConditionalRender mode='show' show={show}>
             <div
-                style={{...style, animationDuration: duration+'s'}}
-                className={`${styleMessage.ayongMessage} ${iconClassNmae}`}
+                style={{...style, animationDuration: duration + 's'}}
+                className={`${styleMessage.ayongMessage} ${iconClassName}`}
                 onAnimationEnd={onAyongClose}
             >
-                <Upward className={`${styleMessage.tag} ${iconClassNmae}`}/>
+                {leftIcon[type as type]}
+                {/*<Tick className={`${styleMessage.tag} ${iconClassName}`}/>*/}
                 {message}
                 {showClose &&
-                   <Minusround style={{fill: iconColor[type]}}
-                               className={` ${iconClassNmae} ${styleMessage.close}`} onClick={onMessageClose}/>}
+                   <Wrong style={{fill: iconColor[type as type]}}
+                          className={` ${iconClassName} ${styleMessage.close}`} onClick={onMessageClose}/>}
             </div>
         </ConditionalRender>
 
