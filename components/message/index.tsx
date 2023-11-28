@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import styleMessage from './index.module.less';
-import {NotificationProps, NotificationState, MessageProps} from './index'
+import {NotificationProps, NotificationState, MessageProps, type} from './index.d'
 import {Minusround, Upward} from "../icon/icon.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import './index.module.less';
@@ -21,23 +21,39 @@ const createNotificationPortal = () => {
 createNotificationPortal();
 
 
-const Notification: React.FC<NotificationProps> = ({onAyongClose, message, showClose = false, type, style}) => {
+const Notification: React.FC<NotificationProps> = ({
+                                                       onAyongClose,
+                                                       message,
+                                                       showClose = false,
+                                                       type,
+                                                       style,
+                                                       duration = 3
+                                                   }: NotificationProps) => {
     const [show, setShow] = useState<boolean>(true);
     const onMessageClose = () => {
         setShow(false);
         onAyongClose();
     }
-
+    const iconColor: { [key: string]: string } = {
+        info: '#1890ff',
+        success: '#52c41a',
+        warning: '#faad14',
+        error: '#f5222d'
+    }
+    const iconClassNmae = styleMessage[type as type];
+    console.log(duration)
     return (
         <ConditionalRender mode='show' show={show}>
             <div
-                style={style}
-                className={`${styleMessage.ayongMessage} ${styleMessage[type]} `}
+                style={{...style, animationDuration: duration+'s'}}
+                className={`${styleMessage.ayongMessage} ${iconClassNmae}`}
                 onAnimationEnd={onAyongClose}
             >
-                <Upward className={styleMessage.tag}/>
+                <Upward className={`${styleMessage.tag} ${iconClassNmae}`}/>
                 {message}
-                {showClose && <Minusround onClick={onMessageClose} className='close'/>}
+                {showClose &&
+                   <Minusround style={{fill: iconColor[type]}}
+                               className={` ${iconClassNmae} ${styleMessage.close}`} onClick={onMessageClose}/>}
             </div>
         </ConditionalRender>
 
@@ -105,7 +121,7 @@ const notify = (props: MessageProps) => {
 };
 // string | number | React.FC
 const messageMode = {
-    info: (props: { onClose: () => void; showClose: boolean; message: string }): void => {
+    info: (props: MessageProps): void => {
         notify({...props as MessageProps, type: 'info'});
     },
     success: (props: MessageProps) => {
