@@ -3,36 +3,40 @@
   position: fixed;
   top: 0;
   left: 50%;
+  fill: #58BA2DFF; //颜色加深
   transform: translateX(-50%);
-  color: var(--ayong-message-border-color);
   background-color: var(--ayong-message-bg-color);
   border: 2px solid var(--ayong-message-border-color);
   padding: 10px 15px;
   border-radius: var(--ayong-radius);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   animation: slideIn 3s cubic-bezier(0.42, 0, 0, 0.99);
+}
 
+.info {
+  color: var(--ayong-message-font-color);
+  fill: var(--ayong-message-font-color); //颜色加深
 }
 
 .success {
   color: #fff;
+  fill: #fff; //颜色加深
   border-color: darken(#8aabec, 10%); //颜色加深
   background: var(--ayong-primary);
-  fill: darken(#8aabec, 10%); //颜色加深
 }
 
 .warning {
   color: #fff;
-  border-color: darken(#947904, 10%); //颜色加深
+  border-color: darken(#d6af0c, 3%); //颜色加深
   background: var(--ayong-warn);
-  fill: darken(#947904, 10%); //颜色加深
+  fill: #fff; //颜色加深
 }
 
 .error {
   color: #fff;
-  border-color: darken(#ad0000, 10%); //颜色加深
-  background: var(--ayong-error);
-  fill: darken(#ad0000, 10%); //颜色加深
+  border-color: darken(#f79797, 10%); //颜色加深
+  background: var(--ayong-message-error);
+  fill: #fff; //颜色加深
 }
 
 .close {

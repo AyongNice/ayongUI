@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import styleMessage from './index.module.less';
 import {NotificationProps, NotificationState, MessageProps, type} from './index.d'
-import {Wrong, Tick,Lament} from "../icon/icon.ts";
+import {Wrong, Tick, Lament, Unfold} from "../icon/icon.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import './index.module.less';
 // 创建一个div添加到body中
@@ -35,18 +35,18 @@ const Notification: React.FC<NotificationProps> = ({
         onAyongClose();
     }
     const iconColor: { [key: string]: string } = {
-        info: '#1890ff',
-        success: '#52c41a',
-        warning: '#faad14',
-        error: '#f5222d'
+        info: '#fff',
+        success: '#fff',
+        warning: '#fff',
+        error: '#fff',
     }
 
     const iconClassName: string = styleMessage[type as type];
-    const leftIcon={
-        info:  React.createElement(Lament, {className:`${styleMessage.tag} ${iconClassName}`}),
-        success: React.createElement(Tick,{className:`${styleMessage.tag} ${iconClassName}`}),
-        warning: React.createElement(Lament,{className:`${styleMessage.tag} ${iconClassName}`}),
-        error: React.createElement(Wrong,{className:`${styleMessage.tag} ${iconClassName}`}),
+    const leftIcon = {
+        info: React.createElement(Lament, {className: `${styleMessage.tag} ${iconClassName}`}),
+        success: React.createElement(Tick, {className: `${styleMessage.tag} ${iconClassName}`}),
+        warning: React.createElement(Lament, {className: `${styleMessage.tag} ${iconClassName}`}),
+        error: React.createElement(Wrong, {className: `${styleMessage.tag} ${iconClassName}`}),
     }
 
     return (
@@ -60,8 +60,8 @@ const Notification: React.FC<NotificationProps> = ({
                 {/*<Tick className={`${styleMessage.tag} ${iconClassName}`}/>*/}
                 {message}
                 {showClose &&
-                   <Wrong style={{fill: iconColor[type as type]}}
-                          className={` ${iconClassName} ${styleMessage.close}`} onClick={onMessageClose}/>}
+                   <Wrong
+                      className={` ${styleMessage.close} ${iconClassName}`} onClick={onMessageClose}/>}
             </div>
         </ConditionalRender>
 
