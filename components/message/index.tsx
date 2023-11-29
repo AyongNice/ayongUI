@@ -23,6 +23,7 @@ createNotificationPortal();
 
 const Notification: React.FC<NotificationProps> = ({
                                                        onAyongClose,
+                                                       icon,
                                                        message,
                                                        showClose = false,
                                                        type,
@@ -35,7 +36,6 @@ const Notification: React.FC<NotificationProps> = ({
         onAyongClose();
     }
 
-
     const iconClassName: string = styleMessage[type as type];
     const leftIcon = {
         info: React.createElement(Lament, {className: `${styleMessage.tag} ${iconClassName}`}),
@@ -44,6 +44,7 @@ const Notification: React.FC<NotificationProps> = ({
         error: React.createElement(Wrong, {className: `${styleMessage.tag} ${iconClassName}`}),
     }
 
+
     return (
         <ConditionalRender mode='show' show={show}>
             <div
@@ -51,7 +52,7 @@ const Notification: React.FC<NotificationProps> = ({
                 className={`${styleMessage.ayongMessage} ${iconClassName}`}
                 onAnimationEnd={onAyongClose}
             >
-                {leftIcon[type as type]}
+                {icon ? React.createElement(icon.type, {className: `${styleMessage.tag} ${iconClassName}`}) : leftIcon[type as type]}
                 {message}
                 {showClose &&
                    <Wrong
