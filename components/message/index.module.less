@@ -10,7 +10,11 @@
   padding: 10px 15px;
   border-radius: var(--ayong-radius);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  animation: slideIn 3s cubic-bezier(0.42, 0, 0, 0.99);
+  animation: slideIn 2s cubic-bezier(0.42, 0, 0, 0.99);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .info {
@@ -43,15 +47,20 @@
   width: 15px;
   height: 15px;
   margin-left: 10px;
-  vertical-align: middle;
+  //position: absolute;
+  right: 5px;
+  top: 50%;
+  //transform: translateY(-50%);
 }
 
 .tag {
   width: 15px;
   height: 15px;
   margin-right: 10px;
-  vertical-align: middle;
-
+  //position: absolute;
+  left: 5px;
+  top: 50%;
+  //transform: translateY(-50%);
 }
 
 //写个动画 从上到下 间隔0.5秒 从下到上 然后渐变消失 0.5秒

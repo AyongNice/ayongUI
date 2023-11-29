@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, isValidElement} from 'react';
 import {createRoot} from 'react-dom/client';
 import styleMessage from './index.module.less';
 import {NotificationProps, NotificationState, MessageProps, type} from './index.d'
-import {Wrong, Tick, Lament, Unfold} from "../icon/icon.ts";
+import {Wrong, Tick, Lament} from "../icon/icon.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import './index.module.less';
 // 创建一个div添加到body中
@@ -27,19 +27,14 @@ const Notification: React.FC<NotificationProps> = ({
                                                        showClose = false,
                                                        type,
                                                        style,
-                                                       duration = 3
+                                                       duration = 2
                                                    }: NotificationProps) => {
     const [show, setShow] = useState<boolean>(true);
     const onMessageClose = (): void => {
         setShow(false);
         onAyongClose();
     }
-    const iconColor: { [key: string]: string } = {
-        info: '#fff',
-        success: '#fff',
-        warning: '#fff',
-        error: '#fff',
-    }
+
 
     const iconClassName: string = styleMessage[type as type];
     const leftIcon = {
@@ -57,7 +52,6 @@ const Notification: React.FC<NotificationProps> = ({
                 onAnimationEnd={onAyongClose}
             >
                 {leftIcon[type as type]}
-                {/*<Tick className={`${styleMessage.tag} ${iconClassName}`}/>*/}
                 {message}
                 {showClose &&
                    <Wrong
@@ -96,9 +90,10 @@ const notificationState: NotificationState[] = [];
 const portalContainer: HTMLElement | null = document.getElementById('notification-portal');
 
 const notify = (props: MessageProps) => {
-    if (!portalContainer) {
-        return;
+    if (isValidElement(props.message)) {
+        if (!props.useHTMLString) return console.warn('message内容如果为HTML时候,防止 XSS 攻击!必须设置useHTMLString属性为true :: If the message content is HTML, prevent XSS attacks!The useHTMLString attribute must be set to true--- ayongUI');
     }
+    if (!portalContainer) return;
     //浏览器渲染空闲时执行
     window.requestIdleCallback(() => {
         const cloneNode: Node = portalContainer.cloneNode(true) as Node;
