@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import table from './index.module.less'
-import {TableProps, Column, DataItem, ColumnGroup} from "./index.d";
+import {TableProps, Column, DataItem, ColumnGroup, DraggableProps} from "./index.d";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import UnfoldTd from "./components/unfold-td/unfold-td.tsx"; // 展开渲染组件
 import UnfoldButton from "./components/unfold-button/unfold-button.tsx"; //展开折叠按钮组件
@@ -9,25 +9,24 @@ import GroupChildTh from "./components/group-child-th/group-child-th.tsx"; //分
 import useDragDrop from "./draggable.ts"; //分组 th组件
 
 import {groupHandle} from "./group-handle.ts";
-import GroupTbody from "./components/gtoup-tbody/group-tbody.tsx"; //分组 th组件
+import GroupTbody from "./components/gtoup-tbody/group-tbody.tsx";
+import {UseDragDropRetunrn} from "./index"; //分组 th组件
 function Index({
                    columns,
                    children,
-                   data,
+                   data = [],
+                   className,
+                   draggable = false,
+                   expandable,
+                   onDragAfter = () => {
+                   },
                    cellActiveClassName = () => {
                    },
-                   className,
-                   tbodyStyle,
-                   draggable = false,
-                   onDdragAfter = () => {
-                   },
-                   expandable,
                }: TableProps) {
 
     let _tableColumns: Column[] = [];
     let colSpanSize: number = 0;
     const {expandedRowRender} = expandable || {};
-
 
     // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
     const groupHandleData = groupHandle({columns, children});
@@ -77,7 +76,7 @@ function Index({
         handleDragOver,
         handleDrop,
         handleDropData,
-    } = useDragDrop({_tableColumns, data, draggable, onDdragAfter});
+    }: UseDragDropRetunrn = useDragDrop({_tableColumns, data, draggable, onDragAfter});
 
     const [sortOrderMap, stateSortOrderMap] = useState<{ [key: string]: string }>(_sortOrderMap);//排序状态
 
@@ -196,7 +195,6 @@ function Index({
 
                             <GroupTbody
                                 item={item}
-                                tbodyStyle={tbodyStyle}
                                 tableColumns={tableColumns}
                                 activeTD={activeTD}/>
 

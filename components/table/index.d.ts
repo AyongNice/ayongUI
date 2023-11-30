@@ -1,6 +1,7 @@
 import React, {ReactNode} from 'react';
 import GroupTbody from "./components/gtoup-tbody/group-tbody";
 import {ButtonProps} from "../button/index.tsx";
+import useDragDrop from "./draggable.ts";
 
 interface expandIconProps {
     expanded: boolean;//当前展开状态 true展开;false关闭
@@ -29,8 +30,28 @@ export interface UnfoldTdProps {
     toggleExpand?: (key: string) => void;
 }
 
+//拖拽方法入参数
+export interface DragDropParma {
+    _tableColumns: Column[];
+    data: DataItem[];
+    draggable: boolean;
+    onDragAfter: (data: DataItem[], column: Column[]) => void;
+}
+
+//拖拽方法返回参数
+export interface UseDragDropRetunrn {
+    tableColumns: Column[];
+    tableData: DataItem[];
+    activeTR: null | number;
+    activeTD: null | string;
+    hadleDragStart: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void;
+    hadleDragStartData: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void;
+    hadleDragOver: (e: React.DragEvent<HTMLTableRowElement>) => void;
+    hadleDrop: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void;
+    hadleDropData: (e: React.DragEvent<HTMLTableRowElement>, index: number) => void;
+}
 /**
- * 拖拽组件的属性类型
+ * 拖拽方法入参数
  */
 export interface DraggableProps {
     draggable?: boolean;
@@ -79,6 +100,9 @@ export interface TableProps {
     draggable?: boolean;// 是否可拖拽
     onDdragAfter?: (data: DataItem[], column: Column[]) => void;// 拖拽后的回调
     expandable?: Expandable;//扩展展开参数
+    children?: React.ReactNode;// 子元素
+    cellActiveClassName?: Function<string>;// 动态添加样式
+    onDragAfter?: (data: DataItem[], column: Column[]) => void;// 拖拽后的回调
 }
 
 // 定义Column组件的属性类型

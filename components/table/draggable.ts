@@ -1,16 +1,16 @@
 // dragDropUtils.ts
 
 import React, {useState} from 'react';
-import {Column, DataItem, DraggableProps} from "./index";
+import {Column, DataItem, UseDragDropRetunrn, DragDropParma} from "./index.d";
 
 
 export const useDragDrop = ({
                                 _tableColumns,
                                 data,
                                 draggable,
-                                onDdragAfter = () => {
+                                onDragAfter = () => {
                                 }
-                            }: DraggableProps) => {
+                            }: DragDropParma): UseDragDropRetunrn => {
 
 
     const [tableColumns, setTableColumns] = useState<Column[]>(_tableColumns);
@@ -44,7 +44,7 @@ export const useDragDrop = ({
         const [movedColumn] = newColumns.splice(sourceIndex, 1);
         newColumns.splice(index, 0, movedColumn);
         setTableColumns(newColumns);
-        onDdragAfter(newColumns, tableData);
+        onDragAfter(newColumns, tableData);
     };
 
     const handleDropData = (e: React.DragEvent<HTMLTableRowElement>, index: number): void => {
@@ -55,7 +55,7 @@ export const useDragDrop = ({
         const [movedTableData] = newTableData.splice(sourceIndex, 1);
         newTableData.splice(index, 0, movedTableData);
         setTableData(newTableData);
-        onDdragAfter(newTableData, tableColumns)
+        onDragAfter(newTableData, tableColumns)
     };
 
     return {
