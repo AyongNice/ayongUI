@@ -46,7 +46,16 @@ export { default as Search } from "./components/search-frame"; // 搜索
 export { default as Transfer} from "./components/transfer-frame"; // 转账
 export { default as Unlock} from "./components/unlock-frame"; // 解锁
 export { default as Save} from "./components/save-frame"; // 保存
-/*
+export { default as Play} from "./components/play-frame"; //  圆形播放
+export { default as Panetop} from "./components/panetop-frame"; // 方框上
+export { default as Panedown} from "./components/panedown-frame"; // 方框下
+export { default as Paneleft} from "./components/paneleft-frame"; // 方框左
+export { default as Paneright} from "./components/paneright-frame"; // 方框右
+export { default as Login} from "./components/login-frame"; // 登录
+export { default as Logout} from "./components/logout-frame"; // 退出
+export { default as Menufold} from "./components/menufold-frame"; // 收起菜单
+export { default as Menuunfold} from "./components/menuunfold-frame"; //展开菜单
+/**
 * 实体icon
 */
 export { default as Alipayfull } from "./components/alipayfull-solid"; //支付宝
