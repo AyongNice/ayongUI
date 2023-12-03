@@ -7,7 +7,6 @@ const Lament = (props: IconProps) => {
         className = "", style = {}, onClick = () => {
         }
     } = props;
-    console.log(style)
     const styleClassName: string = `${icon.default} ${className}`;
     return (
         <svg

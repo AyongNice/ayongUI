@@ -6,6 +6,8 @@ import {Wrong, Tick, Lament} from "../icon/icon.ts";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import './index.module.less';
 // 创建一个div添加到body中
+
+//没有虚拟dom
 const createNotificationPortal = () => {
     const dom = document.getElementById('notification-portal');
     if (!dom) {
@@ -43,8 +45,9 @@ const Notification: React.FC<NotificationProps> = ({
         warning: React.createElement(Lament, {className: `${styleMessage.tag} ${iconClassName}`}),
         error: React.createElement(Wrong, {className: `${styleMessage.tag} ${iconClassName}`}),
     }
-
-
+    /**
+     * onAnimationEnd 动画结束事件
+     */
     return (
         <ConditionalRender mode='show' show={show}>
             <div
@@ -63,29 +66,6 @@ const Notification: React.FC<NotificationProps> = ({
     );
 };
 
-const NotificationContainer: React.FC = () => {
-    const [notifications] = useState<React.ReactNode[]>([]);
-
-    return (
-        <div className="notification-container">
-            {notifications.map((n, index) => (
-                <React.Fragment key={index}>{n?.element || n}</React.Fragment>
-            ))}
-        </div>
-    );
-};
-
-const NotificationProvider: React.FC = ({children}) => {
-    return (
-        <>
-            {children}
-            <div id="notification-portal">
-                <NotificationContainer/>
-            </div>
-        </>
-    );
-};
-
 
 const notificationState: NotificationState[] = [];
 const portalContainer: HTMLElement | null = document.getElementById('notification-portal');
@@ -95,11 +75,14 @@ const notify = (props: MessageProps) => {
         if (!props.useHTMLString) return console.warn('message内容如果为HTML时候,防止 XSS 攻击!必须设置useHTMLString属性为true :: If the message content is HTML, prevent XSS attacks!The useHTMLString attribute must be set to true--- ayongUI');
     }
     if (!portalContainer) return;
-    //浏览器渲染空闲时执行
+    //浏览器渲染空闲时执行 浏览器没秒60帧
     window.requestIdleCallback(() => {
         const cloneNode: Node = portalContainer.cloneNode(true) as Node;
         portalContainer.appendChild(cloneNode);
 
+        /**
+         * 关闭通知
+         */
         const onAyongClose = () => {
             portalContainer.removeChild(cloneNode);
             const index: number = notificationState.findIndex((item) => item.container === cloneNode);
@@ -110,10 +93,10 @@ const notify = (props: MessageProps) => {
         };
 
         const initialTop: number = notificationState.length * 70; // 设置初始top值，根据需求调整
+
         const notification = (
-            <NotificationProvider key={notificationState.length}>
-                <Notification onAyongClose={onAyongClose} {...props} style={{top: initialTop + 'px'}}/>
-            </NotificationProvider>
+            <Notification onAyongClose={onAyongClose} {...props} style={{top: initialTop + 'px'}}/>
+
         );
 
         const root = createRoot(cloneNode as HTMLElement);
@@ -123,7 +106,7 @@ const notify = (props: MessageProps) => {
     });
 
 };
-// string | number | React.FC
+
 const messageMode = {
     info: (props: MessageProps): void => {
         notify({...props as MessageProps, type: 'info'});
