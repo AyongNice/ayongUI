@@ -1,88 +1,100 @@
 'use strict'; //开启严格模式
-export { default as Button } from './components/button/index';
-export type { ButtonProps } from './components/button/index.d';
+export {default as Button} from './components/button/index';
+export type {ButtonProps} from './components/button/index.d';
 export {
-	Alipay,
-	Alert,
-	PreviousStep,
-	FileCopy,
-	CodeDisplay,
-	LabelersLists,
-	Collapse,
-	Unfold,
-	UserHollow,
-	EyesOpen,
-	EyesClosed,
-	Setting,
-	Alipayfull,
-	Advance,
-	Wechatfull,
-	Fileput,
-	Download,
-	Upload,
-	Wechat,
-	Weibofull,
-	Weibo,
-	Fulcopy,
-	Taobao,
-	Taobaoful,
-	Android,
-	Androidfu,
-	Google,
-	Googlefu,
-	Plusround,
-	Plusrofu,
-	Minusround,
-	Minusrfu,
-	Upward,
-	Upwardfu,
-	Downward,
-	Downwardfu,
-	Downwleft,
-	Downwleftfu,
-	Downwright,
-	Downwrightfu,
-	Arrotopfu,
-	Arrowbuttomfu,
-	Arroleft,
-	Arroright,
-	Shrinks,
-	Dilate,
-	Rewind,
-	Forward,
-	Doubleright,
-	Doubleleft,
-	Aligntop,
-	Alignbottom,
-	Aligncenter,
-	Enter,
-	Rollback,
-	Retweet,
-	Swap,
-	Swapleft,
-	Swapright,
-	Tick,
-	Wrong,
-	Lament,
-	Illustrate,
-	Delete,
-	Search,
-	Transfer,
-	Unlock,
-	Save,
+    Alipay,
+    Alert,
+    PreviousStep,
+    FileCopy,
+    CodeDisplay,
+    LabelersLists,
+    Collapse,
+    Unfold,
+    UserHollow,
+    EyesOpen,
+    EyesClosed,
+    Setting,
+    Alipayfull,
+    Advance,
+    Wechatfull,
+    Fileput,
+    Download,
+    Upload,
+    Wechat,
+    Weibofull,
+    Weibo,
+    Fulcopy,
+    Taobao,
+    Taobaoful,
+    Android,
+    Androidfu,
+    Google,
+    Googlefu,
+    Plusround,
+    Plusrofu,
+    Minusround,
+    Minusrfu,
+    Upward,
+    Upwardfu,
+    Downward,
+    Downwardfu,
+    Downwleft,
+    Downwleftfu,
+    Downwright,
+    Downwrightfu,
+    Arrotopfu,
+    Arrowbuttomfu,
+    Arroleft,
+    Arroright,
+    Shrinks,
+    Dilate,
+    Rewind,
+    Forward,
+    Doubleright,
+    Doubleleft,
+    Aligntop,
+    Alignbottom,
+    Aligncenter,
+    Enter,
+    Rollback,
+    Retweet,
+    Swap,
+    Swapleft,
+    Swapright,
+    Tick,
+    Wrong,
+    Lament,
+    Illustrate,
+    Delete,
+    Search,
+    Transfer,
+    Unlock,
+    Save,
+    Play,
+    Panetop,
+    Panedown,
+    Paneleft,
+    Paneright,
+    Login,
+    Logout,
+    Menufold,
+    Menuunfold
 } from './components/icon/icon.ts';
-export type { IconProps } from './components/icon';
-export { default as Table } from './components/table/index.tsx';
-export type { TableProps } from './components/table/index.d';
+export type {IconProps} from './components/icon';
+export {default as Table} from './components/table/index.tsx';
+export type {TableProps} from './components/table/index.d';
 
-export { default as Input } from './components/input/index.tsx';
-export type { InputProps } from './components/input/index.d';
-export { setThemeVariables } from './utils/index.ts';
-export { default as Message } from './components/message/index.tsx';
-export type { MessageProps } from './components/message/index.d';
+export {default as Input} from './components/input/index.tsx';
+export type {InputProps} from './components/input/index.d';
+export {setThemeVariables} from './utils/index.ts';
+export {default as Message} from './components/message/index.tsx';
+export type {MessageProps} from './components/message/index.d';
 
-export { default as Tooltip } from './components/tooltip/index.tsx';
-export type { TooltipProps } from './components/tooltip/index.d';
+export {default as Tooltip} from './components/tooltip/index.tsx';
+export type {TooltipProps} from './components/tooltip/index.d';
+
+export {default as Rate} from './components/rate/index.tsx';
+export type {RateProps} from './components/rate/index.d';
 
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
