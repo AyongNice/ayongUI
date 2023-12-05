@@ -9,7 +9,10 @@ const Rate: React.FC<RateProps> = ({
                                        value,
                                        disabled = false,
                                        className,
-                                       onRatingChange
+                                       onChange = () => {
+                                       },
+                                       icon = ''
+
                                    }) => {
     const [rating, setRating] = useState(value);
 //触摸事件 状态
@@ -18,13 +21,11 @@ const Rate: React.FC<RateProps> = ({
     const handleStarClick = (selectedRating: number) => {
         if (disabled) return;
         setRating(selectedRating);
-        if (onRatingChange) {
-            onRatingChange(selectedRating);
+        if (onChange) {
+            onChange(selectedRating);
         }
     };
-    const handStar = () => {
 
-    }
     const handleStarMove = (selectedRating: number) => {
         if (disabled) return;
         setRatingMove(selectedRating);
@@ -32,32 +33,40 @@ const Rate: React.FC<RateProps> = ({
     const handleStarMoveOut = () => {
         if (disabled) return;
         setRatingMove(null);
+        console.log(1123)
     }
-    const styleRet = {
-        "::after": {
-            background: "red",
-            // 其他样式...
-        },
-    }
+
     const getClassName = (index: number, base: string): string => {
         const styleClass: string = index < (ratingMove || rating) ? `${base} ${style.beam} ${style.active}` : `${base} ${style.beam} `
         return `${styleClass} ${className}`;
     }
-
+    const getIconClassName = (index: number) => {
+        console.log(123)
+        return index < (ratingMove || rating) ? style.divIconActive : style.divIcon;
+    }
     return (
         <div className={style.warp}>
             {[...Array(count)].map((_, index) => (
-                <div key={index}
-                     onMouseOut={handleStarMoveOut}
-                     onMouseMove={() => handleStarMove(index + 1)}
-                     className={style.rotor}
-                     onClick={() => handleStarClick(index + 1)}>
-                    <div style={{'--color': color}} className={getClassName(index, style.north)}></div>
-                    <div style={{'--color': color}} className={getClassName(index, style.northwest)}></div>
-                    <div style={{'--color': color}} className={getClassName(index, style.northeast)}></div>
-                    <div style={{'--color': color}} className={getClassName(index, style.west)}></div>
-                    <div style={{'--color': color}} className={getClassName(index, style.east)}></div>
-                </div>
+                icon ? <div
+                        key={index}
+                        onMouseOut={handleStarMoveOut}
+                        onMouseMove={() => handleStarMove(index + 1)}
+                        onClick={() => handleStarClick(index + 1)}
+                    >
+                        {React.createElement(icon, {
+                            className: getIconClassName(index),
+                        })}</div> :
+                    <div key={index}
+                         onMouseOut={handleStarMoveOut}
+                         onMouseMove={() => handleStarMove(index + 1)}
+                         className={style.rotor}
+                         onClick={() => handleStarClick(index + 1)}>
+                        <div style={{'--color': color}} className={getClassName(index, style.north)}/>
+                        <div style={{'--color': color}} className={getClassName(index, style.northwest)}/>
+                        <div style={{'--color': color}} className={getClassName(index, style.northeast)}/>
+                        <div style={{'--color': color}} className={getClassName(index, style.west)}/>
+                        <div style={{'--color': color}} className={getClassName(index, style.east)}/>
+                    </div>
             ))}
         </div>
     );

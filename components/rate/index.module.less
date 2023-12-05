@@ -29,7 +29,7 @@
   content: '';
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(45deg, transparent 40%, #cdcdcd 41%);
+  background-image: linear-gradient(45deg, transparent 40%, var(--ayong-grey) 41%);
   border-radius: 20%;
   transform: rotate(45deg);
   //animation: twinkle 1s infinite alternate ease-out;
@@ -38,6 +38,14 @@
 
 .active:after {
   background-image: linear-gradient(45deg, transparent 40%, var(--color) 41%);
+}
+
+.divIcon {
+  fill: var(--ayong-grey);
+}
+
+.divIconActive {
+  fill: gold;
 }
 
 .north {
