@@ -3,12 +3,20 @@ import style from './index.module.less';
 import {RateProps} from "./index.d"
 
 
-const Rate: React.FC<RateProps> = ({count = 5, className, initialRating, onRatingChange}) => {
-    const [rating, setRating] = useState(initialRating);
+const Rate: React.FC<RateProps> = ({
+                                       count = 5,
+                                       color = 'gold',
+                                       value,
+                                       disabled = false,
+                                       className,
+                                       onRatingChange
+                                   }) => {
+    const [rating, setRating] = useState(value);
 //触摸事件 状态
     const [ratingMove, setRatingMove] = useState<number | null>(null);
 
     const handleStarClick = (selectedRating: number) => {
+        if (disabled) return;
         setRating(selectedRating);
         if (onRatingChange) {
             onRatingChange(selectedRating);
@@ -18,29 +26,38 @@ const Rate: React.FC<RateProps> = ({count = 5, className, initialRating, onRatin
 
     }
     const handleStarMove = (selectedRating: number) => {
+        if (disabled) return;
         setRatingMove(selectedRating);
     }
     const handleStarMoveOut = () => {
+        if (disabled) return;
         setRatingMove(null);
     }
-
-    const getClassName = (index: number): string => {
-        const styleClass: string = index < (ratingMove || rating) ? `${style.star} ${style.active}` : `${style.star} `
+    const styleRet = {
+        "::after": {
+            background: "red",
+            // 其他样式...
+        },
+    }
+    const getClassName = (index: number, base: string): string => {
+        const styleClass: string = index < (ratingMove || rating) ? `${base} ${style.beam} ${style.active}` : `${base} ${style.beam} `
         return `${styleClass} ${className}`;
     }
 
     return (
-        <div>
+        <div className={style.warp}>
             {[...Array(count)].map((_, index) => (
-                <span
-                    key={index}
-                    onMouseOut={handleStarMoveOut}
-                    onMouseMove={() => handleStarMove(index + 1)}
-                    onClick={() => handleStarClick(index + 1)}
-                    className={getClassName(index)}
-                >
-          {/*&#9733;*/}
-        </span>
+                <div key={index}
+                     onMouseOut={handleStarMoveOut}
+                     onMouseMove={() => handleStarMove(index + 1)}
+                     className={style.rotor}
+                     onClick={() => handleStarClick(index + 1)}>
+                    <div style={{'--color': color}} className={getClassName(index, style.north)}></div>
+                    <div style={{'--color': color}} className={getClassName(index, style.northwest)}></div>
+                    <div style={{'--color': color}} className={getClassName(index, style.northeast)}></div>
+                    <div style={{'--color': color}} className={getClassName(index, style.west)}></div>
+                    <div style={{'--color': color}} className={getClassName(index, style.east)}></div>
+                </div>
             ))}
         </div>
     );

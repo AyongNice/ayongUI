@@ -1,42 +1,99 @@
-.star {
-  display: inline-block;
-  margin-right: 5px; /* 为星星之间添加一些间距 */
-  width: 20px; /* 调整星星的宽度 */
-  height: 20px; /* 调整星星的高度 */
+
+.warp {
+  width: 200px;
+  display: flex;
+}
+
+.rotor {
   position: relative;
-  //background: #cfcfcf;
-  margin-left: 10px;
-  cursor: 'pointer';
-  //clip-path: polygon(50% 0%,
-  //61.8% 35.4%,
-  //100% 35.4%,
-  //69.1% 57.3%,
-  //80.9% 92.7%,
-  //50% 71.8%,
-  //19.1% 92.7%,
-  //30.9% 57.3%,
-  //0% 35.4%,
-  //38.2% 35.4%);
-
-
-  transition: all .2s ease-in-out;
+  width: 12%;
+  padding-bottom: 10%;
+  animation: rotato 1s infinite linear;
+  -webkit-animation: rotato 4s infinite ease-in-out alternate;
+  transition: all .5s ease-in-out;
 
   &:hover {
     transform: scale(1.2);
   }
-
-
-}
-//filter: grayscale(1);
-.star::before {
-  content: '⭐️'; /* 使用实心星号字符，可以根据需求更换为其他字符 */
-  font-size: 20px; /* 调整星星的大小 */
-  color: grey; /* 未选择的星星颜色 */
-  transition: color 0.2s ease-in-out;
-  border-radius: 50%; /* 调整星星的圆角 */
 }
 
-.active {
-  color: gold; /* 已选择的星星颜色 */
-  //background: gold; /* 已选择的星星颜色 */
+.beam {
+
+  position: absolute;
+  width: 60%;
+  height: 85%;
 }
+
+.beam:after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(45deg, transparent 40%, #cdcdcd 41%);
+  border-radius: 20%;
+  transform: rotate(45deg);
+  //animation: twinkle 1s infinite alternate ease-out;
+  //-webkit-animation: twinkle 1s infinite alternate ease-out;
+}
+
+.active:after {
+  background-image: linear-gradient(45deg, transparent 40%, var(--color) 41%);
+}
+
+.north {
+  transform: rotate(270deg) scaleY(0.5);
+}
+
+.northwest {
+  transform: rotate(198deg) scaleY(0.5);
+}
+
+.northeast {
+  transform: rotate(342deg) scaleY(0.5);
+}
+
+.west {
+  transform: rotate(126deg) scaleY(0.5);
+}
+
+.east {
+  transform: rotate(54deg) scaleY(0.5);
+}
+
+@keyframes twinkle {
+  0% {
+    border-radius: 5px;
+  }
+  100% {
+    border-radius: 50px;
+  }
+}
+
+@-webkit-keyframes twinkle {
+  0% {
+    border-radius: 5px;
+  }
+  100% {
+    border-radius: 50px;
+  }
+}
+
+//@keyframes rotato {
+//  0% {
+//    transform: rotate(0deg);
+//  }
+//  100% {
+//    transform: rotate(72deg);
+//  }
+//}
+//@-webkit-keyframes rotato {
+//  0% {
+//    transform: rotate(0deg);
+//  }
+//  50% {
+//    transform: rotate(72deg);
+//  }
+//  100% {
+//    transform: rotate(-72deg);
+//  }
+//}
