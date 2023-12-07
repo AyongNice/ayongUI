@@ -55,6 +55,14 @@ export { default as Login} from "./components/login-frame"; // 登录
 export { default as Logout} from "./components/logout-frame"; // 退出
 export { default as Menufold} from "./components/menufold-frame"; // 收起菜单
 export { default as Menuunfold} from "./components/menuunfold-frame"; //展开菜单
+export { default as Borderbottom} from "./components/borderbottom-frame"; //虚线边框下
+export { default as Borderhorizontal} from "./components/borderhorizontal-frame"; //虚线边框垂直居中
+export { default as Borderlnner} from "./components/borderlnner-frame"; //虚线边框十字
+export { default as Bordersolid} from "./components/bordersolid-frame"; //实线边框
+export { default as Borderleft} from "./components/borderleft-frame"; //虚线边框左
+export { default as Borderight} from "./components/borderight-frame"; //虚线边框右
+export { default as Bordertop} from "./components/bordertop-frame"; //虚线边框上
+export { default as Borderverticle} from "./components/borderverticle-frame"; //虚线边框水平居中
 /**
 * 实体icon
 */

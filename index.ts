@@ -78,7 +78,15 @@ export {
     Login,
     Logout,
     Menufold,
-    Menuunfold
+    Menuunfold,
+    Borderbottom,
+    Borderhorizontal,
+    Borderlnner,
+    Bordersolid,
+    Borderleft,
+    Borderight,
+    Bordertop,
+    Borderverticle,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';
