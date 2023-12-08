@@ -33,7 +33,6 @@ const Rate: React.FC<RateProps> = ({
     const handleStarMoveOut = () => {
         if (disabled) return;
         setRatingMove(null);
-        console.log(1123)
     }
 
     const getClassName = (index: number, base: string): string => {
@@ -41,7 +40,6 @@ const Rate: React.FC<RateProps> = ({
         return `${styleClass} ${className}`;
     }
     const getIconClassName = (index: number) => {
-        console.log(123)
         return index < (ratingMove || rating) ? style.divIconActive : style.divIcon;
     }
     return (
