@@ -6,7 +6,7 @@ import {RateProps} from "./index.d"
 const Rate: React.FC<RateProps> = ({
                                        count = 5,
                                        color = 'gold',
-                                       value,
+                                       value=0,
                                        disabled = false,
                                        className,
                                        onChange = () => {
