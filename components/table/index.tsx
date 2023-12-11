@@ -222,21 +222,20 @@ interface ColumnFunction extends React.FC {
     displayName: string;//防止编译命名冲突
 }
 
-// @ts-ignore
-const Column: ColumnFunction = ({title, dataIndex, render}) => {
+const Columns: ColumnFunction = ({title, dataIndex, render}) => {
     return null; // 列定义不需要在这里渲染
 }
 
 // @ts-ignore
-const ColumnGroup: ColumnFunction = ({title, children}) => {
+const ColumnGroups: ColumnFunction = ({title, children}) => {
     return null; // 列定义不需要在这里渲染
 }
-ColumnGroup.displayName = 'ColumnGroup';
-Column.displayName = 'Column';
+ColumnGroups.displayName = 'ColumnGroup';
+Columns.displayName = 'Column';
 
-Index.ColumnGroup = ColumnGroup;
+Index.ColumnGroup = ColumnGroups;
 
-Index.Column = Column;
+Index.Column = Columns;
 
 export default Index;
 

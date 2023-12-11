@@ -1,5 +1,4 @@
 import React, {useState, isValidElement} from 'react';
-import {createRoot} from 'react-dom/client';
 import styleMessage from './index.module.less';
 import {NotificationProps, NotificationState, MessageProps, type} from './index.d'
 import {Wrong, Tick, Lament} from "../icon/icon.ts";
