@@ -46,7 +46,7 @@ const Notification: React.FC<NotificationProps> = ({
     return (
         <ConditionalRender mode='show' show={show}>
             <div
-                style={{...style, animationDuration: duration + 's'}}
+                style={{...style, zIndex:1000, animationDuration: duration + 's'}}
                 className={`${styleMessage.ayongMessage} ${iconClassName}`}
                 onAnimationEnd={onAyongClose}
             >

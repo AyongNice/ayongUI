@@ -104,6 +104,9 @@ export type {TooltipProps} from './components/tooltip/index.d';
 export {default as Rate} from './components/rate/index.tsx';
 export type {RateProps} from './components/rate/index.d';
 
+export {default as Select} from './components/select/index.tsx';
+export type {SelectProps} from './components/select/index.d';
+
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
 // export {default as Select} from './components/select/select';
