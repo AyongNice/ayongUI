@@ -1,72 +1,113 @@
-import React, {useState, useRef} from 'react';
-import {DownOutlined, SearchOutlined} from '@ant-design/icons';
-import selectStyle from './index.module.less';  // 请根据你的文件路径调整
+import React, {useState, useRef, useEffect} from 'react';
+import selectStyle from './index.module.less';
+import {Wrong} from '../icon/icon.ts'
 
-const Option = ({value, label, onClick}) => (
-    <div className={selectStyle.customOption} value={value} onClick={onClick}>
-        {label}
-    </div>
-);
+const Option = ({option, onClick, selectedValues = []}) => {
 
-const CustomSelect = ({defaultValue, onChange, options,style}) => {
+    const getClassName = (): string => {
+        const selectName: string = selectedValues.includes(option.value) ? selectStyle.selectOption : '';
+        const disabled: string = option.disabled ? selectStyle.disabled : '';
+        return `${selectStyle.customOption} ${selectName} ${disabled}`
+    }
+    const onSelectClick = () => {
+        if (option.disabled) return;
+        onClick();
+    }
+    return (
+
+        <div className={getClassName()} value={option.value} onClick={onSelectClick}>
+            {option.label}
+        </div>
+    )
+};
+
+const CustomSelect = ({defaultValue, onChange, options, style}) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedValue, setSelectedValue] = useState(defaultValue);
+    const [selectedValues, setSelectedValues] = useState(defaultValue);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const inputRef = useRef(null);
 
     const handleOptionClick = (value) => {
-        setIsDropdownVisible(false);
-        setSelectedValue(value); // 设置选中的值为选择框的值
-        setSearchTerm(value); // 清空搜索框的值
-        onChange(value);
+        setSelectedValues((prevValues) => {
+            if (Array.isArray(selectedValues)) {
+                return prevValues.includes(value) ? prevValues.filter((v) => v !== value) : [...prevValues, value]
+            }
+            return value
+        });
+        setSearchTerm('');
+        console.log(selectedValues)
+        if (!Array.isArray(selectedValues)) {
+            setIsDropdownVisible(false)
+        }
+        onChange(selectedValues);
     };
 
-    const handleInputClick = () => {
-        setIsDropdownVisible(!isDropdownVisible);
+    const handleSelectClick = () => {
+        setIsDropdownVisible(true);
     };
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
-        setIsDropdownVisible(true)
     };
+
+    const handleClearClick = () => {
+        setSelectedValues([]);
+        onChange([]);
+    };
+
     const handleBlur = () => {
-        console.log('blur');
-    }
+        // setIsDropdownVisible(false);
+    };
+
 
     return (
         <div style={style} className={selectStyle.customSelect}>
-            <div className={selectStyle.customSelectSelection} onClick={handleInputClick}>
-                <div>{selectedValue}</div>
-                <input
-                    type="text"
-                    value={searchTerm}  // 将值绑定到 searchTerm
-                    onChange={handleInputChange}
-                    onFocus={() => setIsDropdownVisible(true)}
-                    onBlur={handleBlur}
-                    placeholder={defaultValue}
-                    ref={inputRef}
-                />
-                <DownOutlined/>
-            </div>
+            <main className={selectStyle.main} onClick={handleSelectClick}>
+                {Array.isArray(selectedValues) ? <div className={selectStyle.customSelectSelector}>
+
+                        {selectedValues.map((value) => (
+                            <div key={value} className={selectStyle.customSelectSelectionOverflowItem}>
+
+                                <span className={selectStyle.customSelectSelectionItemContent}>{value}</span>
+                                <span
+                                    className={selectStyle.customSelectSelectionItemRemove}
+                                    onClick={() => handleOptionClick(value)}
+                                >
+                  <Wrong className={selectStyle.close}/>
+                </span>
+                            </div>
+                        ))}
+                        <input
+                            className={selectStyle.customSelectSelectionSearchInput}
+                            value={searchTerm}
+                            onClick={handleSelectClick}
+                            onChange={handleInputChange}
+                            onFocus={() => setIsDropdownVisible(true)}
+                            onBlur={handleBlur}
+                            placeholder=''
+                            ref={inputRef}
+                        />
+                        <span>&nbsp;</span>
+
+                    </div>
+                    : <main>{selectedValues}</main>}
+            </main>
+
+
             <div className={selectStyle.dropdown}>
                 {isDropdownVisible && (
-                    <div className={selectStyle.customSelectDropdown}>
-                        <div className={selectStyle.optionsContainer}>
-                            {options
-                                .filter(option => option.label.toLowerCase().includes(searchTerm.toLowerCase()))
-                                .map(option => (
-                                    <Option
-                                        key={option.value}
-                                        value={option.value}
-                                        label={option.label}
-                                        onClick={() => handleOptionClick(option.value)}
-                                    />
-                                ))}
-                        </div>
-                    </div>
+                    <ul className={selectStyle.customSelectDropdownMenuItems}>
+                        {options.map((option) => (
+                            <Option
+                                option={option}
+                                selectedValues={selectedValues}
+                                key={option.value}
+                                onClick={() => handleOptionClick(option.value)}
+                            />
+                        ))}
+                    </ul>
                 )}
             </div>
-
         </div>
     );
 };

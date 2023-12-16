@@ -38,29 +38,145 @@
   align-items: center;
 }
 
-.search-container input {
-  flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 6px;
-}
 
 .options-container {
   max-height: 200px;
   overflow-y: auto;
+
+
 }
 
-.custom-option {
+.customOption {
+  padding: 3px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 3px 0;
+
+  &:hover {
+    background: var(--ayong-premium-grey);
+  }
+}
+
+.selectOption {
+  font-weight: bold;
+  background: var(--ayong-primary-grey);
+}
+
+.dropdown {
+  width: 100%;
+  color: var(--ayong-font-dark);
+  background: var(--ayong-light);
+  border-radius: 4px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 110%;
+  left: 0;
+  z-index: var(--ayong-zindex1);
+}
+
+.disabled {
+  color: var(--ayong-grey);
+  cursor: not-allowed;
+}
+
+
+.selectedValues {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+}
+
+.selectedValues > div {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4px;
+}
+
+/* index.module.less */
+
+.customSelect {
+  position: relative;
+}
+
+
+.main {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  background: var(--ayong-light);
+  border-radius: var(--ayong-radius);
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+
+.customSelectSelector {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.customSelectSelectionSearchInput {
+  flex: 1;
+  outline: none;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.close {
+  width: 10px;
+  height: 10px;
+  fill: var(--ayong-grey);
+}
+
+.customSelectSelectionOverflowItem {
+  margin-top: 4px;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  background: var(--ayong-grey-crescent);
+  border-radius: 4px;
+}
+
+
+.customSelectSelectionItemContent {
+  margin-right: 4px;
+}
+
+.customSelectSelectionItemRemove {
+  cursor: pointer;
+  color: #999;
+}
+
+.customSelectArrow {
+  margin-left: auto;
+  /* Add styles for the arrow icon */
+}
+
+.customSelectClear {
+  cursor: pointer;
+  margin-left: 8px;
+  color: #999;
+}
+
+
+.customSelectDropdownMenuItems {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+}
+
+.customSelectDropdownMenuItem {
   padding: 8px;
   cursor: pointer;
 }
 
-.custom-option:hover {
-  background-color: #f0f0f0;
-}
-
-.dropdown {
-
-  background: #8e8e8e;
-  padding: 8px;
-}
+/* Add other styles as needed */
