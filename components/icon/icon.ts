@@ -63,6 +63,9 @@ export { default as Borderleft} from "./components/borderleft-frame"; //虚线�
 export { default as Borderight} from "./components/borderight-frame"; //虚线边框右
 export { default as Bordertop} from "./components/bordertop-frame"; //虚线边框上
 export { default as Borderverticle} from "./components/borderverticle-frame"; //虚线边框水平居中
+export { default as Wrongs} from "./components/wrongs-frame"; // 错
+export { default as Under} from "./components/under-frame"; // 下
+export { default as Nocontent} from "./components/nocontent-frame"; // 暂无内容
 /**
 * 实体icon
 */
@@ -89,3 +92,4 @@ export { default as Tick } from "./components/tick-solid"; // 对勾
 export { default as Wrong } from "./components/wrong-solid"; // 错
 export { default as Lament } from "./components/lament-solid"; // 感叹号
 export { default as Illustrate } from "./components/illustrate-solid"; // 感叹号
+export { default as Empty} from "./components/empty-solid"; // 空
