@@ -1,6 +1,9 @@
 import React, {useState, useRef, useEffect} from 'react';
 import selectStyle from './index.module.less';
-import {Wrong} from '../icon/icon.ts'
+import Multiple from './components/multiple/index.tsx'
+import {Wrong, Downwleftfu} from "../icon/icon.ts";
+import table from "../table/index.module.less";
+import unfold from "../table/components/unfold-button/index.module.less";
 
 const Option = ({option, onClick, selectedValues = []}) => {
 
@@ -21,82 +24,118 @@ const Option = ({option, onClick, selectedValues = []}) => {
     )
 };
 
-const CustomSelect = ({defaultValue, onChange, options, style}) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedValues, setSelectedValues] = useState(defaultValue);
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const inputRef = useRef(null);
 
-    const handleOptionClick = (value) => {
-        setSelectedValues((prevValues) => {
-            if (Array.isArray(selectedValues)) {
-                return prevValues.includes(value) ? prevValues.filter((v) => v !== value) : [...prevValues, value]
+const CustomSelect = ({defaultValue, onChange, options, style, disabled, clearable}) => {
+        const [searchTerm, setSearchTerm] = useState('');
+        const [selectedValues, setSelectedValues] = useState(defaultValue);
+        const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+        const [showClearable, setShowClearable] = useState<boolean>(false)
+        // useEffect(() => {
+        //     // 添加全局事件监听器
+        //     document.addEventListener('mousedown', handlemousedown);
+        //
+        //     // 清除事件监听器
+        //     return () => {
+        //         document.removeEventListener('mousedown', handlemousedown);
+        //     };
+        // }, []); // 空数组表示只在组件挂载和卸载时执行
+        const handleOptionClick = (value) => {
+            console.log('handleOptionClick', value)
+            setSelectedValues((prevValues) => {
+                if (Array.isArray(selectedValues)) {
+                    return prevValues.includes(value) ? prevValues.filter((v) => v !== value) : [...prevValues, value]
+                }
+                return value
+            });
+            setSearchTerm('');
+            console.log(selectedValues)
+            if (!Array.isArray(selectedValues)) {
+                setIsDropdownVisible(false)
             }
-            return value
-        });
-        setSearchTerm('');
-        console.log(selectedValues)
-        if (!Array.isArray(selectedValues)) {
-            setIsDropdownVisible(false)
+            onChange(selectedValues);
+        };
+        const handlemousedown = (event) => {
+            event.stopPropagation();
+            console.log('handlemousedown')
+            // setIsDropdownVisible(!isDropdownVisible);
         }
-        onChange(selectedValues);
-    };
+        const handleSelectClick = (event) => {
+            event.stopPropagation();
+            console.log('handleSelectClick')
+            setIsDropdownVisible(!isDropdownVisible);
+        };
 
-    const handleSelectClick = () => {
-        setIsDropdownVisible(true);
-    };
+        const handleInputChange = (e) => {
+            console.log('handleInputChange', e.target.value)
+            setSearchTerm(e.target.value);
+        };
+        const handleBlur = () => {
+            // setIsDropdownVisible(false);
+        };
+        /**
+         * 按下键盘 多选情况下从后面删除
+         * @param event
+         */
+        const handleKeyDown = (): void => {
+            if (!searchTerm.length) {
+                setSelectedValues(selectedValues.slice(0, selectedValues.length - 1));
+                onChange(selectedValues.slice(0, selectedValues.length - 1));
+            }
 
-    const handleInputChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+        }
+        const getWarpClassname = () => {
+            const disabledName: string = disabled ? selectStyle.disabled : '';
+            return isDropdownVisible ? `${selectStyle.customSelect} ${selectStyle.active} ${disabledName}` : `${selectStyle.customSelect} ${disabledName}`
+        }
+        const onMouseEnter = () => {
+            if (clearable) setShowClearable(true);
+        }
 
-    const handleClearClick = () => {
-        setSelectedValues([]);
-        onChange([]);
-    };
+        const clearValue = () => {
+            setSelectedValues([]);
+            onChange([]);
+        }
 
-    const handleBlur = () => {
-        // setIsDropdownVisible(false);
-    };
+        return (
+            <div style={style}
+                 className={getWarpClassname()}>
+                <main className={selectStyle.main}
+                      onMouseEnter={onMouseEnter}
+                      onMouseLeave={() => setShowClearable(false)}
+                      onClick={handleSelectClick}>
+                    {Array.isArray(selectedValues) ?
+                        <React.Fragment>
+                            <Multiple
+                                selectedValues={selectedValues}
+                                value={searchTerm}
+                                onKeyDown={handleKeyDown}
+                                handleOptionClick={handleOptionClick}
+                                onInputClick={handleSelectClick}
+                                onChange={handleInputChange}
+                                onFocus={() => setIsDropdownVisible(true)}
+                                onBlur={handleBlur}
+                            />
+                            <div className={selectStyle.iconBox}>
+                                {showClearable ? <Wrong onClick={clearValue} className={selectStyle.close}/> :
+                                    <Downwleftfu className={`${selectStyle.rotateTransform} ${
+                                        isDropdownVisible ? selectStyle.rotate90 : ''
+                                    }`}/>}
 
-
-    return (
-        <div style={style} className={selectStyle.customSelect}>
-            <main className={selectStyle.main} onClick={handleSelectClick}>
-                {Array.isArray(selectedValues) ? <div className={selectStyle.customSelectSelector}>
-
-                        {selectedValues.map((value) => (
-                            <div key={value} className={selectStyle.customSelectSelectionOverflowItem}>
-
-                                <span className={selectStyle.customSelectSelectionItemContent}>{value}</span>
-                                <span
-                                    className={selectStyle.customSelectSelectionItemRemove}
-                                    onClick={() => handleOptionClick(value)}
-                                >
-                  <Wrong className={selectStyle.close}/>
-                </span>
                             </div>
-                        ))}
-                        <input
-                            className={selectStyle.customSelectSelectionSearchInput}
-                            value={searchTerm}
-                            onClick={handleSelectClick}
-                            onChange={handleInputChange}
-                            onFocus={() => setIsDropdownVisible(true)}
-                            onBlur={handleBlur}
-                            placeholder=''
-                            ref={inputRef}
-                        />
-                        <span>&nbsp;</span>
 
-                    </div>
-                    : <main>{selectedValues}</main>}
-            </main>
+                        </React.Fragment>
+                        : <div className={selectStyle.selectBox}>
+                            <div
+                                className={isDropdownVisible ? `${selectStyle.onValue} ${selectStyle.selectValue}` : selectStyle.selectValue}>{selectedValues}</div>
+                            <Downwleftfu className={`${selectStyle.rotateTransform} ${
+                                isDropdownVisible ? selectStyle.rotate90 : ''
+                            }`}/>
+                        </div>}
+                </main>
 
 
-            <div className={selectStyle.dropdown}>
                 {isDropdownVisible && (
-                    <ul className={selectStyle.customSelectDropdownMenuItems}>
+                    <ul className={selectStyle.dropdown}>
                         {options.map((option) => (
                             <Option
                                 option={option}
@@ -108,8 +147,8 @@ const CustomSelect = ({defaultValue, onChange, options, style}) => {
                     </ul>
                 )}
             </div>
-        </div>
-    );
-};
+        );
+    }
+;
 
 export default CustomSelect;

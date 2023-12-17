@@ -62,18 +62,6 @@
   background: var(--ayong-primary-grey);
 }
 
-.dropdown {
-  width: 100%;
-  color: var(--ayong-font-dark);
-  background: var(--ayong-light);
-  border-radius: 4px;
-  box-sizing: border-box;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: 110%;
-  left: 0;
-  z-index: var(--ayong-zindex1);
-}
 
 .disabled {
   color: var(--ayong-grey);
@@ -91,31 +79,66 @@
   display: flex;
 }
 
-.selectedValues > div {
+.selectBox {
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  padding: 4px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.rotateTransform {
+  width: 15px;
+  height: 15px;
+  fill: var(--ayong-grey);
+  transition: transform 0.3s ease; /* 添加过渡效果 */
+}
+
+.rotate90 {
+  transform: rotate(-90deg); /* 在此添加按钮旋转的效果 */
 }
 
 /* index.module.less */
 
 .customSelect {
   position: relative;
+  transition: all .3s;
+  border-radius: var(--ayong-radius);
+  border: 1px solid var(--ayong-grey);
+
+
 }
 
+.active {
+  border-color: var(--ayong-primary);
+}
+
+//在选择框
+.onValue {
+  transition: all .3s;
+  color: var(--ayong-grey);
+}
+
+.selectValue {
+  transition: all .3s;
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
 
 .main {
   width: 100%;
+  height: 100%;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   background: var(--ayong-light);
   border-radius: var(--ayong-radius);
-  padding: 5px;
+  padding: 0 4px 4px 9px;
   box-sizing: border-box;
 }
 
 
 .customSelectSelector {
+  width: 95%;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -131,8 +154,8 @@
 }
 
 .close {
-  width: 10px;
-  height: 10px;
+  width: 13px;
+  height: 13px;
   fill: var(--ayong-grey);
 }
 
@@ -146,6 +169,41 @@
   border-radius: 4px;
 }
 
+.dropdown {
+  width: 100%;
+  max-height: 200px;
+  color: var(--ayong-font-dark);
+  background: var(--ayong-light);
+  border-radius: 4px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 110%;
+  left: 0;
+  transition: all 1s;
+  z-index: var(--ayong-zindex1);
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+//设置滑动条样式
+.dropdown::-webkit-scrollbar {
+  //width: 4px;
+  //height: 4px;
+  //background: var(--ayong-grey);
+  //border-radius: 100px;
+  //padding: 10px 0;
+}
+
+.iconBox {
+  width: 5%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .customSelectSelectionItemContent {
   margin-right: 4px;
@@ -163,20 +221,9 @@
 
 .customSelectClear {
   cursor: pointer;
-  margin-left: 8px;
+  margin-left: 4px;
   color: #999;
 }
 
-
-.customSelectDropdownMenuItems {
-  list-style: none;
-  margin: 0;
-  padding: 8px;
-}
-
-.customSelectDropdownMenuItem {
-  padding: 8px;
-  cursor: pointer;
-}
 
 /* Add other styles as needed */
