@@ -1,64 +1,46 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState} from 'react';
 import selectStyle from './index.module.less';
 import Multiple from './components/multiple/index.tsx'
 import {Wrong, Downwleftfu} from "../icon/icon.ts";
-import table from "../table/index.module.less";
-import unfold from "../table/components/unfold-button/index.module.less";
+import {SelectProps} from "./index.d";
+import Option from "./components/option/index.tsx";
 
-const Option = ({option, onClick, selectedValues = []}) => {
+const CustomSelect: React.FC<SelectProps> = ({
+                                                 defaultValue,
+                                                 onChange = () => {
+                                                 },
+                                                 options,
+                                                 style,
+                                                 disabled,
+                                                 clearable
+                                             }) => {
+        /** 搜索选项 **/
+        const [searchTerm, setSearchTerm] = useState<string>('');
+        /** 选择值 **/
+        const [selectedValues, setSelectedValues] = useState<string | string[]>(defaultValue as string);
+        /** 是否显示下拉框 **/
+        const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
+        /** 是否显示清除按钮 **/
+        const [showClearable, setShowClearable] = useState<boolean>(false);
 
-    const getClassName = (): string => {
-        const selectName: string = selectedValues.includes(option.value) ? selectStyle.selectOption : '';
-        const disabled: string = option.disabled ? selectStyle.disabled : '';
-        return `${selectStyle.customOption} ${selectName} ${disabled}`
-    }
-    const onSelectClick = () => {
-        if (option.disabled) return;
-        onClick();
-    }
-    return (
-
-        <div className={getClassName()} value={option.value} onClick={onSelectClick}>
-            {option.label}
-        </div>
-    )
-};
-
-
-const CustomSelect = ({defaultValue, onChange, options, style, disabled, clearable}) => {
-        const [searchTerm, setSearchTerm] = useState('');
-        const [selectedValues, setSelectedValues] = useState(defaultValue);
-        const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-        const [showClearable, setShowClearable] = useState<boolean>(false)
-        // useEffect(() => {
-        //     // 添加全局事件监听器
-        //     document.addEventListener('mousedown', handlemousedown);
-        //
-        //     // 清除事件监听器
-        //     return () => {
-        //         document.removeEventListener('mousedown', handlemousedown);
-        //     };
-        // }, []); // 空数组表示只在组件挂载和卸载时执行
-        const handleOptionClick = (value) => {
-            console.log('handleOptionClick', value)
-            setSelectedValues((prevValues) => {
+        /**
+         * 点击选项
+         * @param value
+         */
+        const handleOptionClick = (value: string) => {
+            setSelectedValues((prevValues: string | string[]) => {
                 if (Array.isArray(selectedValues)) {
                     return prevValues.includes(value) ? prevValues.filter((v) => v !== value) : [...prevValues, value]
                 }
                 return value
             });
             setSearchTerm('');
-            console.log(selectedValues)
             if (!Array.isArray(selectedValues)) {
                 setIsDropdownVisible(false)
             }
             onChange(selectedValues);
         };
-        const handlemousedown = (event) => {
-            event.stopPropagation();
-            console.log('handlemousedown')
-            // setIsDropdownVisible(!isDropdownVisible);
-        }
+
         const handleSelectClick = (event) => {
             event.stopPropagation();
             console.log('handleSelectClick')
@@ -66,7 +48,6 @@ const CustomSelect = ({defaultValue, onChange, options, style, disabled, clearab
         };
 
         const handleInputChange = (e) => {
-            console.log('handleInputChange', e.target.value)
             setSearchTerm(e.target.value);
         };
         const handleBlur = () => {
@@ -83,14 +64,24 @@ const CustomSelect = ({defaultValue, onChange, options, style, disabled, clearab
             }
 
         }
+
+        /**
+         * 获取select的className
+         */
         const getWarpClassname = () => {
             const disabledName: string = disabled ? selectStyle.disabled : '';
             return isDropdownVisible ? `${selectStyle.customSelect} ${selectStyle.active} ${disabledName}` : `${selectStyle.customSelect} ${disabledName}`
         }
+        /**
+         * 鼠标移入显示清除按钮
+         */
         const onMouseEnter = () => {
             if (clearable) setShowClearable(true);
         }
 
+        /**
+         * 清除多选选项
+         */
         const clearValue = () => {
             setSelectedValues([]);
             onChange([]);
@@ -134,18 +125,14 @@ const CustomSelect = ({defaultValue, onChange, options, style, disabled, clearab
                 </main>
 
 
-                {isDropdownVisible && (
-                    <ul className={selectStyle.dropdown}>
-                        {options.map((option) => (
-                            <Option
-                                option={option}
-                                selectedValues={selectedValues}
-                                key={option.value}
-                                onClick={() => handleOptionClick(option.value)}
-                            />
-                        ))}
-                    </ul>
-                )}
+                {isDropdownVisible &&
+                   <ul className={selectStyle.dropdown}>
+                      <Option options={options}
+                              selectedValues={selectedValues}
+                              onClick={handleOptionClick}
+                      />
+
+                   </ul>}
             </div>
         );
     }
