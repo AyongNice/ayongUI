@@ -1,8 +1,3 @@
-.custom-select {
-  position: relative;
-  display: inline-block;
-  font-family: Arial, sans-serif;
-}
 
 .custom-select-selection {
   padding: 8px;
@@ -51,6 +46,10 @@
   border-radius: 4px;
   cursor: pointer;
   margin: 3px 0;
+  //超出隐藏
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   &:hover {
     background: var(--ayong-premium-grey);
@@ -79,22 +78,15 @@
   display: flex;
 }
 
-.selectBox {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
 .rotateTransform {
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
   fill: var(--ayong-grey);
   transition: transform 0.3s ease; /* 添加过渡效果 */
 }
 
 .rotate90 {
-  transform: rotate(-90deg); /* 在此添加按钮旋转的效果 */
+  transform: rotate(90deg); /* 在此添加按钮旋转的效果 */
 }
 
 /* index.module.less */
@@ -127,10 +119,10 @@
 
 .main {
   width: 100%;
-  height: 100%;
+  height: 30px;
   display: flex;
   align-items: center;
-  background: var(--ayong-light);
+  //background: var(--ayong-light);
   border-radius: var(--ayong-radius);
   padding: 0 4px 4px 9px;
   box-sizing: border-box;
@@ -138,7 +130,7 @@
 
 
 .customSelectSelector {
-  width: 95%;
+  width: 87%;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -151,6 +143,7 @@
   border: none;
   border-radius: 4px;
   box-sizing: border-box;
+  background: transparent;
 }
 
 .close {
@@ -186,6 +179,8 @@
   margin: 0;
   padding: 8px;
   overflow-y: auto;
+
+
 }
 
 //设置滑动条样式
@@ -195,14 +190,23 @@
   //background: var(--ayong-grey);
   //border-radius: 100px;
   //padding: 10px 0;
+
+
 }
 
 .iconBox {
-  width: 5%;
+  flex: 1;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.selectBox {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .customSelectSelectionItemContent {
