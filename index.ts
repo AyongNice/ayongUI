@@ -140,4 +140,4 @@ export type {SelectProps} from './components/select/index.d';
 // export {default as Badge} from './components/badge/badge';
 
 // export {default as Menu} from './components/menu/menu';
-console.log(1111113123133)
+
