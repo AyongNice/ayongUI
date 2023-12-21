@@ -66,6 +66,17 @@ export { default as Borderverticle} from "./components/borderverticle-frame"; //
 export { default as Wrongs} from "./components/wrongs-frame"; // 错
 export { default as Under} from "./components/under-frame"; // 下
 export { default as Nocontent} from "./components/nocontent-frame"; // 暂无内容
+export { default as Picture} from "./components/picture-frame"; // 图片中心
+export { default as Pictureletf} from "./components/pictureleft-fram"; // 图片剧左
+export { default as Pictureright} from "./components/pictureright-frame"; // 图片剧右
+export { default as Images} from "./components/images-frame"; // 图片
+export { default as Ieftbottom} from "./components/leftbottom-frame"; // 左下圆角
+export { default as Rightbottom} from "./components/rightbottom-frame"; // 右下圆角
+export { default as Upleft} from "./components/upleft-frame"; //左上圆角
+export { default as Upright} from "./components/upright-frame"; //右上圆角
+export { default as Fullscren} from "./components/fullscren-frame"; //全屏
+export { default as Exitfullscren} from "./components/exitfullscren-frame"; //退出全屏
+export { default as Gitlab} from "./components/gitlab-frame"; //gitlab
 /**
 * 实体icon
 */
@@ -93,3 +104,4 @@ export { default as Wrong } from "./components/wrong-solid"; // 错
 export { default as Lament } from "./components/lament-solid"; // 感叹号
 export { default as Illustrate } from "./components/illustrate-solid"; // 感叹号
 export { default as Empty} from "./components/empty-solid"; // 空
+export { default as Github} from "./components/github-solid"; // github
