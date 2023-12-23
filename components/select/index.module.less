@@ -42,6 +42,9 @@
 }
 
 .customOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 3px 5px;
   border-radius: 4px;
   cursor: pointer;
@@ -138,6 +141,7 @@
 
 .customSelectSelectionSearchInput {
   flex: 1;
+  width: 10px;
   outline: none;
   padding: 4px;
   border: none;
@@ -146,10 +150,21 @@
   background: transparent;
 }
 
+.delete {
+  width: 10px;
+  height: 10px;
+  fill: var(--ayong-grey);
+}
+
 .close {
   width: 13px;
   height: 13px;
   fill: var(--ayong-grey);
+}
+
+.iconActive {
+
+  fill: var(--ayong-primary);
 }
 
 .customSelectSelectionOverflowItem {

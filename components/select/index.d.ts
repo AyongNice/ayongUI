@@ -16,6 +16,8 @@ export interface SelectProps {
   disabled?: boolean;// 是否禁用
   clearable?: boolean;// 是否可清空
   search?: boolean;// 是否可搜索
+  collapseTags?: boolean;//是否折叠多选
+  optionRender?: (opt: options) => React.FC | null //自定义下来模版
 }
 
 export interface OptionsParma {
