@@ -77,6 +77,15 @@ export { default as Upright} from "./components/upright-frame"; //右上圆角
 export { default as Fullscren} from "./components/fullscren-frame"; //全屏
 export { default as Exitfullscren} from "./components/exitfullscren-frame"; //退出全屏
 export { default as Gitlab} from "./components/gitlab-frame"; //gitlab
+export { default as Right} from "./components/right-frame"; //对
+export { default as Rightcircle} from "./components/rightcircle-frame"; //圆的对
+export { default as Folder} from "./components/folder-frame"; //文件夹
+export { default as Openfolder} from "./components/openfolder-frame"; //打开的文件夹
+export { default as Send} from "./components/send-frame"; //发送
+export { default as Useradd} from "./components/adduser-frame"; //添加用户
+export { default as Deleteuser} from "./components/deleteuser-frame"; //删除用户
+export { default as Addusers} from "./components/addusers-frame"; //添加多个用户
+export { default as Userdelete} from "./components/deleteusers-frame"; //删除多个用户
 /**
 * 实体icon
 */
