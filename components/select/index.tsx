@@ -53,6 +53,7 @@ const LeftIcon = ({
 }
 const CustomSelect: React.FC<SelectProps> = ({
                                                style,
+                                               value,
                                                search,
                                                options,
                                                disabled,
@@ -62,6 +63,8 @@ const CustomSelect: React.FC<SelectProps> = ({
                                                onChange = () => {
                                                },
                                                optionRender = null,
+                                               optionHeaderRender = null,
+
                                              }) => {
     const _style = {width: '200px', ...style}
     /** 搜索选项 **/
@@ -73,21 +76,40 @@ const CustomSelect: React.FC<SelectProps> = ({
     /** 是否显示清除按钮 **/
     const [showClearable, setShowClearable] = useState<boolean>(false);
     useEffect(() => {
+      //判断value 数组是否等于defaultValue
 
-      console.log(clearable, Array.isArray(selectedValues))
-    }, [])
+
+      if (Array.isArray(value)) {
+        console.log('useEffect---zujian', value)
+        value.forEach(_ => {
+          if (!options.find(item => item.value === _).disabled) {
+            handleOptionClick(_)
+          }
+
+        })
+        if (!value.length) {
+          setSelectedValues(value)
+          setSearchTerm('');
+
+          onChange(selectedValues);
+        }
+        setIsDropdownVisible(false)
+
+      }
+    }, [value])
 
 
     /**
      * 点击选项
      * @param value
      */
-    const handleOptionClick = (value: string) => {
+    const handleOptionClick = (selectValue: string, disabled: boolean) => {
+      if (disabled) return;
       setSelectedValues((prevValues: string | string[]) => {
         if (Array.isArray(selectedValues)) {
-          return prevValues.includes(value) ? prevValues.filter((v) => v !== value) : [...prevValues, value]
+          return prevValues.includes(selectValue) ? prevValues.filter((v) => v !== selectValue) : [...prevValues, selectValue]
         }
-        return value
+        return selectValue
       });
       setSearchTerm('');
       if (!Array.isArray(selectedValues)) {
@@ -194,6 +216,8 @@ const CustomSelect: React.FC<SelectProps> = ({
 
         {isDropdownVisible &&
           <ul className={selectStyle.dropdown}>
+            {typeof optionHeaderRender === 'function' &&
+              <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>}
             <Option options={options}
                     search={search}
                     optionRender={optionRender}

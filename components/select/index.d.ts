@@ -10,6 +10,7 @@ export interface Options {
 export interface SelectProps {
   className?: string;// 类名
   defaultValue?: string | string[];// 默认值
+  value?: string | string[];// 选中值
   style?: React.CSSProperties;// 样式
   onChange?: (value: string | string[]) => void;// 选中值改变时的回调
   options: Options[];// 选项数据
@@ -18,6 +19,7 @@ export interface SelectProps {
   search?: boolean;// 是否可搜索
   collapseTags?: boolean;//是否折叠多选
   optionRender?: (opt: options) => React.FC | null //自定义下来模版
+  optionHeaderRender: (opt: options) => React.FC | null //自定义下来模版
 }
 
 export interface OptionsParma {

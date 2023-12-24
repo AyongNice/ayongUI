@@ -26,7 +26,7 @@ const Option = ({options, optionRender, search, searchTerm, onClick, selectedVal
                onClick={() => onSelectClick(option)}>
             {typeof optionRender === 'function' ? optionRender(option) : option.label}
             <Tick
-              className={`${selectedValues.includes(option.value) && selectStyle.iconActive} ${selectStyle.icon}`}
+              className={`${selectedValues.includes(option.value) && !option.disabled && selectStyle.iconActive} ${selectStyle.icon}`}
             />
           </div>
         ))

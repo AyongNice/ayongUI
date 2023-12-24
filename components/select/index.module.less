@@ -216,6 +216,22 @@
   overflow-y: auto;
 }
 
+.optionHeader {
+  //下划线
+  position: relative;
+  text-align: left;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--ayong-grey);
+    margin-top: 4px;
+    position: absolute;
+  }
+}
+
 //设置滑动条样式
 .dropdown::-webkit-scrollbar {
   //width: 4px;
