@@ -74,6 +74,7 @@ const Multiple = ({
 
     ))
     }
+    {!selectedValues.length && '请选择'}
     <input
       className={selectStyle.customSelectSelectionSearchInput}
       value={searchTerm}

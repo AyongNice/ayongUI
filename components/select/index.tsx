@@ -29,7 +29,7 @@ const LeftIcon = ({
     <div className={Array.isArray(selectedValues) ? selectStyle.iconBox : selectStyle.selectBox}>
       {!Array.isArray(selectedValues) &&
         <div
-          className={isDropdownVisible ? `${selectStyle.onValue} ${selectStyle.selectValue}` : selectStyle.selectValue}>{selectedValues}</div>}
+          className={isDropdownVisible ? `${selectStyle.onValue} ${selectStyle.selectValue}` : selectStyle.selectValue}>{selectedValues || '请选择'}</div>}
       {search && !Array.isArray(selectedValues) && <input
         className={selectStyle.customSelectSelectionSearchInput}
         value={searchTerm}
@@ -41,9 +41,9 @@ const LeftIcon = ({
         placeholder=''
       />}
 
-      {showClearable ? <Wrongs onClick={clearValue} className={selectStyle.close}/> :
-        (search && isDropdownVisible) ? <Search className={selectStyle.close}/> :
-          <Under className={`${selectStyle.rotateTransform} ${
+      {showClearable ? <Wrongs onClick={clearValue} className={selectStyle.icon}/> :
+        (search && isDropdownVisible) ? <Search className={selectStyle.icon}/> :
+          <Under className={`${selectStyle.icon} ${selectStyle.rotateTransform} ${
             isDropdownVisible ? selectStyle.rotate90 : ''
           }`}/>}
 

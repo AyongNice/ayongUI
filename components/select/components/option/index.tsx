@@ -1,6 +1,6 @@
 import {Options, OptionsParma} from "../../../index.d";
 import selectStyle from "../../index.module.less";
-import {Tick} from '../../../icon/icon.ts'
+import {Tick, Empty} from '../../../icon/icon.ts'
 import React from "react";
 
 
@@ -26,11 +26,17 @@ const Option = ({options, optionRender, search, searchTerm, onClick, selectedVal
                onClick={() => onSelectClick(option)}>
             {typeof optionRender === 'function' ? optionRender(option) : option.label}
             <Tick
-              className={`${selectedValues.includes(option.value) && selectStyle.iconActive} ${selectStyle.close}`}
+              className={`${selectedValues.includes(option.value) && selectStyle.iconActive} ${selectStyle.icon}`}
             />
           </div>
         ))
       }
+
+      {!filteredOptions.length && <div className={selectStyle.emptyBox}>
+        <Empty className={selectStyle.empty}/>
+        无匹配数据
+
+      </div>}
     </>
   )
 };
