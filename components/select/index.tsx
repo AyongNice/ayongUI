@@ -6,32 +6,67 @@ import {SelectProps} from "./index.d";
 import Option from "./components/option/index.tsx";
 
 
-const LeftIcon = ({clearable, showClearable, clearValue, search, isDropdownVisible, selectedValues}) => {
+const LeftIcon = ({
+                    search,
+                    clearable,
+                    searchTerm,
+                    onInputClick,
+                    showClearable,
+                    clearValue,
+                    collapseTags,
+                    isDropdownVisible,
+                    selectedValues,
+                    handleOnKeyDown = () => {
+                    },
+                    onChange = () => {
+                    },
+                    onFocus = () => {
+                    },
+                    onBlur = () => {
+                    },
+                  }) => {
   return (
     <div className={Array.isArray(selectedValues) ? selectStyle.iconBox : selectStyle.selectBox}>
+      {!Array.isArray(selectedValues) &&
+        <div
+          className={isDropdownVisible ? `${selectStyle.onValue} ${selectStyle.selectValue}` : selectStyle.selectValue}>{selectedValues || '请选择'}</div>}
+      {search && !Array.isArray(selectedValues) && <input
+        className={selectStyle.customSelectSelectionSearchInput}
+        value={searchTerm}
+        onClick={onInputClick}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={handleOnKeyDown}
+        placeholder=''
+      />}
 
-      {!Array.isArray(selectedValues) && <div
-        className={isDropdownVisible ? `${selectStyle.onValue} ${selectStyle.selectValue}` : selectStyle.selectValue}>{selectedValues}</div>}
-
-      {showClearable ? <Wrongs onClick={clearValue} className={selectStyle.close}/> :
-        <Under className={`${selectStyle.rotateTransform} ${
-          isDropdownVisible ? selectStyle.rotate90 : ''
-        }`}/>}
+      {showClearable ? <Wrongs onClick={clearValue} className={selectStyle.icon}/> :
+        (search && isDropdownVisible) ? <Search className={selectStyle.icon}/> :
+          <Under className={`${selectStyle.icon} ${selectStyle.rotateTransform} ${
+            isDropdownVisible ? selectStyle.rotate90 : ''
+          }`}/>}
 
     </div>
 
   )
 }
 const CustomSelect: React.FC<SelectProps> = ({
+                                               style,
+                                               value,
+                                               search,
+                                               options,
+                                               disabled,
+                                               clearable,
+                                               collapseTags,
                                                defaultValue,
                                                onChange = () => {
                                                },
-                                               options,
-                                               style,
-                                               disabled,
-                                               clearable,
-                                               search
+                                               optionRender = null,
+                                               optionHeaderRender = null,
+
                                              }) => {
+    const _style = {width: '200px', ...style}
     /** 搜索选项 **/
     const [searchTerm, setSearchTerm] = useState<string>('');
     /** 选择值 **/
@@ -41,21 +76,40 @@ const CustomSelect: React.FC<SelectProps> = ({
     /** 是否显示清除按钮 **/
     const [showClearable, setShowClearable] = useState<boolean>(false);
     useEffect(() => {
+      //判断value 数组是否等于defaultValue
 
-      console.log(clearable, Array.isArray(selectedValues))
-    }, [])
+
+      if (Array.isArray(value)) {
+        console.log('useEffect---zujian', value)
+        value.forEach(_ => {
+          if (!options.find(item => item.value === _).disabled) {
+            handleOptionClick(_)
+          }
+
+        })
+        if (!value.length) {
+          setSelectedValues(value)
+          setSearchTerm('');
+
+          onChange(selectedValues);
+        }
+        setIsDropdownVisible(false)
+
+      }
+    }, [value])
 
 
     /**
      * 点击选项
      * @param value
      */
-    const handleOptionClick = (value: string) => {
+    const handleOptionClick = (selectValue: string, disabled: boolean) => {
+      if (disabled) return;
       setSelectedValues((prevValues: string | string[]) => {
         if (Array.isArray(selectedValues)) {
-          return prevValues.includes(value) ? prevValues.filter((v) => v !== value) : [...prevValues, value]
+          return prevValues.includes(selectValue) ? prevValues.filter((v) => v !== selectValue) : [...prevValues, selectValue]
         }
-        return value
+        return selectValue
       });
       setSearchTerm('');
       if (!Array.isArray(selectedValues)) {
@@ -111,9 +165,12 @@ const CustomSelect: React.FC<SelectProps> = ({
       onChange(Array.isArray(selectedValues) ? [] : '');
     }
 
+    const onSearchChange = (e): void => {
+      setSearchTerm(e.target.value);
+    }
 
     return (
-      <div style={style}
+      <div style={_style}
            className={getWarpClassname()}>
         <main
           style={{height: Array.isArray(selectedValues) ? '100%' : '30px'}}
@@ -124,8 +181,10 @@ const CustomSelect: React.FC<SelectProps> = ({
           {Array.isArray(selectedValues) ?
             <React.Fragment>
               <Multiple
-                selectedValues={selectedValues}
                 value={searchTerm}
+                collapseTags={collapseTags}
+                showClearable={showClearable}
+                selectedValues={selectedValues}
                 onKeyDown={handleKeyDown}
                 handleOptionClick={handleOptionClick}
                 onChange={handleInputChange}
@@ -145,6 +204,8 @@ const CustomSelect: React.FC<SelectProps> = ({
             </React.Fragment>
             : <LeftIcon
               search={search}
+              searchTerm={searchTerm}
+              onChange={onSearchChange}
               clearable={clearable}
               clearValue={clearValue}
               showClearable={showClearable}
@@ -155,11 +216,15 @@ const CustomSelect: React.FC<SelectProps> = ({
 
         {isDropdownVisible &&
           <ul className={selectStyle.dropdown}>
+            {typeof optionHeaderRender === 'function' &&
+              <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>}
             <Option options={options}
+                    search={search}
+                    optionRender={optionRender}
+                    searchTerm={searchTerm}
                     selectedValues={selectedValues}
                     onClick={handleOptionClick}
             />
-
           </ul>
         }
       </div>

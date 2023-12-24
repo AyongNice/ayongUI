@@ -1,3 +1,25 @@
+/* 选择框最外层样式*/
+
+.customSelect {
+  position: relative;
+  transition: all .3s;
+
+}
+
+//选择框顶部样式
+.main {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--ayong-radius);
+  padding: 0 4px 4px 9px;
+  box-sizing: border-box;
+  color: var(--ayong-stone-gray);
+  font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1px solid var(--ayong-grey);
+}
 
 .custom-select-selection {
   padding: 8px;
@@ -37,11 +59,13 @@
 .options-container {
   max-height: 200px;
   overflow-y: auto;
-
-
 }
 
 .customOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 3px 5px;
   border-radius: 4px;
   cursor: pointer;
@@ -57,12 +81,14 @@
 }
 
 .selectOption {
+  color: var(--ayong-primary);
   font-weight: bold;
   background: var(--ayong-primary-grey);
 }
 
 
 .disabled {
+  background: var(--ayong-grey-crescent);
   color: var(--ayong-grey);
   cursor: not-allowed;
 }
@@ -78,10 +104,8 @@
   display: flex;
 }
 
+
 .rotateTransform {
-  width: 13px;
-  height: 13px;
-  fill: var(--ayong-grey);
   transition: transform 0.3s ease; /* 添加过渡效果 */
 }
 
@@ -89,16 +113,6 @@
   transform: rotate(90deg); /* 在此添加按钮旋转的效果 */
 }
 
-/* index.module.less */
-
-.customSelect {
-  position: relative;
-  transition: all .3s;
-  border-radius: var(--ayong-radius);
-  border: 1px solid var(--ayong-grey);
-
-
-}
 
 .active {
   border-color: var(--ayong-primary);
@@ -117,17 +131,6 @@
   margin-top: 4px;
 }
 
-.main {
-  width: 100%;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  //background: var(--ayong-light);
-  border-radius: var(--ayong-radius);
-  padding: 0 4px 4px 9px;
-  box-sizing: border-box;
-}
-
 
 .customSelectSelector {
   width: 87%;
@@ -138,6 +141,7 @@
 
 .customSelectSelectionSearchInput {
   flex: 1;
+  width: 10px;
   outline: none;
   padding: 4px;
   border: none;
@@ -146,10 +150,23 @@
   background: transparent;
 }
 
-.close {
+//删除多选项目按键
+.delete {
+  width: 10px;
+  height: 10px;
+  fill: var(--ayong-stone-gray);
+}
+
+//基础icon
+.icon {
   width: 13px;
   height: 13px;
-  fill: var(--ayong-grey);
+  fill: var(--ayong-stone-gray);
+}
+
+//动态icon样式
+.iconActive {
+  fill: var(--ayong-primary);
 }
 
 .customSelectSelectionOverflowItem {
@@ -158,12 +175,30 @@
   display: flex;
   align-items: center;
   padding: 2px 4px;
+  color: var(--ayong-stone-gray);
   background: var(--ayong-grey-crescent);
+  border-color: var(--ayong-grey);
   border-radius: 4px;
+}
+
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ayong-stone-gray);
+  font: 400 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+.empty {
+  width: 10%;
+  height: 10%;
+  margin-bottom: 10px;
 }
 
 .dropdown {
   width: 100%;
+  text-align: center;
   max-height: 200px;
   color: var(--ayong-font-dark);
   background: var(--ayong-light);
@@ -179,8 +214,22 @@
   margin: 0;
   padding: 8px;
   overflow-y: auto;
+}
 
+.optionHeader {
+  //下划线
+  position: relative;
+  text-align: left;
 
+  &::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--ayong-grey);
+    margin-top: 4px;
+    position: absolute;
+  }
 }
 
 //设置滑动条样式
@@ -195,7 +244,6 @@
 }
 
 .iconBox {
-  flex: 1;
   height: 30px;
   display: flex;
   align-items: center;
