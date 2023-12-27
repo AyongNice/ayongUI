@@ -1,6 +1,6 @@
 import {Options, OptionsParma} from "../../../index.d";
 import selectStyle from "../../index.module.less";
-import {Tick, Empty} from '../../../icon/icon.ts'
+import {Right, Empty} from '../../../icon/icon.ts'
 import React from "react";
 
 
@@ -25,7 +25,7 @@ const Option = ({options, optionRender, search, searchTerm, onClick, selectedVal
           <div className={getClassName(option)} key={option.value} value={option.value}
                onClick={() => onSelectClick(option)}>
             {typeof optionRender === 'function' ? optionRender(option) : option.label}
-            <Tick
+            <Right
               className={`${selectedValues.includes(option.value) && !option.disabled && selectStyle.iconActive} ${selectStyle.icon}`}
             />
           </div>

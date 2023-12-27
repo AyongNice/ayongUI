@@ -4,7 +4,6 @@ export interface Options {
   value: string;
   label: string;
   disabled?: boolean;
-  selectedValues?: string[];
 }
 
 export interface SelectProps {
@@ -18,7 +17,7 @@ export interface SelectProps {
   clearable?: boolean;// 是否可清空
   search?: boolean;// 是否可搜索
   collapseTags?: boolean;//是否折叠多选
-  optionRender?: (opt: options) => React.FC | null //自定义下来模版
+  optionRender?: (opt: options) => React.FC | null //自定义下拉模版
   optionHeaderRender?: (opt: options) => React.FC | null //自定义下来模版
 }
 
