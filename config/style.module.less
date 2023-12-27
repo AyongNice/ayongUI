@@ -15,11 +15,18 @@
 @font-color: #fff;
 @font-size: 15px;
 :root {
+  --ayong-normal-height: 32px; /* 默认高度 */
+  --ayong-large-height: 40px; /* 大尺度 */
+  --ayong-small-height: 24px; /* 小尺度 */
   --ayong-primary: @theme; /* 全局主题色 */
   --ayong-safe: @safe;
   --ayong-error: @dangerous;
   --ayong-warn: @warn;
   --ayong-font-color: @font-color;
+  --ayong-selected-font-color: #ffffff;  /* 选中文字色 */
+  --ayong-selected-bg-color: @theme; /* 选中背景色 */
+  --ayong-disabled-font-color: rgba(0, 0, 0, 0.25); /* 禁用文字色 */
+  --ayong-disabled-bg-color: rgba(0, 0, 0, 0.04); /* 禁用背景色 */
   --ayong-font-dark: #222731;
   --ayong-light: #fff;
   --ayong-font-size: @font-size;
