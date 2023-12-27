@@ -1,0 +1,58 @@
+.pageMain {
+  display: flex;
+  align-items: center;
+  font-size: var(--ayong-font-size);
+  .pageNumList {
+    display: flex;
+    align-items: center;
+    .pageNumItem {
+      color: #000000;
+      font-size: inherit;
+      margin-right: 10px;
+      &:last-child {
+        margin: 0;
+      }
+      &.selected {
+        color: var(--ayong-selected-font-color);
+        background-color: var(--ayong-selected-bg-color);
+      }
+    }
+  }
+  .pageNumItem,
+  .prevBtn,
+  .nextBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    font-size: inherit;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+  .prevBtn {
+    margin-right: 10px;
+  }
+  .nextBtn {
+    margin-left: 10px;
+  }
+  .jumpBox {
+    margin-left: 10px;
+  }
+  .selectPageSize {
+    display: inline-block;
+    min-width: 90px;
+    margin-left: 10px;
+  }
+  .pageSizeInput {
+    width: 60px;
+    margin: 0 10px;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--ayong-disabled-font-color);
+  background-color: var(--ayong-disabled-bg-color);
+}
