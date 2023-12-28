@@ -16,7 +16,7 @@ export { default as EyesClosed } from "./components/eyes-frame"; // 关闭眼睛
 export { default as Setting } from "./components/setting-frame"; // 设置
 export { default as Fileput } from "./components/file-frame"; // 文件
 export { default as Download } from "./components/download-frame"; // 下载
-export { default as Upload } from "./components/upload-frame"; // 上传
+export { default as Uploads } from "./components/upload-frame"; // 上传
 export { default as Wechat } from "./components/wechat-frame"; // 微信
 export { default as Weibo } from "./components/weibo-frame"; // 微博
 export { default as Taobao } from "./components/taobao-frame"; // 淘宝

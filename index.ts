@@ -19,7 +19,7 @@ export {
     Wechatfull,
     Fileput,
     Download,
-    Upload,
+    Uploads,
     Wechat,
     Weibofull,
     Weibo,
@@ -131,6 +131,9 @@ export type {RateProps} from './components/rate/index.d';
 
 export {default as Select} from './components/select/index.tsx';
 export type {SelectProps} from './components/select/index.d';
+
+export {default as Upload} from './components/upload/index.tsx';
+export type {UploadProps} from './components/upload/index.d';
 
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
