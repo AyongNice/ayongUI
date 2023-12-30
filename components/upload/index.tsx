@@ -5,6 +5,7 @@ import Button from "../button/index.tsx";
 import {Uploads, Wrongs} from "../icon/icon.ts"
 import Message from '../message/index.tsx'
 import FileLsit from "./components/file-list/index.tsx";
+import {isPromise} from '../../utils/index.ts'
 
 const getClassName = (className) => {
   return `${style.avatar} ${className}`
@@ -43,15 +44,21 @@ const Upload: React.FC<UploadProps> = ({
                                          disabled = false,
                                          maxCount = null,
                                          iconRender = null,
+                                         defaultFileList = [],
+                                         fileList = [],
                                          beforeUpload = () => {
                                            return true
                                          },
-                                         fileList = [],
+                                         onRemove = () => {
+
+                                         },
                                          uplaodRender = null,
                                          onChange = () => {
                                          },
                                        }) => {
-  const [selectedFile, setSelectedFile] = useState<File[]>([]);
+  const fileLists = [...defaultFileList, ...fileList]
+
+  const [selectedFile, setSelectedFile] = useState<File[]>(fileLists);
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -69,13 +76,9 @@ const Upload: React.FC<UploadProps> = ({
       Message.warning({message: ` 文件超出${formatFileSize(file.size)}M限制`})
       return beforeUpload(file)
     }
-    //判断 是否Promise类型
-    if (beforeUpload() instanceof Promise) {
-      const res = await beforeUpload(file)
-      if (!res) return;
-    } else {
-      if (!beforeUpload(file)) return;
-    }
+
+    const res = await isPromise(beforeUpload, file)
+    if (!res) return;
     console.log('-------upload-----');
     setSelectedFile((prevState) => {
       return [...selectedFile, file];
@@ -83,7 +86,19 @@ const Upload: React.FC<UploadProps> = ({
     // 将文件传递给父组件或执行其他上传逻辑
     onChange(file);
   };
-
+  /**
+   * 删除文件
+   * @param index {number} 下标
+   */
+  const handleDelete = async (_item: File, index: number) => {
+    const resRemove = await isPromise(onRemove, _item)
+    if (resRemove) return;
+    setSelectedFile((prevState) => {
+      const res = prevState.filter((_, i) => i !== index)
+      console.log(res)
+      return res
+    })
+  }
 
   return (<>
     <input
@@ -93,7 +108,7 @@ const Upload: React.FC<UploadProps> = ({
       onChange={handleFileChange}
     />
     {typeof uplaodRender === 'function' ? uplaodRender(handleButtonClick) : templateMode[mode](handleButtonClick, className, uplaodText)}
-    <FileLsit selectedFile={selectedFile}/>
+    <FileLsit selectedFile={selectedFile} handleDelete={handleDelete}/>
   </>)
 
 }

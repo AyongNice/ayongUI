@@ -1,18 +1,23 @@
 import React, {useEffect} from 'react';
+import {Delete, Folder} from '../../../icon/icon.ts';
+import style from './index.module.less'
 
-const FileLsit = ({selectedFile = []}) => {
-  useEffect(() => {
-    console.log(selectedFile)
-  }, [selectedFile])
+const FileList = ({
+                    selectedFile = [],
+                    handleDelete = () => {
+                    }
+                  }) => {
+
   return <>
     {
-      selectedFile.map((item, index) => <div key={index}>
+      selectedFile.map((item, index) => <div className={style.fileListBox} key={index}>
+          <Folder/>
           <span>{item.name}</span>
-          <span>{item.size}</span>
+          <Delete onClick={() => handleDelete(item, index)} className={style.deleteIcon}/>
         </div>
       )
     }
   </>
 }
 
-export default FileLsit
+export default FileList

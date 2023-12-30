@@ -17,7 +17,7 @@ export interface UploadProps {
   onRemove: () => Promise;//点击移除文件时的回调，返回值为 false 时不移除。支持返回一个 Promise 对象，Promise 对象 resolve(false) 或 reject 时不移除
   defaultFileList?: any[]; // 默认已经上传的文件列表
   disabled?: boolean; // 是否禁用
-  fileList?: any[]; // 已经上传的文件列表（受控）
+  fileList?: File[] | null; // 已经上传的文件列表（受控）
   headers?: object; // 设置上传的请求头部
   listType?: 'text' | 'picture' | 'picture-card'; // 上传列表的内建样式
   multiple?: boolean; // 是否支持多选文件
@@ -32,6 +32,19 @@ export interface UploadProps {
   onProgress?: (percent: number, file: File) => void; // 上传中的回调函数
 }
 
+interface File {
+  action: string;
+  data: object;
+  method: string;
+  headers: string;
+
+
+}
+
+interface FileListProps {
+  selectedFileList: File[];
+  handleDelete: (file: File, index: number) => void;
+}
 
 declare const Upload: React.FC<UploadProps>;
 
