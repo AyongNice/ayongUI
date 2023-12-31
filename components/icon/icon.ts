@@ -86,6 +86,24 @@ export { default as Useradd} from "./components/adduser-frame"; //添加用户
 export { default as Deleteuser} from "./components/deleteuser-frame"; //删除用户
 export { default as Addusers} from "./components/addusers-frame"; //添加多个用户
 export { default as Userdelete} from "./components/deleteusers-frame"; //删除多个用户
+export { default as Paper} from "./components/paperclip-frame"; //曲别针
+export { default as Support} from "./components/support-frame"; //点赞
+export { default as Loading} from "./components/loading-frame"; //加载
+export { default as Lock} from "./components/lock-frame"; //锁
+export { default as Letter} from "./components/letter-frame"; //信件夹
+export { default as Messages} from "./components/messages-frame"; //消息
+export { default as Poweroff} from "./components/poweroff-frame"; //关闭电源
+export { default as Printer} from "./components/printer-frame"; //打印
+export { default as Flushed} from "./components/flushed-frame"; //刷新
+export { default as Rest} from "./components/rest-frame"; //奶茶杯
+export { default as Sweep} from "./components/sweep-frame"; //扫一扫
+export { default as Soundoff} from "./components/soundoff-frame"; //声音关
+export { default as Sound} from "./components/sound-frame"; //声音开
+export { default as Close} from "./components/close-frame"; //错圆
+export { default as Laments} from "./components/lament-frame"; //感叹号
+export { default as Rounlament} from "./components/rounlament-frame"; //感叹号圆
+export { default as Question} from "./components/question-frame"; //问号
+export { default as Quesround} from "./components/quesround-frame"; //问号圆
 /**
 * 实体icon
 */

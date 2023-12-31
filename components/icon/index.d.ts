@@ -5,6 +5,5 @@ export interface IconProps {
     style?: {};//填充颜色
     onClick?: () => void;//点击事件
 }
-
 declare const Icon: React.FC<IconProps>;
 export default Icon;
