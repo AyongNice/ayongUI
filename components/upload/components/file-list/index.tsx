@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Delete, Folder} from '../../../icon/icon.ts';
-import style from './index.module.less'
+import style from '../../index.module.less'
 
 const FileList = ({
                     selectedFile = [],

@@ -1,6 +1,6 @@
 import React from "react";
 import {IconProps} from "../../index";
-import loading from './index.module.less'
+import loading from './loading.module.less'
 const Loading = (props: IconProps) => {
     const {className = "", style = {}, onClick = () => {}} = props;
     const styleClassName: string = `${loading.loading} ${className}`;
