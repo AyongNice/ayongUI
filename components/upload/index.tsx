@@ -6,17 +6,19 @@ import {Uploads, Wrongs} from "../icon/icon.ts"
 import Message from '../message/index.tsx'
 import FileLsit from "./components/file-list/index.tsx";
 import {isPromise} from '../../utils/index.ts'
+import '../../config/style.module.less'
 
-const getClassName = (className) => {
-  return `${style.avatar} ${className}`
+const getClassName = (disabled) => {
+  return `${style.avatar}  ${disabled && 'disabled'}`
 }
 
 const templateMode = {
-  'default': (handleButtonClick: Function, className: string, uplaodText) => {
-    return <Button className={className} onClick={handleButtonClick}><Uploads/> {uplaodText}</Button>
+  'default': ({handleButtonClick, uplaodText, disabled}) => {
+    return <Button disabled={disabled} onClick={handleButtonClick}><Uploads/> {uplaodText}
+    </Button>
   },
-  'avatar': (handleButtonClick: Function, className: string) => {
-    return <div onClick={handleButtonClick} className={getClassName(className)}>
+  'avatar': ({handleButtonClick, disabled}) => {
+    return <div onClick={handleButtonClick} className={getClassName(disabled)}>
       <span>+</span>
     </div>
   },
@@ -43,30 +45,36 @@ const Upload: React.FC<UploadProps> = ({
                                          multiple = false,
                                          disabled = false,
                                          maxCount = null,
+                                         uplaodRender = null,
                                          iconRender = null,
                                          defaultFileList = [],
                                          fileList = [],
+                                         fileListRender = null,
+                                         action,
+                                         method = 'POST',
+                                         name = 'file',
+                                         withCredentials = true,
+                                         headers,
                                          beforeUpload = () => {
                                            return true
                                          },
                                          onRemove = () => {
-
+                                           return false
                                          },
-                                         uplaodRender = null,
                                          onChange = () => {
                                          },
                                        }) => {
   const fileLists = [...defaultFileList, ...fileList]
-
   const [selectedFile, setSelectedFile] = useState<File[]>(fileLists);
   const fileInputRef = useRef(null);
-
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null)
   const handleButtonClick = () => {
     // 触发隐藏的文件选择按钮
     fileInputRef.current.click();
   };
 
   const handleFileChange = async (event) => {
+    console.log('event', event.target.files)
     const file = event.target.files[0];
     console.log(file.size, maxFileSize)
     if (maxFileSize && file.size / 1000 > maxFileSize) {
@@ -78,8 +86,25 @@ const Upload: React.FC<UploadProps> = ({
     }
 
     const res = await isPromise(beforeUpload, file)
+    console.log('res', res)
+
     if (!res) return;
-    console.log('-------upload-----');
+
+    const formData = new FormData();
+    formData.append(name, file);
+    console.log('action', action)
+    fetch(action, {
+      method: method,
+      body: formData,
+      //携带cookie
+      //不携带cookie
+      //credentials: 'omit'
+      credentials: withCredentials ? 'include' : 'omit',
+      headers
+    }).then((res) => {
+      console.log('res', res)
+    })
+
     setSelectedFile((prevState) => {
       return [...selectedFile, file];
     })
@@ -90,26 +115,49 @@ const Upload: React.FC<UploadProps> = ({
    * 删除文件
    * @param index {number} 下标
    */
-  const handleDelete = async (_item: File, index: number) => {
+  const handleDelete = async (_item: File, index: number): Promise<void> => {
     const resRemove = await isPromise(onRemove, _item)
+    console.log('resRemove', resRemove)
     if (resRemove) return;
-    setSelectedFile((prevState) => {
-      const res = prevState.filter((_, i) => i !== index)
-      console.log(res)
-      return res
-    })
+    setDeleteIndex(() => index)
   }
 
-  return (<>
+  /**
+   * 动画结束后删除文件
+   * @param e
+   * @param index
+   */
+  const onAnimationEnd = (e: React.AnimationEvent, index: number): void => {
+    console.log('e', e)
+    if (e.animationName === "fadeOutDown") {
+      setSelectedFile((prevState: File[]) => {
+        return prevState.filter((_: File, i: number): boolean => i !== index)
+      })
+      setDeleteIndex(null)
+    }
+  }
+  return (<div className={className}>
     <input
+      disabled={disabled}
       type="file"
       ref={fileInputRef}
       style={{display: 'none'}}
       onChange={handleFileChange}
     />
-    {typeof uplaodRender === 'function' ? uplaodRender(handleButtonClick) : templateMode[mode](handleButtonClick, className, uplaodText)}
-    <FileLsit selectedFile={selectedFile} handleDelete={handleDelete}/>
-  </>)
+    {typeof uplaodRender === 'function' ? uplaodRender(handleButtonClick) : templateMode[mode]({
+      handleButtonClick,
+      uplaodText,
+      disabled
+    })}
+    <FileLsit
+      selectedFile={selectedFile}
+      deleteIndex={deleteIndex}
+      iconRender={iconRender}
+      fileListRender={fileListRender}
+      onAnimationEnd={onAnimationEnd}
+      handleDelete={handleDelete}
+    />
+  </div>)
 
 }
 

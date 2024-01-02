@@ -32,18 +32,7 @@ export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) 
     let res = await Fun(arg)
     resolve(res)
   })
-  if (Fun() instanceof Promise) {
-    let res = {}
-    try {
-      res = await Fun(arg)
 
-    } catch (e) {
-      return;
-    }
-    return res;
-  } else {
-    return Fun(arg);
-  }
 }
 
 interface ThemeConfig {
