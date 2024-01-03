@@ -1,0 +1,73 @@
+.fileListItem {
+  width: 100%;
+  color: var(--ayong-dark-green-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 1s;
+  padding: 2px 5px;
+  border-radius: var(--ayong-radius);
+  animation: fadeInUp 0.5s ease-in-out; /* 0.5秒的渐入渐出效果，可以根据需要调整 */
+  //超出80%文字省略号
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  &:hover {
+    background: var(--ayong-grey-crescent);
+  }
+
+  &:hover .deleteIcon {
+    opacity: 1;
+  }
+
+  &:first-of-type {
+    margin-top: 8px;
+  }
+
+}
+
+
+
+.iconSize {
+  width: 18px;
+  height: 18px;
+}
+
+.deleteIcon {
+  opacity: 0;
+  //fill: var(--ayong-grey);
+  //触摸时的小手
+  cursor: pointer;
+
+  &:hover {
+    fill: var(--ayong-error);
+  }
+
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+}
+
+
+//添加file 向上滑动动画
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* 初始位置，向上偏移一些距离 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 最终位置，无偏移 */
+  }
+}
+
+
+

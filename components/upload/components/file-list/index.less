@@ -1,0 +1,19 @@
+.fileListItemExit {
+  //css阻止用户交互属性 不能点击
+  //pointer-events: none;
+  animation: fadeOutDown 0.5s ease-in-out; /* 渐出效果 */
+}
+
+//删除file 向下滑动动画
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px); /* 向下偏移一些距离 */
+  }
+}
+
+
