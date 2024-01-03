@@ -18,23 +18,19 @@ const FileList = ({
                   }) => {
 
   const getClassName = (index: number): string => {
-    console.log('getClassName', index, deleteIndex)
     return `${style.fileListItem}  ${deleteIndex === index ? 'fileListItemExit' : ''}`
   }
-
-  useEffect(() => {
-    console.log('getClassName----', getClassName(0))
-  }, [])
   return <div className={style.box}>
     {
       selectedFile.map((item, index) => {
-          return typeof fileListRender === 'function' ? fileListRender(item, index,handleDelete) :
+          return typeof fileListRender === 'function' ? fileListRender(item, index, handleDelete) :
             <div onAnimationEnd={(e) => onAnimationEnd(e, index)}
                  className={getClassName(index)}
                  key={index}>
               {typeof iconRender === 'function' ? iconRender() : <Folder className={style.iconSize}/>}
-              <span>{item.name}</span>
+              <span>{item?.file?.name}</span>
               <Delete onClick={() => handleDelete(item, index)} className={style.deleteIcon}/>
+              <progress value={item.percent} max="100"/>
             </div>
         }
       )

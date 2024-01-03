@@ -46,6 +46,7 @@ export interface UploadFile extends File {
   url: string;//下载地址
   uid: string;//唯一标识符，不设置时会自动生成
   status: string;//上传状态，不同状态展示颜色也会有所不同 error | done | uploading | removed
+  file: File;
 }
 
 interface UploadFileListProps {

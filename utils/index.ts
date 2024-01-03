@@ -59,7 +59,6 @@ interface ThemeConfig {
 
 export function setThemeVariables(themeConfig: ThemeConfig): void {
   const root: HTMLElement = document.documentElement;
-  console.log(111)
   for (let [variable, value] of Object.entries(themeConfig)) {
     root.style.setProperty(`--${variable}`, value);
   }

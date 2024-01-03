@@ -7,6 +7,7 @@ import Message from '../message/index.tsx'
 import FileLsit from "./components/file-list/index.tsx";
 import {isPromise, isURL} from '../../utils/index.ts'
 import '../../config/style.module.less'
+import {trackUploadProgress} from "./fileUpload.ts";
 
 const getClassName = (disabled) => {
   return `${style.avatar}  ${disabled && 'disabled'}`
@@ -65,14 +66,20 @@ const Upload: React.FC<UploadProps> = ({
                                          },
                                        }) => {
   const fileLists = [...defaultFileList, ...fileList]
-  const [selectedFile, setSelectedFile] = useState<File[]>(fileLists);
+  const [selectedFile, setSelectedFile] = useState<UploadFile[]>(fileLists);
   const fileInputRef = useRef(null);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null)
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [progress, setProgress] = useState(0);
   const handleButtonClick = () => {
     // 触发隐藏的文件选择按钮
     fileInputRef.current.click();
   };
-
+  const monitorUploadProgress = (event) => {
+    if (event.lengthComputable) {
+      const percentCompleted = (event.loaded / event.total) * 100;
+      setProgress(percentCompleted);
+    }
+  };
 
   /**
    * 处理文件上传j
@@ -91,26 +98,26 @@ const Upload: React.FC<UploadProps> = ({
     console.log('res', res)
 
     if (!res) return;
-
-    const formData = new FormData();
-    formData.append(name, file);
-    console.log('action', action)
-//
-    if (isURL(action)) {
-      await fetch(action as string, {
-        method: method,
-        body: formData,
-        credentials: withCredentials ? 'include' : 'omit',
-        headers
-      })
-      setSelectedFile((prevState) => {
-        return [...selectedFile, file];
-      })
+    if (action) {
+      try {
+        await trackUploadProgress({
+          action, name, file, progressCallback: (percent) => {
+            setSelectedFile((prevState) => {
+              return [...selectedFile, {file, percent, status: 'done', uid: Date.now()}];
+            })
+          }, headers, method, withCredentials
+        })
+      } catch (e) {
+        setSelectedFile((prevState) => {
+          return [...selectedFile, {file, status: 'error', uid: Date.now()}];
+        })
+      }
     } else {
       setSelectedFile((prevState) => {
-        return [...selectedFile, file];
+        return [...selectedFile, {file, status: 'done', uid: Date.now()}];
       })
     }
+
     // 将文件传递给父组件或执行其他上传逻辑
     onChange(file);
   };
