@@ -1,11 +1,11 @@
 import {useState, useRef} from "react";
 import style from "./index.module.less";
-import {UploadProps} from "./index.d";
+import {UploadProps, UploadFile} from "./index.d";
 import Button from "../button/index.tsx";
 import {Uploads, Wrongs} from "../icon/icon.ts"
 import Message from '../message/index.tsx'
 import FileLsit from "./components/file-list/index.tsx";
-import {isPromise} from '../../utils/index.ts'
+import {isPromise, isURL} from '../../utils/index.ts'
 import '../../config/style.module.less'
 
 const getClassName = (disabled) => {
@@ -73,16 +73,18 @@ const Upload: React.FC<UploadProps> = ({
     fileInputRef.current.click();
   };
 
-  const handleFileChange = async (event) => {
-    console.log('event', event.target.files)
-    const file = event.target.files[0];
+
+  /**
+   * 处理文件上传j
+   * @param event
+   */
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file: File = event.target.files[0];
     console.log(file.size, maxFileSize)
     if (maxFileSize && file.size / 1000 > maxFileSize) {
-
       //精确到maxFileSize小数点后两位 保留两位小数 都是00不要小数
-
       Message.warning({message: ` 文件超出${formatFileSize(file.size)}M限制`})
-      return beforeUpload(file)
+      return beforeUpload(file as UploadFile)
     }
 
     const res = await isPromise(beforeUpload, file)
@@ -93,21 +95,22 @@ const Upload: React.FC<UploadProps> = ({
     const formData = new FormData();
     formData.append(name, file);
     console.log('action', action)
-    fetch(action, {
-      method: method,
-      body: formData,
-      //携带cookie
-      //不携带cookie
-      //credentials: 'omit'
-      credentials: withCredentials ? 'include' : 'omit',
-      headers
-    }).then((res) => {
-      console.log('res', res)
-    })
-
-    setSelectedFile((prevState) => {
-      return [...selectedFile, file];
-    })
+//
+    if (isURL(action)) {
+      await fetch(action as string, {
+        method: method,
+        body: formData,
+        credentials: withCredentials ? 'include' : 'omit',
+        headers
+      })
+      setSelectedFile((prevState) => {
+        return [...selectedFile, file];
+      })
+    } else {
+      setSelectedFile((prevState) => {
+        return [...selectedFile, file];
+      })
+    }
     // 将文件传递给父组件或执行其他上传逻辑
     onChange(file);
   };

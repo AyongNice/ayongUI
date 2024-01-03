@@ -35,7 +35,7 @@ export interface UploadProps {
 }
 
 //上传文件类型
-interface UploadFile {
+export interface UploadFile extends File {
   action: string;
   data: object;
   method: string;

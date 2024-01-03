@@ -35,6 +35,9 @@ export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) 
 
 }
 
+//判断字符是否符合 链接格式
+export const isURL = (str: string): boolean => /^(ftp|http|https):\/\/[^ "]+$/.test(str);
+
 interface ThemeConfig {
   'ayong-primary-color': string;                   // 全局主题色
   'ayong-safe': string;                            // 安全颜色
