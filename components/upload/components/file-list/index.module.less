@@ -2,8 +2,7 @@
   width: 100%;
   color: var(--ayong-dark-green-gray);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   transition: all 1s;
   padding: 2px 5px;
   border-radius: var(--ayong-radius);
@@ -12,6 +11,21 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  dd {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-inline-start: 0;
+
+
+  }
+
+  progress {
+    width: 100%;
+    height: 3px;
+  }
 
   span {
     flex: 1;
@@ -31,7 +45,6 @@
   }
 
 }
-
 
 
 .iconSize {

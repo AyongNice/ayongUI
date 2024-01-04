@@ -27,10 +27,13 @@ const FileList = ({
             <div onAnimationEnd={(e) => onAnimationEnd(e, index)}
                  className={getClassName(index)}
                  key={index}>
-              {typeof iconRender === 'function' ? iconRender() : <Folder className={style.iconSize}/>}
-              <span>{item?.file?.name}</span>
-              <Delete onClick={() => handleDelete(item, index)} className={style.deleteIcon}/>
-              <progress value={item.percent} max="100"/>
+              <dd>
+                {typeof iconRender === 'function' ? iconRender() : <Folder className={style.iconSize}/>}
+                <span>{item.file ? item.file.name : item.name}</span>
+                <Delete onClick={() => handleDelete(item, index)} className={style.deleteIcon}/>
+              </dd>
+
+              {item.status === 'done' && <progress className={style.progress} value={item.percent} max="100"/>}
             </div>
         }
       )

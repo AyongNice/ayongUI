@@ -5,7 +5,7 @@ import Button from "../button/index.tsx";
 import {Uploads, Wrongs} from "../icon/icon.ts"
 import Message from '../message/index.tsx'
 import FileLsit from "./components/file-list/index.tsx";
-import {isPromise, isURL} from '../../utils/index.ts'
+import {isPromise, formatFileSize} from '../../utils/index.ts'
 import '../../config/style.module.less'
 import {trackUploadProgress} from "./fileUpload.ts";
 
@@ -26,17 +26,6 @@ const templateMode = {
   undefined: () => {
   }
 }
-const formatFileSize = (sizeInBytes) => {
-  // 将字节数转换为兆字节，并精确到小数点后两位
-  const sizeInMegabytes = sizeInBytes / (1024 * 1024);
-  const formattedSize = sizeInMegabytes.toFixed(2);
-
-  // 移除小数部分中的尾随0
-  const finalSize = formattedSize.replace(/\.?0*$/, '');
-
-  return finalSize;
-};
-
 const Upload: React.FC<UploadProps> = ({
                                          mode = 'default',
                                          className = '',
@@ -65,7 +54,7 @@ const Upload: React.FC<UploadProps> = ({
                                          onChange = () => {
                                          },
                                        }) => {
-  const fileLists = [...defaultFileList, ...fileList]
+  const fileLists = [...defaultFileList, ...fileList as UploadFile[]]
   const [selectedFile, setSelectedFile] = useState<UploadFile[]>(fileLists);
   const fileInputRef = useRef(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
@@ -80,24 +69,31 @@ const Upload: React.FC<UploadProps> = ({
       setProgress(percentCompleted);
     }
   };
-
+  const [key, setKey] = useState(0);
   /**
    * 处理文件上传j
    * @param event
    */
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const file: File = event.target.files[0];
-    console.log(file.size, maxFileSize)
+    /** 限制文件大小 **/
     if (maxFileSize && file.size / 1000 > maxFileSize) {
       //精确到maxFileSize小数点后两位 保留两位小数 都是00不要小数
-      Message.warning({message: ` 文件超出${formatFileSize(file.size)}M限制`})
+      Message.warning({message: ` 文件超出${formatFileSize(maxFileSize) === 0 ? 1 : formatFileSize(maxFileSize)}M限制`})
       return beforeUpload(file as UploadFile)
     }
 
-    const res = await isPromise(beforeUpload, file)
-    console.log('res', res)
+    /**
+     * beforeUpload
+     */
+    try {
+      const res = await isPromise(beforeUpload, file)
+      if (!res) return;
+    } catch (e) {
 
-    if (!res) return;
+    }
+
     if (action) {
       try {
         await trackUploadProgress({
@@ -120,15 +116,22 @@ const Upload: React.FC<UploadProps> = ({
 
     // 将文件传递给父组件或执行其他上传逻辑
     onChange(file);
+    // 通过更改 key 属性强制 React 重新渲染组件
+    setKey((prevKey) => prevKey + 1);
   };
   /**
    * 删除文件
    * @param index {number} 下标
    */
   const handleDelete = async (_item: File, index: number): Promise<void> => {
-    const resRemove = await isPromise(onRemove, _item)
-    console.log('resRemove', resRemove)
-    if (resRemove) return;
+
+    try {
+      const resRemove = await isPromise(onRemove, _item)
+      if (resRemove) return;
+    } catch (e) {
+
+    }
+    console.log()
     setDeleteIndex(() => index)
   }
 
@@ -138,7 +141,6 @@ const Upload: React.FC<UploadProps> = ({
    * @param index
    */
   const onAnimationEnd = (e: React.AnimationEvent, index: number): void => {
-    console.log('e', e)
     if (e.animationName === "fadeOutDown") {
       setSelectedFile((prevState: File[]) => {
         return prevState.filter((_: File, i: number): boolean => i !== index)
@@ -146,10 +148,12 @@ const Upload: React.FC<UploadProps> = ({
       setDeleteIndex(null)
     }
   }
+  // @ts-ignore
   return (<div className={className}>
     <input
-      disabled={disabled}
       type="file"
+      key={key}
+      disabled={disabled}
       ref={fileInputRef}
       style={{display: 'none'}}
       onChange={handleFileChange}

@@ -34,6 +34,12 @@ export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) 
   })
 
 }
+export  const formatFileSize = (sizeInBytes:number) => {
+  // 将字节数转换为兆字节，并精确到小数点后两位
+  const sizeInMegabytes = sizeInBytes / 1024;
+  return sizeInMegabytes.toFixed(1);
+};
+
 
 //判断字符是否符合 链接格式
 export const isURL = (str: string): boolean => /^(ftp|http|https):\/\/[^ "]+$/.test(str);
