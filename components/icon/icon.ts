@@ -44,7 +44,7 @@ export { default as Swapright } from "./components/swapright-frame"; // 交换�
 export { default as Delete } from "./components/delete-frame"; // 删除
 export { default as Search } from "./components/search-frame"; // 搜索
 export { default as Transfer} from "./components/transfer-frame"; // 转账
-export { default as Unlock} from "./components/unlock-frame"; // 解锁
+export { default as Lock} from "./components/lock-frame"; // 解锁
 export { default as Save} from "./components/save-frame"; // 保存
 export { default as Play} from "./components/play-frame"; //  圆形播放
 export { default as Panetop} from "./components/panetop-frame"; // 方框上
@@ -89,7 +89,7 @@ export { default as Userdelete} from "./components/deleteusers-frame"; //删除�
 export { default as Paper} from "./components/paperclip-frame"; //曲别针
 export { default as Support} from "./components/support-frame"; //点赞
 export { default as Loading} from "./components/loading-frame"; //加载
-export { default as Lock} from "./components/lock-frame"; //锁
+export { default as Unlock} from "./components/unlock-frame"; //锁
 export { default as Letter} from "./components/letter-frame"; //信件夹
 export { default as Messages} from "./components/messages-frame"; //消息
 export { default as Poweroff} from "./components/poweroff-frame"; //关闭电源
@@ -104,6 +104,14 @@ export { default as Laments} from "./components/lament-frame"; //感叹号
 export { default as Rounlament} from "./components/rounlament-frame"; //感叹号圆
 export { default as Question} from "./components/question-frame"; //问号
 export { default as Quesround} from "./components/quesround-frame"; //问号圆
+export { default as Disc} from "./components/disc-frame"; //链接中断
+export { default as Disike} from "./components/disike-frame"; //踩
+export { default as Expand} from "./components/expand-frame"; //全屏
+export { default as Ellipsis} from "./components/ellipsis-frame"; //点点点展开
+export { default as Exprot} from "./components/exprot-frame"; //分享
+export { default as Fileimg} from "./components/fileimg-frame"; //图片文件
+export { default as Userswich} from "./components/userswich-frame"; //切换用户
+
 /**
 * 实体icon
 */
@@ -132,3 +140,5 @@ export { default as Lament } from "./components/lament-solid"; // 感叹号
 export { default as Illustrate } from "./components/illustrate-solid"; // 感叹号
 export { default as Empty} from "./components/empty-solid"; // 空
 export { default as Github} from "./components/github-solid"; // github
+export { default as Image} from "./components/image-solid"; //切换用户
+export { default as Posit} from "./components/posit-solid"; //定位

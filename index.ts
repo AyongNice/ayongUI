@@ -68,7 +68,7 @@ export {
     Delete,
     Search,
     Transfer,
-    Unlock,
+    Lock,
     Save,
     Play,
     Panetop,
@@ -115,7 +115,7 @@ export {
     Paper,
     Support,
     Loading,
-    Lock,
+    Unlock,
     Letter,
     Messages,
     Poweroff,
@@ -130,6 +130,15 @@ export {
     Rounlament,
     Question,
     Quesround,
+    Disc,
+    Disike,
+    Expand,
+    Ellipsis,
+    Exprot,
+    Fileimg,
+    Userswich,
+    Image,
+    Posit,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';
