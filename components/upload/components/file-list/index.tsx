@@ -17,6 +17,10 @@ const FileList = ({
                     },
                   }) => {
 
+
+  useEffect(()=>{
+    console.log('selectedFile',selectedFile)
+  },[selectedFile])
   const getClassName = (index: number): string => {
     return `${style.fileListItem}  ${deleteIndex === index ? 'fileListItemExit' : ''}`
   }
@@ -33,7 +37,8 @@ const FileList = ({
                 <Delete onClick={() => handleDelete(item, index)} className={style.deleteIcon}/>
               </dd>
 
-              {item.status === 'done' && <progress className={style.progress} value={item.percent} max="100"/>}
+              {item.status === 'done' && item.percent !== 100 &&
+                <progress className={style.progress} value={item.percent} max="100"/>}
             </div>
         }
       )

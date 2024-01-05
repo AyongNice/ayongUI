@@ -5,9 +5,11 @@ import Button from "../button/index.tsx";
 import {Uploads, Wrongs} from "../icon/icon.ts"
 import Message from '../message/index.tsx'
 import FileLsit from "./components/file-list/index.tsx";
-import {isPromise, formatFileSize} from '../../utils/index.ts'
+import AvatarList from './components/avatar-list/index.tsx';
+import {isPromise, formatFileSize, readAsDataURLImg} from '../../utils/index.ts'
 import '../../config/style.module.less'
 import {trackUploadProgress} from "./fileUpload.ts";
+
 
 const getClassName = (disabled) => {
   return `${style.avatar}  ${disabled && 'disabled'}`
@@ -19,14 +21,13 @@ const templateMode = {
     </Button>
   },
   'avatar': ({handleButtonClick, disabled}) => {
-    return <div onClick={handleButtonClick} className={getClassName(disabled)}>
-      <span>+</span>
-    </div>
+    return null
   },
   undefined: () => {
   }
 }
 const Upload: React.FC<UploadProps> = ({
+                                         style = {},
                                          mode = 'default',
                                          className = '',
                                          uplaodText = '上传文件',
@@ -54,26 +55,31 @@ const Upload: React.FC<UploadProps> = ({
                                          onChange = () => {
                                          },
                                        }) => {
+  const _style = {
+    width: 86,
+    height: 86,
+    ...style
+  }
+  //文件
   const fileLists = [...defaultFileList, ...fileList as UploadFile[]]
+  //选择文件
   const [selectedFile, setSelectedFile] = useState<UploadFile[]>(fileLists);
+  //input
   const fileInputRef = useRef(null);
+  //删除索引
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-  const [progress, setProgress] = useState(0);
+  //input刷新key
+  const [key, setKey] = useState(0);
+
   const handleButtonClick = () => {
     // 触发隐藏的文件选择按钮
     fileInputRef.current.click();
   };
-  const monitorUploadProgress = (event) => {
-    if (event.lengthComputable) {
-      const percentCompleted = (event.loaded / event.total) * 100;
-      setProgress(percentCompleted);
-    }
-  };
-  const [key, setKey] = useState(0);
 
   const getFile = (event: React.ChangeEvent<HTMLInputElement>): void => {
     handleFileChange(event?.target?.files[0] as File);
   }
+
   /**
    * 处理文件上传
    * @param event
@@ -95,29 +101,53 @@ const Upload: React.FC<UploadProps> = ({
       } catch (e) {
 
       }
+      let avatarImgURL: string = ''
+      try {
+        if (mode === 'avatar') {
+          const width = typeof _style.width === 'string' ? _style.width.replace('px', '') : _style.width;
+          const height = typeof _style.height === 'string' ? _style.width.replace('px', '') : _style.height;
+          avatarImgURL = await readAsDataURLImg(file, width, height);
+        }
+      } catch (e) {
+
+      }
+      let fileItme: UploadFile = {
+        file,
+        action: '',
+        data: {},
+        method,
+        headers,
+        avatarImgURL,
+        name: file.name,
+      }
 
       if (action) {
         try {
           await trackUploadProgress({
-            action, name, file, progressCallback: (percent) => {
-              setSelectedFile((prevState) => {
-                return [...selectedFile, {file, percent, status: 'done', uid: Date.now()}];
+            action, name, file, progressCallback: (percent: number) => {
+              fileItme = {...fileItme, percent, status: 'done', uid: Date.now()}
+              setSelectedFile((prevState: UploadFile[]) => {
+                if (maxCount === 1) return [fileItme];
+                return [...prevState, fileItme];
               })
             }, headers, method, withCredentials
           })
         } catch (e) {
-          setSelectedFile((prevState) => {
-            return [...selectedFile, {file, status: 'error', uid: Date.now()}];
+          fileItme = {...fileItme, status: 'error', uid: Date.now()}
+          setSelectedFile((prevState: UploadFile[]) => {
+            if (maxCount === 1) return [fileItme];
+            return [...prevState, fileItme];
           })
         }
       } else {
-        setSelectedFile((prevState) => {
-          return [...selectedFile, {file, status: 'done', percent: '100%', uid: Date.now()}];
+        fileItme = {...fileItme, percent: 100, status: 'done', uid: Date.now()}
+        setSelectedFile((prevState: UploadFile[]) => {
+          if (maxCount === 1) return [fileItme];
+          return [...prevState as UploadFile[], fileItme];
         })
       }
-      console.log('selectedFile', selectedFile)
       // 将文件传递给父组件或执行其他上传逻辑
-      onChange(file);
+      onChange(fileItme);
       // 通过更改 key 属性强制 React 重新渲染组件
       setKey((prevKey) => prevKey + 1);
       resolve();
@@ -136,7 +166,6 @@ const Upload: React.FC<UploadProps> = ({
     } catch (e) {
 
     }
-    console.log()
     setDeleteIndex(() => index)
   }
 
@@ -146,6 +175,7 @@ const Upload: React.FC<UploadProps> = ({
    * @param index
    */
   const onAnimationEnd = (e: React.AnimationEvent, index: number): void => {
+    console.log('onAnimationEnd', e)
     if (e.animationName === "fadeOutDown") {
       setSelectedFile((prevState: File[]) => {
         return prevState.filter((_: File, i: number): boolean => i !== index)
@@ -194,14 +224,25 @@ const Upload: React.FC<UploadProps> = ({
       uplaodText,
       disabled
     })}
-    <FileLsit
-      selectedFile={selectedFile}
-      deleteIndex={deleteIndex}
-      iconRender={iconRender}
-      fileListRender={fileListRender}
-      onAnimationEnd={onAnimationEnd}
-      handleDelete={handleDelete}
-    />
+    {
+      mode === 'avatar' ? <AvatarList
+        style={_style}
+        selectedFile={selectedFile}
+        deleteIndex={deleteIndex}
+        iconRender={iconRender}
+        handleButtonClick={handleButtonClick}
+        fileListRender={fileListRender}
+        onAnimationEnd={onAnimationEnd}
+        handleDelete={handleDelete}/> : <FileLsit
+        selectedFile={selectedFile}
+        deleteIndex={deleteIndex}
+        iconRender={iconRender}
+        fileListRender={fileListRender}
+        onAnimationEnd={onAnimationEnd}
+        handleDelete={handleDelete}
+      />
+    }
+
   </div>)
 
 }

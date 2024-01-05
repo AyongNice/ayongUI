@@ -41,10 +41,10 @@ export interface UploadFile extends File {
   method: string;
   headers: string;
   icon: string;
-  percent: string;//上传进度
+  percent: number;//上传进度
   name: string;//文件名
   url: string;//下载地址
-  uid: string;//唯一标识符，不设置时会自动生成
+  uid: number;//唯一标识符，不设置时会自动生成
   status: string;//上传状态，不同状态展示颜色也会有所不同 error | done | uploading | removed
   file: File;
 }

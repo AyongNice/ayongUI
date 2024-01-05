@@ -48,7 +48,6 @@ export function trackUploadProgress({action, name, file, method, headers, withCr
 
       uploadedSize += value.length;
       const progress = (uploadedSize / totalSize) * 100;
-      console.log(`Upload progress: ${progress.toFixed(2)}%`);
       progressCallback(progress);
       return reader.read().then(processChunk);
     });

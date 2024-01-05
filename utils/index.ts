@@ -34,12 +34,51 @@ export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) 
   })
 
 }
-export  const formatFileSize = (sizeInBytes:number) => {
+export const formatFileSize = (sizeInBytes: number) => {
   // 将字节数转换为兆字节，并精确到小数点后两位
   const sizeInMegabytes = sizeInBytes / 1024;
   return sizeInMegabytes.toFixed(1);
 };
+export const readAsDataURLImg = (file: File, maxWidth: number, maxHeight: number): Promise<string> => {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const img = new Image();
+      img.src = reader.result;
 
+      img.onload = () => {
+
+
+        let width = img.width;
+        let height = img.height;
+
+        // 如果图片尺寸超过最大限制，进行缩放
+        if (width > maxWidth || height > maxHeight) {
+          const scaleFactor = Math.min(maxWidth / width, maxHeight / height);
+          width *= scaleFactor;
+          height *= scaleFactor;
+        }
+
+        // 使用 canvas 进行重新绘制，设置新尺寸
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // 将 canvas 转为 base64 编码
+        const resizedImageDataUrl = canvas.toDataURL('image/jpeg');
+
+        // 更新状态，显示调整大小后的图片
+        resolve(resizedImageDataUrl);
+      };
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+};
 
 //判断字符是否符合 链接格式
 export const isURL = (str: string): boolean => /^(ftp|http|https):\/\/[^ "]+$/.test(str);
