@@ -10,6 +10,8 @@ import {isPromise, formatFileSize, readAsDataURLImg} from '../../utils/index.ts'
 import '../../config/style.module.less'
 import {trackUploadProgress} from "./fileUpload.ts";
 
+import messages from '../message/index.tsx'
+
 
 const getClassName = (disabled) => {
   return `${style.avatar}  ${disabled && 'disabled'}`
@@ -32,7 +34,7 @@ const Upload: React.FC<UploadProps> = ({
                                          className = '',
                                          uplaodText = '上传文件',
                                          maxFileSize = null,
-                                         accept = 'image/*',
+                                         accept = '',
                                          multiple = false,
                                          disabled = false,
                                          maxCount = null,
@@ -59,6 +61,9 @@ const Upload: React.FC<UploadProps> = ({
     width: 86,
     height: 86,
     ...style
+  }
+  if (mode === 'avatar') {
+    accept = 'image/jpeg, image/png'
   }
   //文件
   const fileLists = [...defaultFileList, ...fileList as UploadFile[]]
@@ -104,6 +109,8 @@ const Upload: React.FC<UploadProps> = ({
       let avatarImgURL: string = ''
       try {
         if (mode === 'avatar') {
+          console.log(file)
+          if (!file.type.includes('image')) return messages.error({message: 'avatar模式下必须是图片类型'});
           const width = typeof _style.width === 'string' ? _style.width.replace('px', '') : _style.width;
           const height = typeof _style.height === 'string' ? _style.width.replace('px', '') : _style.height;
           avatarImgURL = await readAsDataURLImg(file, width, height);
@@ -216,6 +223,7 @@ const Upload: React.FC<UploadProps> = ({
       key={key}
       disabled={disabled}
       ref={fileInputRef}
+      accept={accept}
       style={{display: 'none'}}
       onChange={getFile}
     />
