@@ -20,10 +20,6 @@ const AvatarList = ({
                       },
                     }) => {
 
-
-  useEffect(() => {
-    console.log('selectedFile', selectedFile,deleteIndex)
-  }, [selectedFile,deleteIndex])
   const getClassName = (index: number): string => {
     return `${styleAvater.avatar}  ${deleteIndex === index ? 'fileListItemExit' : ''}`
   }

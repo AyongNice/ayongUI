@@ -1,4 +1,4 @@
-export function trackUploadProgress({action, name, file, method, headers, withCredentials, progressCallback}) {
+export function trackUploadProgress({action, name, file, method, headers, data, withCredentials, progressCallback}) {
   return new Promise((resolve, reject) => {
     const reader = file.stream().getReader();
     const totalSize = file.size;
@@ -27,6 +27,10 @@ export function trackUploadProgress({action, name, file, method, headers, withCr
     let uploadedSize = 0;
     const formData = new FormData();
     formData.append(name, file);
+
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
     fetch(action, {
       method: method,
       credentials: withCredentials ? 'include' : 'omit',
@@ -53,3 +57,5 @@ export function trackUploadProgress({action, name, file, method, headers, withCr
     });
   });
 }
+
+

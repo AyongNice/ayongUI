@@ -9,13 +9,8 @@ import AvatarList from './components/avatar-list/index.tsx';
 import {isPromise, formatFileSize, readAsDataURLImg} from '../../utils/index.ts'
 import '../../config/style.module.less'
 import {trackUploadProgress} from "./fileUpload.ts";
-
 import messages from '../message/index.tsx'
 
-
-const getClassName = (disabled) => {
-  return `${style.avatar}  ${disabled && 'disabled'}`
-}
 
 const templateMode = {
   'default': ({handleButtonClick, uplaodText, disabled}) => {
@@ -35,6 +30,7 @@ const Upload: React.FC<UploadProps> = ({
                                          uplaodText = '上传文件',
                                          maxFileSize = null,
                                          accept = '',
+                                         data = {},
                                          multiple = false,
                                          disabled = false,
                                          maxCount = null,
@@ -56,6 +52,7 @@ const Upload: React.FC<UploadProps> = ({
                                          },
                                          onChange = () => {
                                          },
+                                         customRequest = null
                                        }) => {
   const _style = {
     width: 86,
@@ -85,6 +82,13 @@ const Upload: React.FC<UploadProps> = ({
     handleFileChange(event?.target?.files[0] as File);
   }
 
+  const setFileList = (fileItme: UploadFile) => {
+    setSelectedFile((prevState: UploadFile[]) => {
+      if (maxCount === 1) return [fileItme];
+      return [...prevState as UploadFile[], fileItme];
+    })
+  }
+
   /**
    * 处理文件上传
    * @param event
@@ -106,6 +110,22 @@ const Upload: React.FC<UploadProps> = ({
       } catch (e) {
 
       }
+      let fileItme: UploadFile = {
+        file,
+        action: '',
+        data: {},
+        method,
+        headers,
+        avatarImgURL,
+        name: file.name,
+      }
+
+      /** 父组件传入customRequest函数将覆盖子组件默认行为 **/
+      if (typeof customRequest === 'function') {
+        customRequest(fileItme);
+        return setFileList(fileItme)
+      }
+
       let avatarImgURL: string = ''
       try {
         if (mode === 'avatar') {
@@ -118,40 +138,22 @@ const Upload: React.FC<UploadProps> = ({
       } catch (e) {
 
       }
-      let fileItme: UploadFile = {
-        file,
-        action: '',
-        data: {},
-        method,
-        headers,
-        avatarImgURL,
-        name: file.name,
-      }
 
       if (action) {
         try {
           await trackUploadProgress({
-            action, name, file, progressCallback: (percent: number) => {
+            action, name, data, file, progressCallback: (percent: number) => {
               fileItme = {...fileItme, percent, status: 'done', uid: Date.now()}
-              setSelectedFile((prevState: UploadFile[]) => {
-                if (maxCount === 1) return [fileItme];
-                return [...prevState, fileItme];
-              })
+              setFileList(fileItme)
             }, headers, method, withCredentials
           })
         } catch (e) {
           fileItme = {...fileItme, status: 'error', uid: Date.now()}
-          setSelectedFile((prevState: UploadFile[]) => {
-            if (maxCount === 1) return [fileItme];
-            return [...prevState, fileItme];
-          })
+          setFileList(fileItme)
         }
       } else {
         fileItme = {...fileItme, percent: 100, status: 'done', uid: Date.now()}
-        setSelectedFile((prevState: UploadFile[]) => {
-          if (maxCount === 1) return [fileItme];
-          return [...prevState as UploadFile[], fileItme];
-        })
+        setFileList(fileItme)
       }
       // 将文件传递给父组件或执行其他上传逻辑
       onChange(fileItme);
@@ -182,38 +184,41 @@ const Upload: React.FC<UploadProps> = ({
    * @param index
    */
   const onAnimationEnd = (e: React.AnimationEvent, index: number): void => {
-    console.log('onAnimationEnd', e)
     if (e.animationName === "fadeOutDown") {
-      setSelectedFile((prevState: File[]) => {
-        return prevState.filter((_: File, i: number): boolean => i !== index)
+      setSelectedFile((prevState: UploadFile[]) => {
+        return prevState.filter((_: File, i: number): boolean => {
+          if (i !== index) {
+            onChange(prevState);
+            return true;
+          }
+        })
+
       })
       setDeleteIndex(null)
+
     }
   }
 
 
-  const handleDragOver = (event) => {
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDrop = async (event) => {
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     if (disabled) return;
     event.preventDefault();
-    const fileList = Array.from(event.dataTransfer.files);
-    console.log('Dropped files:', fileList);
+    const fileList: File[] = Array.from(event.dataTransfer.files);
     for (let i = 0; i < fileList.length; i++) {
       try {
-
-
         handleFileChange(fileList[i]);
       } catch (e) {
-
       }
       console.log('fileList[i]', fileList[i])
     }
 
   };
 
+  // @ts-ignore
   // @ts-ignore
   return (<div className={className}
                onDragOver={handleDragOver}

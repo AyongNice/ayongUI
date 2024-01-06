@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Delete, Folder} from '../../../icon/icon.ts';
 import style from './index.module.less'
 import './index.less';
@@ -17,10 +17,6 @@ const FileList = ({
                     },
                   }) => {
 
-
-  useEffect(()=>{
-    console.log('selectedFile',selectedFile)
-  },[selectedFile])
   const getClassName = (index: number): string => {
     return `${style.fileListItem}  ${deleteIndex === index ? 'fileListItemExit' : ''}`
   }
@@ -33,7 +29,7 @@ const FileList = ({
                  key={index}>
               <dd>
                 {typeof iconRender === 'function' ? iconRender() : <Folder className={style.iconSize}/>}
-                <span>{item.file ? item.file.name : item.name}</span>
+                <span>{item.name}</span>
                 <Delete onClick={() => handleDelete(item, index)} className={style.deleteIcon}/>
               </dd>
 
