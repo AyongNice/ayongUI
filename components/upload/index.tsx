@@ -144,9 +144,10 @@ const Upload: React.FC<UploadProps> = ({
           await trackUploadProgress({
             action, name, data, file, progressCallback: (percent: number) => {
               fileItme = {...fileItme, percent, status: 'done', uid: Date.now()}
-              setFileList(fileItme)
+
             }, headers, method, withCredentials
           })
+          setFileList(fileItme)
         } catch (e) {
           fileItme = {...fileItme, status: 'error', uid: Date.now()}
           setFileList(fileItme)

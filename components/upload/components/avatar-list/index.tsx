@@ -3,6 +3,7 @@ import {Delete, Folder} from '../../../icon/icon.ts';
 import styleAvater from './index.module.less'
 import {UploadFile} from '../../index.d'
 import './index.less';
+
 const AvatarList = ({
                       style,
                       selectedFile = [],
@@ -47,8 +48,7 @@ const AvatarList = ({
                  key={index}>
               {typeof iconRender === 'function' ? iconRender() : <Folder className={styleAvater.iconSize}/>}
               <img src={item.avatarImgURL}/>
-              <div className={styleAvater.deleteIconBox}>
-              </div>
+              <div className={styleAvater.deleteIconBox}/>
               <Delete onClick={() => handleDelete(item, index)} className={styleAvater.deleteIcon}/>
 
             </div>

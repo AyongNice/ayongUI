@@ -16,7 +16,6 @@ export interface UploadProps {
   beforeUpload?: (file: UploadFile | boolean) => boolean | Promise<UploadFile>; // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者 Promise 则停止上传
   onRemove: (file: UploadFile | boolean) => boolean | Promise<UploadFile>;//点击移除文件时的回调，返回值为 false 时不移除。支持返回一个 Promise 对象，Promise 对象 resolve(false) 或 reject 时不移除
   customRequest?: (file: UploadFile) => void ; // 通过覆盖默认的上传行为，可以自定义自己的上传实现
-
   defaultUploadFileList?: UploadFile[]; // 默认已经上传的文件列表
   disabled?: boolean; // 是否禁用
   fileList?: UploadFile[] | null; // 已经上传的文件列表（受控）

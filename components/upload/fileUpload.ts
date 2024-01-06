@@ -23,7 +23,7 @@ export function trackUploadProgress({action, name, file, method, headers, data, 
      *     localReaderFile.readAsArrayBuffer(file);
      */
 
-
+    let erroeStauts = false;
     let uploadedSize = 0;
     const formData = new FormData();
     formData.append(name, file);
@@ -38,15 +38,18 @@ export function trackUploadProgress({action, name, file, method, headers, data, 
       body: formData
     }).then(response => {
       if (!response.ok) {
+        erroeStauts = true;
         throw new Error('Upload failed');
       }
       resolve(response);
     }).catch(error => {
+      erroeStauts = true;
       reject(error);
     });
 
     reader.read().then(function processChunk({done, value}) {
-      if (done) {
+      console.log('erroeStauts', erroeStauts);
+      if (done || erroeStauts) {
         return;
       }
 
