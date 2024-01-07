@@ -28,7 +28,7 @@ const LeftIcon = ({
     <div className={Array.isArray(selectedValues) ? selectStyle.iconBox : selectStyle.selectBox}>
       {!Array.isArray(selectedValues) && (
         <div className={selectStyle.selectValue}>
-          {selectedValues || '请选择'}
+          {selectedValues ?? '请选择'}
         </div>
       )}
       {search && !Array.isArray(selectedValues) && (
@@ -111,8 +111,11 @@ const CustomSelect: React.FC<SelectProps> = ({
     if (disabled) return
     setSelectedValues((prevValues: string | string[]) => {
       if (Array.isArray(prevValues)) {
+
         return Array.from(new Set([...prevValues, selectValue]))
       }
+
+      console.log('setSelectedValues', selectValue)
       return selectValue
     })
     setSearchTerm('')
