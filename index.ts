@@ -139,6 +139,20 @@ export {
   Userswich,
   Image,
   Posit,
+  Calendar,
+  Imgjpg,
+  Zip,
+  Settings,
+  Updatetime,
+  Bellfiled,
+  Bulb,
+  Reply,
+  Replys,
+  Star,
+  Stars,
+  Exits,
+  Codes,
+  Codeblock,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';

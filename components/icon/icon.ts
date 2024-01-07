@@ -111,7 +111,15 @@ export { default as Ellipsis} from "./components/ellipsis-frame"; //点点点展
 export { default as Exprot} from "./components/exprot-frame"; //分享
 export { default as Fileimg} from "./components/fileimg-frame"; //图片文件
 export { default as Userswich} from "./components/userswich-frame"; //切换用户
-
+export { default as Calendar} from "./components/calendar-frame"; //日历
+export { default as Imgjpg} from "./components/imgjpg-frame"; //jpg格式图片
+export { default as Zip} from "./components/filezip-frame"; //zip压缩
+export { default as Updatetime} from "./components/updatetime-frame"; //更新时间
+export { default as Reply} from "./components/reply-frame"; //返回
+export { default as Stars} from "./components/stars-frame"; //星星
+export { default as Exits} from "./components/partyexits-frame"; //退出方型
+export { default as Codes} from "./components/codes-frame"; //代码展示
+export { default as Codeblock} from "./components/codeblock-frame"; //花括号
 /**
 * 实体icon
 */
@@ -142,3 +150,8 @@ export { default as Empty} from "./components/empty-solid"; // 空
 export { default as Github} from "./components/github-solid"; // github
 export { default as Image} from "./components/image-solid"; //切换用户
 export { default as Posit} from "./components/posit-solid"; //定位
+export { default as Settings} from "./components/settings-solid"; //设置
+export { default as Bellfiled} from "./components/bellfiled-solid"; //铃铛
+export { default as Bulb} from "./components/bulb-solid"; //灯泡
+export { default as Replys} from "./components/replys-solid"; //返回
+export { default as Star} from "./components/star-solid"; //星星
