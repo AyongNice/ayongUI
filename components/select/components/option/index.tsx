@@ -1,5 +1,5 @@
 import {Options, OptionsParma} from "../../../index.d";
-import selectStyle from "../../index.module.less";
+import selectStyle from "./index.module.less";
 import {Right, Empty} from '../../../icon/icon.ts'
 import React, {useEffect} from "react";
 
@@ -18,7 +18,7 @@ const Option = ({options, optionRender, search, searchTerm, onClick, selectedVal
       if (!Array.isArray(selectedValues)) {
         selectedValues = [selectedValues]
       }
-      return selectedValues.includes(option.value) && !option.disabled && selectStyle.iconActive
+      return selectedValues.includes(option.value) && !option.disabled ? selectStyle.iconActive : selectStyle.icon
     }
     const onSelectClick = (option: Options) => {
       if (option.disabled) return;
@@ -45,7 +45,6 @@ const Option = ({options, optionRender, search, searchTerm, onClick, selectedVal
         {!filteredOptions.length && <div className={selectStyle.emptyBox}>
           <Empty className={selectStyle.empty}/>
           无匹配数据
-
         </div>}
       </>
     )

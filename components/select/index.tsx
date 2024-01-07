@@ -24,11 +24,17 @@ const LeftIcon = ({
                     onBlur = () => {
                     },
                   }) => {
+  const isEmntyValue = (value) => {
+    if (value === 0) return value
+    if (!value) return '请选择'
+    return value
+  }
+
   return (
     <div className={Array.isArray(selectedValues) ? selectStyle.iconBox : selectStyle.selectBox}>
       {!Array.isArray(selectedValues) && (
         <div className={selectStyle.selectValue}>
-          {selectedValues ?? '请选择'}
+          {isEmntyValue(selectedValues)}
         </div>
       )}
       {search && !Array.isArray(selectedValues) && (
@@ -148,6 +154,12 @@ const CustomSelect: React.FC<SelectProps> = ({
     }
   }
 
+  const handleDeltselectedValues = (index: number): void => {
+    setSelectedValues(selectedValues.filter((_, i) => i !== index));
+
+    console.log('handleDeltselectedValues', selectedValues)
+    onChange(selectedValues)
+  }
   /**
    * 获取select外层外套的className
    */
@@ -161,7 +173,7 @@ const CustomSelect: React.FC<SelectProps> = ({
   const getMainClassname = (): string => {
     return isDropdownVisible
       ? `${selectStyle.main} ${selectStyle.active}  `
-      : `${selectStyle.main}  `
+      : `${selectStyle.main} `
   }
   /**
    * 鼠标移入显示清除按钮
@@ -201,6 +213,7 @@ const CustomSelect: React.FC<SelectProps> = ({
               onKeyDown={handleKeyDown}
               handleOptionClick={handleOptionClick}
               onChange={handleInputChange}
+              handleDeltselectedValues={handleDeltselectedValues}
               onFocus={() => setIsDropdownVisible(true)}
               onBlur={handleBlur}
             />

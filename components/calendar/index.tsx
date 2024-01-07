@@ -39,6 +39,8 @@ const Calendar: FC<CalendarProps> = (props) => {
 
     setMonthOptions(monthOptions);
     setYearOptions(yearOptions);
+    console.log('monthOptions', monthOptions)
+
     const curDays = handleCrateDate(year, month, 1, getDaysInMonth(year, month));
     setCurDays(handleCrateDate(year, month, 1, getDaysInMonth(year, month)));
 
@@ -176,6 +178,7 @@ const Calendar: FC<CalendarProps> = (props) => {
   return (
     <div className="calendar">
       <Select options={monthOptions}/>
+      <Select options={yearOptions}/>
       <table className="calendar-table" style={{width: props.width}}>
         <thead>
         <tr>
