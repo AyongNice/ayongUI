@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import selectStyle from './index.module.less'
 import Multiple from './components/multiple/index.tsx'
-import { Wrongs, Under, Search } from '../icon/icon.ts'
-import { SelectProps } from './index.d'
+import {Wrongs, Under, Search} from '../icon/icon.ts'
+import {SelectProps} from './index.d'
 import Option from './components/option/index.tsx'
 
 const LeftIcon = ({
-  search,
-  clearable,
-  searchTerm,
-  onInputClick,
-  showClearable,
-  clearValue,
-  collapseTags,
-  isDropdownVisible,
-  selectedValues,
-  handleOnKeyDown = () => {},
-  onChange = () => {},
-  onFocus = () => {},
-  onBlur = () => {},
-}) => {
+                    search,
+                    clearable,
+                    searchTerm,
+                    onInputClick,
+                    showClearable,
+                    clearValue,
+                    collapseTags,
+                    isDropdownVisible,
+                    selectedValues,
+                    handleOnKeyDown = () => {
+                    },
+                    onChange = () => {
+                    },
+                    onFocus = () => {
+                    },
+                    onBlur = () => {
+                    },
+                  }) => {
   return (
     <div className={Array.isArray(selectedValues) ? selectStyle.iconBox : selectStyle.selectBox}>
       {!Array.isArray(selectedValues) && (
-        <div
-          className={
-            isDropdownVisible
-              ? `${selectStyle.onValue} ${selectStyle.selectValue}`
-              : selectStyle.selectValue
-          }
-        >
+        <div className={selectStyle.selectValue}>
           {selectedValues || '请选择'}
         </div>
       )}
@@ -47,9 +45,9 @@ const LeftIcon = ({
       )}
 
       {showClearable ? (
-        <Wrongs onClick={clearValue} className={selectStyle.icon} />
+        <Wrongs onClick={clearValue} className={selectStyle.icon}/>
       ) : search && isDropdownVisible ? (
-        <Search className={selectStyle.icon} />
+        <Search className={selectStyle.icon}/>
       ) : (
         <Under
           className={`${selectStyle.icon} ${selectStyle.rotateTransform} ${
@@ -61,20 +59,21 @@ const LeftIcon = ({
   )
 }
 const CustomSelect: React.FC<SelectProps> = ({
-  style,
-  value,
-  search,
-  options,
-  disabled,
-  className,
-  clearable,
-  collapseTags,
-  defaultValue,
-  onChange = () => {},
-  optionRender = null,
-  optionHeaderRender = null,
-}) => {
-  const _style = {...style }
+                                               style,
+                                               value,
+                                               search,
+                                               options,
+                                               disabled,
+                                               className = '',
+                                               clearable,
+                                               collapseTags,
+                                               defaultValue,
+                                               onChange = () => {
+                                               },
+                                               optionRender = null,
+                                               optionHeaderRender = null,
+                                             }) => {
+  const _style = {...style}
   /** 搜索选项 **/
   const [searchTerm, setSearchTerm] = useState<string>('')
   /** 选择值 **/
@@ -147,13 +146,19 @@ const CustomSelect: React.FC<SelectProps> = ({
   }
 
   /**
-   * 获取select的className
+   * 获取select外层外套的className
    */
-  const getWarpClassname = () => {
+  const getWarpClassname = (): string => {
     const disabledName: string = disabled ? selectStyle.disabled : ''
+    return `${selectStyle.customSelect} ${disabledName} ${className}`
+  }
+  /**
+   * 获取select main标签的className
+   */
+  const getMainClassname = (): string => {
     return isDropdownVisible
-      ? `${selectStyle.customSelect} ${className} ${selectStyle.active} ${disabledName}`
-      : `${selectStyle.customSelect} ${className} ${disabledName}`
+      ? `${selectStyle.main} ${selectStyle.active}  `
+      : `${selectStyle.main}  `
   }
   /**
    * 鼠标移入显示清除按钮
@@ -177,8 +182,8 @@ const CustomSelect: React.FC<SelectProps> = ({
   return (
     <div style={_style} className={getWarpClassname()}>
       <main
-        style={{ height: Array.isArray(selectedValues) ? '100%' : '30px' }}
-        className={selectStyle.main}
+        style={{height: Array.isArray(selectedValues) ? '100%' : '30px'}}
+        className={getMainClassname()}
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setShowClearable(false)}
         onClick={handleSelectClick}
