@@ -111,7 +111,7 @@ export { default as Ellipsis} from "./components/ellipsis-frame"; //点点点展
 export { default as Exprot} from "./components/exprot-frame"; //分享
 export { default as Fileimg} from "./components/fileimg-frame"; //图片文件
 export { default as Userswich} from "./components/userswich-frame"; //切换用户
-export { default as Calendar} from "./components/calendar-frame"; //日历
+export { default as Cendas} from "./components/cendas-frame"; //日历
 export { default as Imgjpg} from "./components/imgjpg-frame"; //jpg格式图片
 export { default as Zip} from "./components/filezip-frame"; //zip压缩
 export { default as Updatetime} from "./components/updatetime-frame"; //更新时间

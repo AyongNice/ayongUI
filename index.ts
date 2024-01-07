@@ -139,7 +139,7 @@ export {
   Userswich,
   Image,
   Posit,
-  Calendar,
+  Cendas,
   Imgjpg,
   Zip,
   Settings,

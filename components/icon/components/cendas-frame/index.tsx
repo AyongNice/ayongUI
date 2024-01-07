@@ -1,7 +1,7 @@
 import React from "react";
 import {IconProps} from "../../index";
 import icon from "../../index.module.less";
-const Calendar = (props: IconProps) => {
+const Cendas = (props: IconProps) => {
     const {className = "", style = {}, onClick = () => {}} = props;
     const styleClassName: string = `${icon.default} ${className}`;
     return (
@@ -20,4 +20,4 @@ const Calendar = (props: IconProps) => {
         </svg>
     );
 };
-export default Calendar;
+export default Cendas;
