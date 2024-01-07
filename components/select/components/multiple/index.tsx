@@ -10,7 +10,8 @@ const Multiple = ({
                     },
                     onChange = () => {
                     },
-
+                    handleDeltselectedValues = () => {
+                    },
                     onKeyDown,
                     searchTerm,
                     onInputClick,
@@ -37,6 +38,10 @@ const Multiple = ({
       onKeyDown();
     }
   }
+  const deleteValue = (event: React.Event<HTMLOrSVGElement>, index: number) => {
+    event.stopPropagation();
+    handleDeltselectedValues(index)
+  }
 
   // const selectedValuesList = ? selectedValues : selectedValues
 
@@ -49,7 +54,7 @@ const Multiple = ({
               className={selectStyle.customSelectSelectionItemRemove}
               onClick={() => handleOptionClick(value)}
             >
-    <Wrong className={selectStyle.delete}/>
+    <Wrong className={selectStyle.delete} onClick={(e) => deleteValue(e, index)}/>
   </span>
           </div>
           :
@@ -68,7 +73,7 @@ const Multiple = ({
             className={selectStyle.customSelectSelectionItemRemove}
             onClick={() => handleOptionClick(value)}
           >
-                   <Wrong className={selectStyle.delete}/>
+                  <Wrong className={selectStyle.delete} onClick={(e) => deleteValue(e, index)}/>
                 </span>
         </div>
 

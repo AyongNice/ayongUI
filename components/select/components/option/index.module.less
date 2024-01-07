@@ -1,0 +1,62 @@
+
+.customOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 3px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 3px 0;
+  //超出隐藏
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--ayong-premium-grey);
+  }
+}
+
+.selectOption {
+  color: var(--ayong-primary);
+  font-weight: bold;
+  background: var(--ayong-primary-grey);
+}
+
+
+.disabled {
+  background: var(--ayong-grey-crescent);
+  color: var(--ayong-grey);
+  cursor: not-allowed;
+}
+
+
+//基础icon
+.icon {
+  width: 13px;
+  height: 13px;
+  fill: var(--ayong-stone-gray);
+}
+
+//动态icon样式
+.iconActive {
+  fill: var(--ayong-primary);
+}
+
+
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ayong-stone-gray);
+  font: 400 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+.empty {
+  width: 10%;
+  height: 10%;
+  margin-bottom: 10px;
+}
+

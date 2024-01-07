@@ -176,6 +176,9 @@ export type {SelectProps} from './components/select/index.d';
 export {default as Upload} from './components/upload/index.tsx';
 export type {default as UploadProps, UploadFile} from './components/upload/index.d';
 
+export {default as Calendar} from './components/calendar/index.tsx';
+export type {CalendarProps} from './components/calendar/index.d';
+
 // export {default as Radio} from './components/radio/radio';
 // export {default as Checkbox} from './components/checkbox/checkbox';
 // export {default as Select} from './components/select/select';
