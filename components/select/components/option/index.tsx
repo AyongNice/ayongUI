@@ -4,7 +4,7 @@ import {Right, Empty} from '../../../icon/icon.ts'
 import React, {useEffect} from "react";
 
 
-const Option = ({options, optionRender, search, searchTerm, onClick, selectedValues = []}: OptionsParma) => {
+const Option = ({options,mode, optionRender, search, searchTerm, onClick, selectedValues = []}: OptionsParma) => {
 
     const getClassName = (option: Options): string => {
       if (!Array.isArray(selectedValues)) {

@@ -11,6 +11,7 @@ export interface SelectProps {
   defaultValue?: string | string[];// 默认值
   value?: string | string[];// 选中值
   style?: React.CSSProperties;// 样式
+  mode?: 'multiple' | 'tags' | 'single';// 模式
   onChange?: (value: string | string[]) => void;// 选中值改变时的回调
   options: Options[];// 选项数据
   disabled?: boolean;// 是否禁用

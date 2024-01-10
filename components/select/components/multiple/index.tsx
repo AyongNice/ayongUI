@@ -4,26 +4,29 @@ import React, {useEffect, useRef} from "react";
 
 
 const Multiple = ({
+                    mode,
+                    search,
+                    onKeyDown,
+                    searchTerm,
+                    onInputClick,
+                    handleOptionClick,
+                    selectedValues,
                     onBlur = () => {
                     },
                     onFocus = () => {
                     },
                     onChange = () => {
                     },
+                    optionRender = () => {
+                    },
                     handleDeltselectedValues = () => {
                     },
-                    onKeyDown,
-                    searchTerm,
-                    onInputClick,
-                    handleOptionClick,
-                    collapseTags,
-                    selectedValues,
-                    optionRender = () => {
-                    }
                   }) => {
   const inputRef = useRef<React.MutableRefObject<any>>(null);
   useEffect(() => {
-  })
+
+    console.log('mode', mode)
+  }, [])
   const focus = () => {
     if (inputRef.current) {
       inputRef.current?.focus();
@@ -48,8 +51,9 @@ const Multiple = ({
   return <div onClick={focus} className={selectStyle.customSelectSelector}>
 
     {selectedValues.map((value, index) => (
-      collapseTags ? index === 0 ? < div key={value} className={selectStyle.customSelectSelectionOverflowItem}>
-            <span className={selectStyle.customSelectSelectionItemContent}>{value}</span>
+
+      mode === 'tag' ? index === 0 ? < div key={value} className={selectStyle.customSelectSelectionOverflowItem}>
+            <span className={selectStyle.customSelectSelectionItemContent}>{value}111</span>
             <span
               className={selectStyle.customSelectSelectionItemRemove}
               onClick={() => handleOptionClick(value)}
@@ -80,18 +84,22 @@ const Multiple = ({
     ))
     }
     {!selectedValues.length && '请选择'}
-    <input
-      className={selectStyle.customSelectSelectionSearchInput}
-      value={searchTerm}
-      onClick={onInputClick}
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onKeyDown={handleOnKeyDown}
-      placeholder=''
-      ref={inputRef}
-    />
-    <span>&nbsp;</span>
+    {
+      search && <>
+        <input
+          className={selectStyle.customSelectSelectionSearchInput}
+          value={searchTerm}
+          onClick={onInputClick}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onKeyDown={handleOnKeyDown}
+          placeholder=''
+          ref={inputRef}
+        />
+        <span>&nbsp;</span>
+      </>
+    }
 
   </div>
 }

@@ -174,11 +174,17 @@ const Calendar: FC<CalendarProps> = (props) => {
     const currentDate = new Date(curYear, curMonth + 1, 1);
     return currentDate < dateObject;
   };
-
+  const onMonthOptionsChange = (value: string) => {
+    handleGetDays(curYear, value, props.startOfWeek!);
+  }
+  const onYearOptionsChange = (value: string) => {
+    debugger
+    handleGetDays(value, curMonth, props.startOfWeek!);
+  }
   return (
     <div className="calendar">
-      <Select options={monthOptions}/>
-      <Select options={yearOptions}/>
+      <Select options={monthOptions} onChange={onMonthOptionsChange}/>
+      <Select options={yearOptions} onChange={onYearOptionsChange}/>
       <table className="calendar-table" style={{width: props.width}}>
         <thead>
         <tr>

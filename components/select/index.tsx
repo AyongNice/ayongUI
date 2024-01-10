@@ -6,13 +6,13 @@ import {SelectProps} from './index.d'
 import Option from './components/option/index.tsx'
 
 const LeftIcon = ({
+                    mode,
                     search,
                     clearable,
                     searchTerm,
                     onInputClick,
                     showClearable,
                     clearValue,
-                    collapseTags,
                     isDropdownVisible,
                     selectedValues,
                     handleOnKeyDown = () => {
@@ -31,13 +31,13 @@ const LeftIcon = ({
   }
 
   return (
-    <div className={Array.isArray(selectedValues) ? selectStyle.iconBox : selectStyle.selectBox}>
-      {!Array.isArray(selectedValues) && (
+    <div className={mode === 'single' ? selectStyle.iconBox : selectStyle.selectBox}>
+      {mode === 'single' && (
         <div className={selectStyle.selectValue}>
           {isEmntyValue(selectedValues)}
         </div>
       )}
-      {search && !Array.isArray(selectedValues) && (
+      {search && mode === 'single' && (
         <input
           className={selectStyle.customSelectSelectionSearchInput}
           value={searchTerm}
@@ -50,7 +50,7 @@ const LeftIcon = ({
         />
       )}
 
-      {showClearable ? (
+      {mode === 'tag' ? (
         <Wrongs onClick={clearValue} className={selectStyle.icon}/>
       ) : search && isDropdownVisible ? (
         <Search className={selectStyle.icon}/>
@@ -72,10 +72,10 @@ const CustomSelect: React.FC<SelectProps> = ({
                                                disabled,
                                                className = '',
                                                clearable,
-                                               collapseTags,
                                                defaultValue,
                                                onChange = () => {
                                                },
+                                               mode = 'single',
                                                optionRender = null,
                                                optionHeaderRender = null,
                                              }) => {
@@ -91,14 +91,13 @@ const CustomSelect: React.FC<SelectProps> = ({
   useEffect(() => {
     //判断value 数组是否等于defaultValue
 
-    if (Array.isArray(value)) {
-      console.log('useEffect---zujian', value)
-      value.forEach((_) => {
+    if (mode === 'multiple') {
+      defaultValue.forEach((_) => {
         if (!options.find((item) => item.value === _).disabled) {
           handleOptionClick(_)
         }
       })
-      if (!value.length) {
+      if (Array.isArray(value) && value.length) {
         setSelectedValues(value)
         setSearchTerm('')
 
@@ -107,7 +106,7 @@ const CustomSelect: React.FC<SelectProps> = ({
       setIsDropdownVisible(false)
     }
     onChange(selectedValues)
-  }, [value, selectedValues])
+  }, [value])
 
   /**
    * 点击选项
@@ -116,7 +115,7 @@ const CustomSelect: React.FC<SelectProps> = ({
   const handleOptionClick = (selectValue: string, disabled: boolean) => {
     if (disabled) return
     setSelectedValues((prevValues: string | string[]) => {
-      if (Array.isArray(prevValues)) {
+      if (Array.isArray(prevValues) && mode !== 'single') {
 
         return Array.from(new Set([...prevValues, selectValue]))
       }
@@ -125,7 +124,7 @@ const CustomSelect: React.FC<SelectProps> = ({
       return selectValue
     })
     setSearchTerm('')
-    if (!Array.isArray(selectedValues)) {
+    if (!Array.isArray(selectedValues) && mode !== 'single') {
       setIsDropdownVisible(false)
     }
   }
@@ -186,8 +185,8 @@ const CustomSelect: React.FC<SelectProps> = ({
    * 清除多选选项
    */
   const clearValue = () => {
-    setSelectedValues(Array.isArray(selectedValues) ? [] : '')
-    onChange(Array.isArray(selectedValues) ? [] : '')
+    setSelectedValues(Array.isArray(selectedValues) && mode !== 'single' ? [] : '')
+    onChange(Array.isArray(selectedValues) && mode !== 'single' ? [] : '')
   }
 
   const onSearchChange = (e): void => {
@@ -197,17 +196,18 @@ const CustomSelect: React.FC<SelectProps> = ({
   return (
     <div style={_style} className={getWarpClassname()}>
       <main
-        style={{height: Array.isArray(selectedValues) ? '100%' : '30px'}}
+        style={{height: Array.isArray(selectedValues) && mode !== 'single' ? '100%' : '30px'}}
         className={getMainClassname()}
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setShowClearable(false)}
         onClick={handleSelectClick}
       >
-        {Array.isArray(selectedValues) ? (
+        {['multiple', 'tag'].includes(mode) ? (
           <React.Fragment>
             <Multiple
+              mode={mode}
+              search={search}
               value={searchTerm}
-              collapseTags={collapseTags}
               showClearable={showClearable}
               selectedValues={selectedValues}
               onKeyDown={handleKeyDown}
@@ -219,6 +219,7 @@ const CustomSelect: React.FC<SelectProps> = ({
             />
 
             <LeftIcon
+              mode={mode}
               search={search}
               clearable={clearable}
               clearValue={clearValue}
@@ -229,6 +230,7 @@ const CustomSelect: React.FC<SelectProps> = ({
           </React.Fragment>
         ) : (
           <LeftIcon
+            mode={mode}
             search={search}
             searchTerm={searchTerm}
             onChange={onSearchChange}
@@ -247,6 +249,7 @@ const CustomSelect: React.FC<SelectProps> = ({
             <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>
           )}
           <Option
+            mode={mode}
             options={options}
             search={search}
             optionRender={optionRender}
