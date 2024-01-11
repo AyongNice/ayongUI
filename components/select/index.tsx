@@ -1,70 +1,14 @@
-import React, {useEffect, useState} from 'react'
-import selectStyle from './index.module.less'
-import Multiple from './components/multiple/index.tsx'
-import {Wrongs, Under, Search} from '../icon/icon.ts'
-import {SelectProps} from './index.d'
-import Option from './components/option/index.tsx'
+import React, {useEffect, useState} from 'react';
+import selectStyle from './index.module.less';
+import {SelectProps} from './index.d';
 
-const LeftIcon = ({
-                    mode,
-                    search,
-                    clearable,
-                    searchTerm,
-                    onInputClick,
-                    showClearable,
-                    clearValue,
-                    isDropdownVisible,
-                    selectedValues,
-                    handleOnKeyDown = () => {
-                    },
-                    onChange = () => {
-                    },
-                    onFocus = () => {
-                    },
-                    onBlur = () => {
-                    },
-                  }) => {
-  const isEmntyValue = (value) => {
-    if (value === 0) return value
-    if (!value) return '请选择'
-    return value
-  }
+import Multiple from './components/multiple/index.tsx';
+import Option from './components/option/index.tsx';
+import LeftIcon from './components/lefticon/index.tsx';
+import Single from './components/single/index.tsx';
 
-  return (
-    <div className={mode === 'single' ? selectStyle.iconBox : selectStyle.selectBox}>
-      {mode === 'single' && (
-        <div className={selectStyle.selectValue}>
-          {isEmntyValue(selectedValues)}
-        </div>
-      )}
-      {search && mode === 'single' && (
-        <input
-          className={selectStyle.customSelectSelectionSearchInput}
-          value={searchTerm}
-          onClick={onInputClick}
-          onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onKeyDown={handleOnKeyDown}
-          placeholder=""
-        />
-      )}
-
-      {mode === 'tag' ? (
-        <Wrongs onClick={clearValue} className={selectStyle.icon}/>
-      ) : search && isDropdownVisible ? (
-        <Search className={selectStyle.icon}/>
-      ) : (
-        <Under
-          className={`${selectStyle.icon} ${selectStyle.rotateTransform} ${
-            isDropdownVisible ? selectStyle.rotate90 : ''
-          }`}
-        />
-      )}
-    </div>
-  )
-}
 const CustomSelect: React.FC<SelectProps> = ({
+                                               mode = 'single',
                                                style,
                                                value,
                                                search,
@@ -75,7 +19,6 @@ const CustomSelect: React.FC<SelectProps> = ({
                                                defaultValue,
                                                onChange = () => {
                                                },
-                                               mode = 'single',
                                                optionRender = null,
                                                optionHeaderRender = null,
                                              }) => {
@@ -155,8 +98,6 @@ const CustomSelect: React.FC<SelectProps> = ({
 
   const handleDeltselectedValues = (index: number): void => {
     setSelectedValues(selectedValues.filter((_, i) => i !== index));
-
-    console.log('handleDeltselectedValues', selectedValues)
     onChange(selectedValues)
   }
   /**
@@ -196,7 +137,6 @@ const CustomSelect: React.FC<SelectProps> = ({
   return (
     <div style={_style} className={getWarpClassname()}>
       <main
-        style={{height: Array.isArray(selectedValues) && mode !== 'single' ? '100%' : '30px'}}
         className={getMainClassname()}
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setShowClearable(false)}
@@ -229,36 +169,43 @@ const CustomSelect: React.FC<SelectProps> = ({
             />
           </React.Fragment>
         ) : (
-          <LeftIcon
-            mode={mode}
-            search={search}
-            searchTerm={searchTerm}
-            onChange={onSearchChange}
-            clearable={clearable}
-            clearValue={clearValue}
-            showClearable={showClearable}
-            selectedValues={selectedValues}
-            isDropdownVisible={isDropdownVisible}
-          />
+          <div className={mode === 'single' ? selectStyle.singleBox : selectStyle.multipleBox}>
+            <Single selectedValues={selectedValues}/>
+            <LeftIcon
+              mode={mode}
+              search={search}
+              searchTerm={searchTerm}
+              onChange={onSearchChange}
+              clearable={clearable}
+              clearValue={clearValue}
+              showClearable={showClearable}
+              selectedValues={selectedValues}
+              isDropdownVisible={isDropdownVisible}
+            />
+
+          </div>
+
         )}
       </main>
 
-      {isDropdownVisible && (
-        <ul className={selectStyle.dropdown}>
-          {typeof optionHeaderRender === 'function' && (
-            <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>
-          )}
-          <Option
-            mode={mode}
-            options={options}
-            search={search}
-            optionRender={optionRender}
-            searchTerm={searchTerm}
-            selectedValues={selectedValues}
-            onClick={handleOptionClick}
-          />
-        </ul>
-      )}
+      {
+        isDropdownVisible && (
+          <ul className={selectStyle.dropdown}>
+            {typeof optionHeaderRender === 'function' && (
+              <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>
+            )}
+            <Option
+              mode={mode}
+              options={options}
+              search={search}
+              optionRender={optionRender}
+              searchTerm={searchTerm}
+              selectedValues={selectedValues}
+              onClick={handleOptionClick}
+            />
+          </ul>
+        )
+      }
     </div>
   )
 }
