@@ -20,7 +20,8 @@ const Option = ({options,mode, optionRender, search, searchTerm, onClick, select
       }
       return selectedValues.includes(option.value) && !option.disabled ? selectStyle.iconActive : selectStyle.icon
     }
-    const onSelectClick = (option: Options) => {
+    const onSelectClick = (event: React.DragEvent<HTMLDivElement>,option: Options) => {
+      event.stopPropagation();
       if (option.disabled) return;
       console.log('onSelectClick', option)
       onClick(option.value);
@@ -33,7 +34,7 @@ const Option = ({options,mode, optionRender, search, searchTerm, onClick, select
         {
           filteredOptions.map((option) => (
             <div className={getClassName(option)} key={option.value} value={option.value}
-                 onClick={() => onSelectClick(option)}>
+                 onClick={(e) => onSelectClick(e,option)}>
               {typeof optionRender === 'function' ? optionRender(option) : option.label}
               <Right
                 className={getClassNameRightIcon(option)}

@@ -65,7 +65,7 @@ const Multiple = ({
         </React.Fragment>
 
         :
-        <Item value={value} key={value} index={index} deleteValue={deleteValue} handleOptionClick={handleOptionClick}/>
+        <Item mode={mode} value={value} key={value} index={index} deleteValue={deleteValue} handleOptionClick={handleOptionClick}/>
     ))
     }
 
@@ -91,3 +91,5 @@ const Multiple = ({
   </div>
 }
 export default Multiple;
+
+//typeScript

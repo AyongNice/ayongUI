@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import selectStyle from './index.module.less';
 import {SelectProps} from './index.d';
 
@@ -7,21 +7,22 @@ import Option from './components/option/index.tsx';
 import LeftIcon from './components/lefticon/index.tsx';
 import Single from './components/single/index.tsx';
 
-const CustomSelect: React.FC<SelectProps> = ({
-                                               mode = 'single',
-                                               style,
-                                               value,
-                                               search,
-                                               options,
-                                               disabled,
-                                               className = '',
-                                               clearable,
-                                               defaultValue,
-                                               onChange = () => {
-                                               },
-                                               optionRender = null,
-                                               optionHeaderRender = null,
-                                             }) => {
+const CustomSelect = (props: React.FC<SelectProps>) => {
+  const {
+    mode = 'single',
+    style,
+    value,
+    search,
+    options,
+    disabled,
+    className = '',
+    clearable,
+    defaultValue,
+    optionRender = null,
+    optionHeaderRender = null,
+    onChange = () => {
+    },
+  } = props;
   const _style = {...style}
   /** 搜索选项 **/
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -30,7 +31,29 @@ const CustomSelect: React.FC<SelectProps> = ({
   /** 是否显示下拉框 **/
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
   /** 是否显示清除按钮 **/
-  const [showClearable, setShowClearable] = useState<boolean>(false)
+  const [showClearable, setShowClearable] = useState<boolean>(false);
+  const select = useRef(null);
+  useEffect(() => {
+
+    const handleOutsideClick = (event) => {
+      // 获取选择框的DOM元素
+      const dropdownElement = select.current;
+
+      // 检查点击事件是否发生在选择框之外，且不是在特定的div上
+      if (dropdownElement && !dropdownElement.contains(event.target)) {
+
+      }
+      console.log(111)
+      setIsDropdownVisible(false);
+    };
+    document.addEventListener('click', handleOutsideClick);
+
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+
+    };
+  }, []);
   useEffect(() => {
     //判断value 数组是否等于defaultValue
 
@@ -67,9 +90,7 @@ const CustomSelect: React.FC<SelectProps> = ({
       return selectValue
     })
     setSearchTerm('')
-    if (!Array.isArray(selectedValues) && mode !== 'single') {
-      setIsDropdownVisible(false)
-    }
+    if (mode === 'single') setIsDropdownVisible(false);
   }
 
   const handleSelectClick = (event) => {
@@ -79,12 +100,15 @@ const CustomSelect: React.FC<SelectProps> = ({
     setIsDropdownVisible(!isDropdownVisible)
   }
 
+
+  /**
+   *  搜索输入框输入
+   * @param e
+   */
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value)
   }
-  const handleBlur = () => {
-    // setIsDropdownVisible(false);
-  }
+
   /**
    * 按下键盘 多选情况下从后面删除
    * @param event
@@ -96,6 +120,10 @@ const CustomSelect: React.FC<SelectProps> = ({
     }
   }
 
+  /**
+   * 删除按钮
+   * @param index
+   */
   const handleDeltselectedValues = (index: number): void => {
     setSelectedValues(selectedValues.filter((_, i) => i !== index));
     onChange(selectedValues)
@@ -145,8 +173,7 @@ const CustomSelect: React.FC<SelectProps> = ({
         {['multiple', 'tag'].includes(mode) ? (
           <React.Fragment>
             <Multiple
-              mode={mode}
-              search={search}
+              {...props}
               value={searchTerm}
               showClearable={showClearable}
               selectedValues={selectedValues}
@@ -154,32 +181,27 @@ const CustomSelect: React.FC<SelectProps> = ({
               handleOptionClick={handleOptionClick}
               onChange={handleInputChange}
               handleDeltselectedValues={handleDeltselectedValues}
-              onFocus={() => setIsDropdownVisible(true)}
-              onBlur={handleBlur}
             />
 
             <LeftIcon
-              mode={mode}
-              search={search}
-              clearable={clearable}
-              clearValue={clearValue}
-              showClearable={showClearable}
-              selectedValues={selectedValues}
+              {...props}
               isDropdownVisible={isDropdownVisible}
             />
           </React.Fragment>
         ) : (
           <div className={mode === 'single' ? selectStyle.singleBox : selectStyle.multipleBox}>
-            <Single selectedValues={selectedValues}/>
-            <LeftIcon
-              mode={mode}
-              search={search}
-              searchTerm={searchTerm}
-              onChange={onSearchChange}
-              clearable={clearable}
-              clearValue={clearValue}
+            <Single
+              {...props}
+              value={searchTerm}
               showClearable={showClearable}
               selectedValues={selectedValues}
+              onKeyDown={handleKeyDown}
+              handleOptionClick={handleOptionClick}
+              onChange={handleInputChange}
+              handleDeltselectedValues={handleDeltselectedValues}
+            />
+            <LeftIcon
+              {...props}
               isDropdownVisible={isDropdownVisible}
             />
 
