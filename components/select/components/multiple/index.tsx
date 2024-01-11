@@ -1,6 +1,5 @@
 import selectStyle from "../../index.module.less";
 import commonStyle from "../../commo.module.less";
-import {Wrong} from "../../../icon/icon.ts";
 import React, {useEffect, useRef} from "react";
 import Item from "./components/itme/index.tsx";
 
@@ -53,19 +52,20 @@ const Multiple = ({
 
     {selectedValues.map((value, index) => (
 
-      mode === 'tag' ? index === 0 ?
-          <Item value={value} index={index} deleteValue={deleteValue} handleOptionClick={handleOptionClick}/>
-          :
-          index === 1 &&
-          <div
-            key={value}
-            className={commonStyle.item}
-          >
-            +{selectedValues.length}
-          </div>
-        :
-        <Item value={value} index={index} deleteValue={deleteValue} handleOptionClick={handleOptionClick}/>
+      mode === 'tag' ? <React.Fragment key={value}>
+          {index === 0 ?
+            <Item value={value} index={index} deleteValue={deleteValue}
+                  handleOptionClick={handleOptionClick}/>
+            :
+            index === 1 &&
+            <div className={commonStyle.item}>
+              +{selectedValues.length}
+            </div>
+          }
+        </React.Fragment>
 
+        :
+        <Item value={value} key={value} index={index} deleteValue={deleteValue} handleOptionClick={handleOptionClick}/>
     ))
     }
 
