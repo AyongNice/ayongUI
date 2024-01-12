@@ -1,8 +1,12 @@
 import React from 'react';
 
+
+export interface  keyValue {
+  [key: string| number]: string| number;
+}
 export interface Options {
-  value: string;
-  label: string;
+  value: keyValue;
+  label: keyValue;
   disabled?: boolean;
 }
 

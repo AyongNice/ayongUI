@@ -23,10 +23,7 @@ const Multiple = ({
                     },
                   }) => {
   const inputRef = useRef<React.MutableRefObject<any>>(null);
-  useEffect(() => {
 
-    console.log('mode', mode)
-  }, [])
   const focus = () => {
     if (inputRef.current) {
       inputRef.current?.focus();

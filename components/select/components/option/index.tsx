@@ -24,7 +24,7 @@ const Option = ({options,mode, optionRender, search, searchTerm, onClick, select
       event.stopPropagation();
       if (option.disabled) return;
       console.log('onSelectClick', option)
-      onClick(option.value);
+      onClick(option);
     }
     const filteredOptions = search ? options.filter(option =>
       option.value.toLowerCase().includes(searchTerm.toLowerCase())

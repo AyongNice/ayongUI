@@ -2,29 +2,43 @@ import React, {useState, useEffect, FC, ReactNode} from 'react';
 import {getDaysInMonth, handleCrateDate, handleCreateDatePicker, parseTime} from './utils.js';
 import {CalendarProps} from './index.d'
 import Select from '../select/index.tsx'
+import './index.less'
 
-const Calendar: FC<CalendarProps> = (props) => {
+const Calendar: FC<CalendarProps> = ({
+                                       children,
+                                       tbodyHeight,
+                                       style,
+                                       rangeTime = [],
+                                       yearsRange = [1970, 2099],
+                                       canSelect,
+                                       selectMode,
+                                       startOfWeek,
+                                       dateSelected = () => {
+                                       },
+                                     }) => {
+  const cFormat: "{d}" = '{d}'
+
   const [monthOptions, setMonthOptions] = useState<string[]>([]);
   const [yearOptions, setYearOptions] = useState<number[]>([]);
   const [weeks, setWeeks] = useState<string[]>(['一', '二', '三', '四', '五', '六', '日']);
   const [curYear, setCurYear] = useState<number>(new Date().getFullYear());
-  const [curMonth, setCurMonth] = useState<number>(new Date().getMonth());
+  const [curMonth, setCurMonth] = useState<number>(new Date().getMonth() + 1);
   const [days, setDays] = useState<number>(0);
-  const [curDate, setCurDate] = useState<string>(parseTime(new Date().getTime()));
+  const [curDate, setCurDate] = useState<string>(parseTime(new Date().getTime()), cFormat);
   const [prevDays, setPrevDays] = useState<any[]>([]);
   const [rearDays, setRearDays] = useState<any[]>([]);
   const [curDays, setCurDays] = useState<any[]>([]);
   const [showDays, setShowDays] = useState<any[]>([]);
   const [res, setRes] = useState<any[][]>([]);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [selectedMode, setSelectedMode] = useState<boolean>(props.selectMode === 'click');
+  const [selectedMode, setSelectedMode] = useState<boolean>(selectMode === 'click');
   const [moveIndex, setMoveIndex] = useState<number[]>([]);
   const [canMove, setCanMove] = useState<boolean>(false);
-
+  const [selectCountMonth, setSelectCountMonth] = useState<number>(1)
   useEffect(() => {
-    setWeeks([...weeks.slice(props.startOfWeek! - 1), ...weeks.slice(0, props.startOfWeek! - 1)]);
-    handleGetDays(curYear, curMonth, props.startOfWeek!);
-  }, [props.startOfWeek, curYear, curMonth]);
+    setWeeks([...weeks.slice(startOfWeek! - 1), ...weeks.slice(0, startOfWeek! - 1)]);
+    handleGetDays(curYear, curMonth, startOfWeek!, cFormat);
+  }, [startOfWeek, curYear, curMonth]);
 
   useEffect(() => {
 
@@ -33,27 +47,30 @@ const Calendar: FC<CalendarProps> = (props) => {
     }
   }, []);
 
-  const handleGetDays = (year: number, month: number, startOfWeek: number) => {
+  const handleGetDays = (year: number, month: number, startOfWeek: number, cFormat: string) => {
     const monthOptions = handleCreateDatePicker().months;
-    const yearOptions = handleCreateDatePicker().years.slice(0, 53);
+    const yearOptions = handleCreateDatePicker(yearsRange).years.slice(0, 58);
 
     setMonthOptions(monthOptions);
     setYearOptions(yearOptions);
-    console.log('monthOptions', monthOptions)
 
-    const curDays = handleCrateDate(year, month, 1, getDaysInMonth(year, month));
-    setCurDays(handleCrateDate(year, month, 1, getDaysInMonth(year, month)));
-
-    // Use useEffect to perform actions after state update
-    console.log('curDays', curDays);
+    const curDays = handleCrateDate({year, month, start: 1, end: getDaysInMonth(year, month), cFormat});
+    setCurDays(curDays);
 
     const firstDayOfWeek = new Date(`${year}-${month + 1}-01`).getDay();
     const obj: Record<number, string> = {1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日'};
     const firstDayInCN = obj[firstDayOfWeek];
     const index = weeks.indexOf(firstDayInCN);
 
-    const newPrevDays = handleCrateDate(year, month, 1, index + 1, 'prev');
-    const newRearDays = handleCrateDate(year, month, 1, 42 - getDaysInMonth(year, month) - index, 'rear');
+    const newPrevDays = handleCrateDate({year, month, start: 1, end: index + 1, type: 'prev', cFormat});
+    const newRearDays = handleCrateDate({
+      year,
+      month,
+      start: 1,
+      end: 42 - getDaysInMonth(year, month) - index,
+      type: 'rear',
+      cFormat
+    });
     const newShowDays = [...newPrevDays, ...curDays, ...newRearDays];
     const newRes = handleFormatDates(newShowDays);
 
@@ -74,7 +91,7 @@ const Calendar: FC<CalendarProps> = (props) => {
   };
 
   const handleItemClick = (item: any, i: number, j: number) => {
-    if (!props.canSelect) return;
+    if (!canSelect) return;
     if (selectedMode) {
       setRes((prevRes) => {
         const updatedRes = [...prevRes];
@@ -86,7 +103,7 @@ const Calendar: FC<CalendarProps> = (props) => {
             prevSelectedDates.filter((date) => date !== item.date)
           );
         }
-        props.dateSelected && props.dateSelected(selectedDates);
+        dateSelected && dateSelected(selectedDates);
         return updatedRes;
       });
     } else {
@@ -110,7 +127,7 @@ const Calendar: FC<CalendarProps> = (props) => {
       setMoveIndex((prevMoveIndex) => [...prevMoveIndex, index]);
       setMoveIndex((prevMoveIndex) => prevMoveIndex.sort((a, b) => a - b));
       setSelectedDates(showDays.slice(moveIndex[0], moveIndex[1] + 1));
-      setSelectedDates.length !== 0 && props.dateSelected && props.dateSelected(selectedDates);
+      setSelectedDates.length !== 0 && dateSelected(selectedDates);
     }
   };
 
@@ -162,30 +179,40 @@ const Calendar: FC<CalendarProps> = (props) => {
   };
 
   const showNext = (): boolean => {
-    if (!props.rangeTime || !props.rangeTime[0]) return true;
-    const dateObject = new Date(props.rangeTime[0]);
+    if (!rangeTime || rangeTime[0]) return true;
+    const dateObject = new Date(rangeTime[0]);
     const currentDate = new Date(curYear, curMonth, 1);
     return currentDate > dateObject;
   };
 
   const showPrev = (): boolean => {
-    if (!props.rangeTime || !props.rangeTime[1]) return true;
+    if (!rangeTime || !rangeTime[1]) return true;
     const dateObject = new Date(props.rangeTime[1]);
     const currentDate = new Date(curYear, curMonth + 1, 1);
     return currentDate < dateObject;
   };
   const onMonthOptionsChange = (value: string) => {
-    handleGetDays(curYear, value, props.startOfWeek!);
+    console.log('onMonthOptionsChange', curYear, value, monthOptions)
+    handleGetDays(curYear, value, startOfWeek!, cFormat);
+    setSelectCountMonth(value)
   }
   const onYearOptionsChange = (value: string) => {
-    debugger
-    handleGetDays(value, curMonth, props.startOfWeek!);
+    handleGetDays(value, curMonth, startOfWeek!, cFormat);
+  }
+
+  const getDayClassName = (item) => {
+    return `${
+      !item.isCurMonth ? 'notCurMonth' : ''} ${
+      item.date === curDate ? 'currentDay' : ''} ${
+      item.isSelected ? 'selectDay' : ''} ${
+      item.isRangeSelected ? 'rangeSelectd' : ''} ${
+      item.isWeekend ? 'weekend' : ''} ${item.isToday ? 'today' : ''}`
   }
   return (
     <div className="calendar">
-      <Select options={monthOptions} onChange={onMonthOptionsChange}/>
-      <Select options={yearOptions} onChange={onYearOptionsChange}/>
-      <table className="calendar-table" style={{width: props.width}}>
+      <Select style={{width: 150}} defaultValue={curMonth} options={monthOptions} onChange={onMonthOptionsChange}/>
+      <Select style={{width: 150}} defaultValue={curYear} options={yearOptions} onChange={onYearOptionsChange}/>
+      <table className="calendar-table" style={style}>
         <thead>
         <tr>
           {weeks.map((item, i) => (
@@ -195,23 +222,17 @@ const Calendar: FC<CalendarProps> = (props) => {
         </thead>
         <tbody>
         {res.map((dates, i) => (
-          <tr key={i} style={{height: props.tbodyHeight}}>
+          <tr key={i} style={style}>
             {dates.map((item, index) => (
               <td
                 key={index}
-                className={`day ${
-                  !item.isCurMonth ? 'notCurMonth' : ''} ${
-                  item.date === curDate ? 'currentDay' : ''} ${
-                  item.isSelected ? 'selectDay' : ''} ${
-                  item.isRangeSelected ? 'rangeSelectd' : ''} ${
-                  item.isWeekend ? 'weekend' : ''}`}
                 onClick={() => handleItemClick(item, i, index)}
                 onMouseOver={() => handleItemMove(item, i, index)}
               >
-                {props.children ? (
-                  <>{props.children}</>
+                {children ? (
+                  <>{children}</>
                 ) : (
-                  <span>{item.date}</span>
+                  <div className={`day ${getDayClassName(item)}`}>{item.date}</div>
                 )}
               </td>
             ))}

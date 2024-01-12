@@ -1,9 +1,12 @@
 import React, {useRef} from "react";
 import selectStyle from './index.module.less';
 import {Wrongs, Under, Search} from '../../../icon/icon.ts'
+import {keyValue} from "../../../index.d";
 
 const Single = ({
                   search,
+                  options,
+                  optionsMap,
                   selectedValues,
                   searchTerm,
                   onInputClick,
@@ -15,14 +18,10 @@ const Single = ({
                   onChange = () => {
                   },
                 }) => {
-  const isEmntyValue = (value: string | number): string | number => {
-    if (value === 0) return value
-    return value ?? '请选择'
-  }
   const inputRef = useRef<React.MutableRefObject<any>>(null);
 
   return <div className={selectStyle.selectValue}>
-    {isEmntyValue(selectedValues)}
+    {optionsMap.get(selectedValues) ?? '请选择'}
     {
       search && <>
         <input

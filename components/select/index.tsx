@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import selectStyle from './index.module.less';
-import {SelectProps} from './index.d';
+import {SelectProps, Options, keyValue} from './index.d';
 
 import Multiple from './components/multiple/index.tsx';
 import Option from './components/option/index.tsx';
@@ -23,11 +23,13 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
     onChange = () => {
     },
   } = props;
-  const _style = {...style}
+  const _style = {...style};
+  const optionsMap: Map<keyValue, keyValue> = new Map();
+  options.forEach((item) => optionsMap.set(item.value, item.label));
   /** 搜索选项 **/
   const [searchTerm, setSearchTerm] = useState<string>('')
   /** 选择值 **/
-  const [selectedValues, setSelectedValues] = useState<string | string[]>(defaultValue as string)
+  const [selectedValues, setSelectedValues] = useState<string | string[]>(defaultValue)
   /** 是否显示下拉框 **/
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
   /** 是否显示清除按钮 **/
@@ -43,7 +45,6 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
       if (dropdownElement && !dropdownElement.contains(event.target)) {
 
       }
-      console.log(111)
       setIsDropdownVisible(false);
     };
     document.addEventListener('click', handleOutsideClick);
@@ -54,6 +55,8 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
 
     };
   }, []);
+
+
   useEffect(() => {
     //判断value 数组是否等于defaultValue
 
@@ -66,30 +69,25 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
       if (Array.isArray(value) && value.length) {
         setSelectedValues(value)
         setSearchTerm('')
-
-        onChange(selectedValues)
       }
       setIsDropdownVisible(false)
     }
-    onChange(selectedValues)
   }, [value])
 
   /**
    * 点击选项
    * @param value
    */
-  const handleOptionClick = (selectValue: string, disabled: boolean) => {
+  const handleOptionClick = (option: Options, disabled: boolean) => {
     if (disabled) return
     setSelectedValues((prevValues: string | string[]) => {
       if (Array.isArray(prevValues) && mode !== 'single') {
-
-        return Array.from(new Set([...prevValues, selectValue]))
+        return Array.from(new Set([...prevValues, option.value]))
       }
-
-      console.log('setSelectedValues', selectValue)
-      return selectValue
+      return option.value
     })
     setSearchTerm('')
+    onChange(option.value)
     if (mode === 'single') setIsDropdownVisible(false);
   }
 
@@ -175,6 +173,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
             <Multiple
               {...props}
               value={searchTerm}
+              optionsMap={optionsMap}
               showClearable={showClearable}
               selectedValues={selectedValues}
               onKeyDown={handleKeyDown}
@@ -193,6 +192,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
             <Single
               {...props}
               value={searchTerm}
+              optionsMap={optionsMap}
               showClearable={showClearable}
               selectedValues={selectedValues}
               onKeyDown={handleKeyDown}

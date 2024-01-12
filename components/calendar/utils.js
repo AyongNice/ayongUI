@@ -7,8 +7,21 @@ export const getDaysInMonth = (year, month) => {
   return day.getDate()
 }
 
+function isToday(dateStr) {
+  // 将日期字符串转换为日期对象
+  var inputDate = new Date(dateStr);
+
+  // 获取当前日期
+  var currentDate = new Date();
+
+  // 将日期部分设置为相同，以便比较
+  inputDate.setHours(0, 0, 0, 0);
+  currentDate.setHours(0, 0, 0, 0);
+  // 检查是否是当天
+  return inputDate.getTime() === currentDate.getTime();
+}
 // 创建日期 yyyy-MM-dd 格式， 用于创建非当前月的日期
-export const handleCrateDate = (year, month, start, end, type) => {
+export const handleCrateDate = ({year, month, start, end, type,cFormat}) => {
   const arr = []
   if (type === 'prev') { // 上一月
     if (start === end) return []
@@ -17,30 +30,33 @@ export const handleCrateDate = (year, month, start, end, type) => {
     for (let i = daysInLastMonth - end + 2; i <= daysInLastMonth; i++) {
       arr.push({
         // date: `${month === 0 ? year - 1 : year}-${(month + 1) < 10 ? month === 0 ? 12 : `0${month}` : month}-${i < 10 ? `0${i}` : i}`,
-        date: parseTime(new Date(year, month - 1, i)),
+        date: parseTime(new Date(year, month - 1, i),cFormat),
         isCurMonth: false,
         isSelected: false,
-        isRangeSelected: false
+        isRangeSelected: false,
+        isToday:isToday(new Date(year, month - 1, i))
       })
     }
   } else if (type === 'rear') { // 下一月
     for (let i = start; i <= end; i++) {
       arr.push({
         // date: `${month === 11 ? year + 1 : year}-${(month + 1) < 9 ? `0${month + 2}` : month + 2 <= 12 ? month + 2 : (month + 2) % 12 < 10 ? `0${(month + 2) % 12}` : (month + 2) % 12}-${i < 10 ? `0${i}` : i}`,
-        date: parseTime(new Date(year, month + 1, i)),
+        date: parseTime(new Date(year, month + 1, i),cFormat),
         isCurMonth: false,
         isSelected: false,
-        isRangeSelected: false
+        isRangeSelected: false,
+        isToday:isToday(new Date(year, month + 1, i))
       })
     }
   } else { // 本月
     for (let i = start; i <= end; i++) {
       arr.push({
         // date: `${year}-${(month + 1) < 10 ? `0${month + 1}` : month + 1}-${i < 10 ? `0${i}` : i}`,
-        date: parseTime(new Date(year, month, i)),
+        date: parseTime(new Date(year, month, i),cFormat),
         isCurMonth: true,
         isSelected: false,
-        isRangeSelected: false
+        isRangeSelected: false,
+        isToday:isToday(new Date(year, month, i))
       })
     }
   }
@@ -48,10 +64,10 @@ export const handleCrateDate = (year, month, start, end, type) => {
   return arr
 }
 
-export const handleCreateDatePicker = () => {
+export const handleCreateDatePicker = (yearsRange=[1970,2099]) => {
   const years = []
   const months = []
-  for (let i = 1970; i <= 2099; i++) {
+  for (let i = yearsRange[0]; i <= yearsRange[1]; i++) {
     years.push({
       label: `${i}年`,
       value: i
@@ -79,7 +95,8 @@ export function parseTime(time, cFormat) {
   if (arguments.length === 0 || !time) {
     return null
   }
-  const format = cFormat || '{y}-{m}-{d}'
+  const format = cFormat || '{y}-{m}-{d}';
+
   let date
   if (typeof time === 'object') {
     date = time
