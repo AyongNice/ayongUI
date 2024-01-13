@@ -120,6 +120,7 @@ export { default as Stars} from "./components/stars-frame"; //星星
 export { default as Exits} from "./components/partyexits-frame"; //退出方型
 export { default as Codes} from "./components/codes-frame"; //代码展示
 export { default as Codeblock} from "./components/codeblock-frame"; //花括号
+export { default as Bookmarks} from "./components/bookmarks-frame"; //书签
 /**
 * 实体icon
 */
@@ -155,3 +156,5 @@ export { default as Bellfiled} from "./components/bellfiled-solid"; //铃铛
 export { default as Bulb} from "./components/bulb-solid"; //灯泡
 export { default as Replys} from "./components/replys-solid"; //返回
 export { default as Star} from "./components/star-solid"; //星星
+export { default as Bookmark} from "./components/bookmark-solid"; //书签
+export { default as User} from "./components/user-solid"; //用户

@@ -153,6 +153,9 @@ export {
   Exits,
   Codes,
   Codeblock,
+  Bookmark,
+  Bookmarks,
+  User,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';
