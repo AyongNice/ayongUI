@@ -121,6 +121,12 @@ export { default as Exits} from "./components/partyexits-frame"; //退出方型
 export { default as Codes} from "./components/codes-frame"; //代码展示
 export { default as Codeblock} from "./components/codeblock-frame"; //花括号
 export { default as Bookmarks} from "./components/bookmarks-frame"; //书签
+export { default as Sunny} from "./components/sunny-frame"; // 太阳
+export { default as Moon} from "./components/moon-frame"; // 月亮
+export { default as Laughing} from "./components/laughing-frame"; // 笑脸
+export { default as Posits} from "./components/posits-frame"; // 定位
+export { default as Skin} from "./components/skin-frame"; // 衣服
+export { default as Handoff} from "./components/handoff-frame"; // 中英文切换
 /**
 * 实体icon
 */
@@ -158,3 +164,6 @@ export { default as Replys} from "./components/replys-solid"; //返回
 export { default as Star} from "./components/star-solid"; //星星
 export { default as Bookmark} from "./components/bookmark-solid"; //书签
 export { default as User} from "./components/user-solid"; //用户
+export { default as Addser} from "./components/adduser-solid"; //添加用户
+export { default as Switchusers} from "./components/switchusers-solid"; //切换用户
+export { default as Handsolid} from "./components/handoff-solid"; //中英文切换

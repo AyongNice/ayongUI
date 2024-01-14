@@ -156,6 +156,15 @@ export {
   Bookmark,
   Bookmarks,
   User,
+  Addser,
+  Switchusers,
+  Sunny,
+  Moon,
+  Laughing,
+  Posits,
+  Skin,
+  Handoff,
+  Handsolid,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';
