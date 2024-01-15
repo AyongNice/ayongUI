@@ -35,6 +35,35 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
   /** 是否显示清除按钮 **/
   const [showClearable, setShowClearable] = useState<boolean>(false);
   const select = useRef(null);
+
+  const dropdownRef = useRef(null);
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const options = dropdownRef.current.querySelectorAll('option');
+  //     const stickyOption = options[8]; // 假设要将第三个选项置顶
+  //
+  //     const selectTop = dropdownRef.current.getBoundingClientRect().top;
+  //     const stickyOptionTop = stickyOption.getBoundingClientRect().top;
+  //
+  //     if (stickyOptionTop < selectTop) {
+  //       stickyOption.style.position = 'sticky';
+  //       stickyOption.style.top = `${selectTop}px`;
+  //     } else {
+  //       stickyOption.style.position = 'static';
+  //       stickyOption.style.top = 'auto';
+  //     }
+  //     console.log('handleScroll',options)
+  //   };
+  //
+  //   dropdownRef.current.addEventListener('scroll', handleScroll);
+  //
+  //   return () => {
+  //     dropdownRef.current.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
+
+
   useEffect(() => {
 
     const handleOutsideClick = (event) => {
@@ -58,21 +87,27 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
 
 
   useEffect(() => {
-    //判断value 数组是否等于defaultValue
+      //判断value 数组是否等于defaultValue
 
-    if (mode === 'multiple') {
-      defaultValue.forEach((_) => {
-        if (!options.find((item) => item.value === _).disabled) {
-          handleOptionClick(_)
+      if (['multiple', 'tag'].includes(mode)) {
+        defaultValue.forEach((_) => {
+          if (!options.find((item) => item.value === _).disabled) {
+            handleOptionClick(_)
+          }
+        })
+        if (Array.isArray(value) && value.length) {
+          setSelectedValues(value)
+          setSearchTerm('')
         }
-      })
-      if (Array.isArray(value) && value.length) {
+        setIsDropdownVisible(false)
+      }
+      if (mode === 'single') {
         setSelectedValues(value)
         setSearchTerm('')
       }
-      setIsDropdownVisible(false)
-    }
-  }, [value])
+
+    }, [value]
+  )
 
   /**
    * 点击选项
@@ -210,24 +245,22 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
         )}
       </main>
 
-      {
-        isDropdownVisible && (
-          <ul className={selectStyle.dropdown}>
-            {typeof optionHeaderRender === 'function' && (
-              <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>
-            )}
-            <Option
-              mode={mode}
-              options={options}
-              search={search}
-              optionRender={optionRender}
-              searchTerm={searchTerm}
-              selectedValues={selectedValues}
-              onClick={handleOptionClick}
-            />
-          </ul>
-        )
-      }
+      <ul
+        ref={dropdownRef}
+        className={`${selectStyle.dropdown} ${isDropdownVisible ? selectStyle.dropdownOpen : selectStyle.dropdownClose}`}>
+        {typeof optionHeaderRender === 'function' && (
+          <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>
+        )}
+        <Option
+          mode={mode}
+          options={options}
+          search={search}
+          optionRender={optionRender}
+          searchTerm={searchTerm}
+          selectedValues={selectedValues}
+          onClick={handleOptionClick}
+        />
+      </ul>
     </div>
   )
 }

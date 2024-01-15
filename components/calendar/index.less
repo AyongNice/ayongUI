@@ -3,9 +3,15 @@
   color: var(--ayong-font-dark);
   width: 100px;
   height: 100px;
+  border-radius: var(--ayong-radius);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .notCurMonth {
@@ -20,10 +26,11 @@
   color: var(--ayong-apricot-yellow);
 }
 
-.today {
-  color: var(--ayong-light);
-  border-radius:var(--ayong-radius) ;
-  background: var(--ayong-primary);
+.onSelect {
+  background: var(--ayong-primary-grey);
 }
 
-//
+.today {
+  color: var(--ayong-light);
+  background: var(--ayong-primary);
+}

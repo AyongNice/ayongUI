@@ -49,10 +49,14 @@ const Multiple = ({
 
     {selectedValues.map((value, index) => (
 
-      mode === 'tag' ? <React.Fragment key={value}>
+      mode === 'tag' ? <React.Fragment key={index}>
           {index === 0 ?
-            <Item value={value} index={index} deleteValue={deleteValue}
-                  handleOptionClick={handleOptionClick}/>
+            <Item
+              value={value}
+              index={index}
+              deleteValue={deleteValue}
+              handleOptionClick={handleOptionClick}
+            />
             :
             index === 1 &&
             <div className={commonStyle.item}>
@@ -62,7 +66,14 @@ const Multiple = ({
         </React.Fragment>
 
         :
-        <Item mode={mode} value={value} key={value} index={index} deleteValue={deleteValue} handleOptionClick={handleOptionClick}/>
+        <Item
+          mode={mode}
+          value={value}
+          key={index}
+          index={index}
+          deleteValue={deleteValue}
+          handleOptionClick={handleOptionClick}
+        />
     ))
     }
 

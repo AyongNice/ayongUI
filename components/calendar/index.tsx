@@ -1,6 +1,6 @@
 import React, {useState, useEffect, FC, ReactNode} from 'react';
 import {getDaysInMonth, handleCrateDate, handleCreateDatePicker, parseTime} from './utils.js';
-import {CalendarProps} from './index.d'
+import {CalendarProps, DayItem} from './index.d'
 import Select from '../select/index.tsx'
 import './index.less'
 
@@ -10,31 +10,33 @@ const Calendar: FC<CalendarProps> = ({
                                        style,
                                        rangeTime = [],
                                        yearsRange = [1970, 2099],
-                                       canSelect,
-                                       selectMode,
+                                       selectedMode = 'noSelect',
                                        startOfWeek,
+                                       disabled = false,
                                        dateSelected = () => {
                                        },
+                                       dayRender = null
                                      }) => {
-  const cFormat: "{d}" = '{d}'
+  const cFormat: string = '{d}';
 
   const [monthOptions, setMonthOptions] = useState<string[]>([]);
   const [yearOptions, setYearOptions] = useState<number[]>([]);
   const [weeks, setWeeks] = useState<string[]>(['一', '二', '三', '四', '五', '六', '日']);
   const [curYear, setCurYear] = useState<number>(new Date().getFullYear());
-  const [curMonth, setCurMonth] = useState<number>(new Date().getMonth() + 1);
+  const [curMonth, setCurMonth] = useState<number>(new Date().getMonth());
   const [days, setDays] = useState<number>(0);
   const [curDate, setCurDate] = useState<string>(parseTime(new Date().getTime()), cFormat);
+
   const [prevDays, setPrevDays] = useState<any[]>([]);
   const [rearDays, setRearDays] = useState<any[]>([]);
   const [curDays, setCurDays] = useState<any[]>([]);
   const [showDays, setShowDays] = useState<any[]>([]);
+
+
   const [res, setRes] = useState<any[][]>([]);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [selectedMode, setSelectedMode] = useState<boolean>(selectMode === 'click');
   const [moveIndex, setMoveIndex] = useState<number[]>([]);
   const [canMove, setCanMove] = useState<boolean>(false);
-  const [selectCountMonth, setSelectCountMonth] = useState<number>(1)
   useEffect(() => {
     setWeeks([...weeks.slice(startOfWeek! - 1), ...weeks.slice(0, startOfWeek! - 1)]);
     handleGetDays(curYear, curMonth, startOfWeek!, cFormat);
@@ -47,6 +49,14 @@ const Calendar: FC<CalendarProps> = ({
     }
   }, []);
 
+
+  /**
+   * 获取日期
+   * @param year
+   * @param month
+   * @param startOfWeek
+   * @param cFormat
+   */
   const handleGetDays = (year: number, month: number, startOfWeek: number, cFormat: string) => {
     const monthOptions = handleCreateDatePicker().months;
     const yearOptions = handleCreateDatePicker(yearsRange).years.slice(0, 58);
@@ -80,7 +90,11 @@ const Calendar: FC<CalendarProps> = ({
     setRes(newRes);
 
   };
-
+  /**
+   * 格式化日期
+   * @param arr
+   * @param size
+   */
   const handleFormatDates = (arr: any[], size = 7): any[][] => {
     const arr2: any[][] = [];
     for (let i = 0; i < size; i++) {
@@ -90,9 +104,59 @@ const Calendar: FC<CalendarProps> = ({
     return arr2;
   };
 
-  const handleItemClick = (item: any, i: number, j: number) => {
-    if (!canSelect) return;
-    if (selectedMode) {
+  /**
+   * 点击日期
+   * @param item
+   * @param i
+   * @param j
+   */
+  const handleItemClick = (item: DayItem, i: number, j: number) => {
+    if (disabled) return;
+    console.log('handleItemClick', item, i, j)
+    /** 点击上下月切换月份 **/
+    if (selectedMode === 'noSelect') {
+      const clickYaerItem = new Date(item.comprehensiveStr).getFullYear();
+      console.log(clickYaerItem, curYear, clickYaerItem > curYear)
+
+      if (clickYaerItem === curYear) { //同一年
+
+        /** 同一年 上一月**/
+        if (item.monthSortMode === 1 && curMonth >= 0) {
+          setCurMonth(prevSate => {
+            return prevSate - 1
+          });
+        }
+        /** 同一年 下一月**/
+        if (item.monthSortMode === 2 && curMonth <= 12) {
+          setCurMonth(prevSate => {
+            return prevSate + 1
+          });
+        }
+        handleGetDays(curYear, curMonth - 1, startOfWeek!, cFormat);
+      } else {
+
+        setCurMonth(1);
+
+        /** 上一年**/
+        if (clickYaerItem > curYear) {
+          setCurYear(prevSate => {
+            return prevSate + 1
+          });
+
+        }
+        /** 上一年**/
+        if (clickYaerItem < curYear) {
+          console.log('上一年---curMonth', curMonth)
+          setCurYear(prevSate => {
+            return prevSate - 1
+          });
+        }
+        handleGetDays(curYear, curMonth - 1, startOfWeek!, cFormat);
+      }
+
+    }
+
+    if (selectedMode === 'multiple') {
       setRes((prevRes) => {
         const updatedRes = [...prevRes];
         updatedRes[i][j].isSelected = !updatedRes[i][j].isSelected;
@@ -103,35 +167,19 @@ const Calendar: FC<CalendarProps> = ({
             prevSelectedDates.filter((date) => date !== item.date)
           );
         }
+        console.log('selectedDates', selectedDates)
         dateSelected && dateSelected(selectedDates);
         return updatedRes;
       });
-    } else {
-      const index = i * 7 + j;
-      setCanMove(true);
-      if (moveIndex.length === 1) {
-        setCanMove(false);
-      }
-      if (moveIndex.length === 2) {
-        setShowDays((prevShowDays) => {
-          const updatedShowDays = [...prevShowDays];
-          updatedShowDays.forEach((item) => {
-            item.isSelected = false;
-            item.isRangeSelected = false;
-          });
-          return updatedShowDays;
-        });
-        setCanMove(true);
-        setMoveIndex([]);
-      }
-      setMoveIndex((prevMoveIndex) => [...prevMoveIndex, index]);
-      setMoveIndex((prevMoveIndex) => prevMoveIndex.sort((a, b) => a - b));
-      setSelectedDates(showDays.slice(moveIndex[0], moveIndex[1] + 1));
-      setSelectedDates.length !== 0 && dateSelected(selectedDates);
+    }
+    if (selectedMode === 'single') {
+      setSelectedDates(item.comprehensiveStr);
     }
   };
 
-  const handleItemMove = (data: any, i: number, j: number) => {
+  const handleItemMove = (data: DayItem, i: number, j: number) => {
+
+    return
     if (canMove && !selectedMode) {
       const index = i * 7 + j;
       setShowDays((prevShowDays) => {
@@ -187,50 +235,72 @@ const Calendar: FC<CalendarProps> = ({
 
   const showPrev = (): boolean => {
     if (!rangeTime || !rangeTime[1]) return true;
-    const dateObject = new Date(props.rangeTime[1]);
+    const dateObject = new Date(rangeTime[1]);
     const currentDate = new Date(curYear, curMonth + 1, 1);
     return currentDate < dateObject;
   };
+
+  /**
+   * 月份选择
+   * @param value
+   */
   const onMonthOptionsChange = (value: string) => {
     console.log('onMonthOptionsChange', curYear, value, monthOptions)
-    handleGetDays(curYear, value, startOfWeek!, cFormat);
-    setSelectCountMonth(value)
+    handleGetDays(curYear, value - 1, startOfWeek!, cFormat);
+    setCurYear(value)
   }
+  /**
+   * 年份选择
+   * @param value
+   */
   const onYearOptionsChange = (value: string) => {
-    handleGetDays(value, curMonth, startOfWeek!, cFormat);
+    handleGetDays(value, curMonth - 1, startOfWeek!, cFormat);
   }
 
-  const getDayClassName = (item) => {
+  const getDayClassName = (item: DayItem) => {
     return `${
-      !item.isCurMonth ? 'notCurMonth' : ''} ${
-      item.date === curDate ? 'currentDay' : ''} ${
-      item.isSelected ? 'selectDay' : ''} ${
-      item.isRangeSelected ? 'rangeSelectd' : ''} ${
-      item.isWeekend ? 'weekend' : ''} ${item.isToday ? 'today' : ''}`
+      item.monthSortMode ? 'notCurMonth' : ''}
+      ${item.date === curDate ? 'currentDay' : ''}
+      ${item.isSelected ? 'onSelect' : ''}
+      ${item.isRangeSelected ? 'rangeSelectd' : ''}
+      ${item.isWeekend ? 'weekend' : ''}
+      ${item.isToday ? 'today' : ''}
+      ${item.comprehensiveStr === selectedDates ? 'onSelect' : ''}
+      `
   }
   return (
     <div className="calendar">
-      <Select style={{width: 150}} defaultValue={curMonth} options={monthOptions} onChange={onMonthOptionsChange}/>
-      <Select style={{width: 150}} defaultValue={curYear} options={yearOptions} onChange={onYearOptionsChange}/>
+      <Select style={{width: 80, marginRight: '20px'}}
+              value={curYear}
+              defaultValue={curYear}
+              options={yearOptions}
+              onChange={onYearOptionsChange}/>
+
+      <Select style={{width: 80}}
+              value={curMonth + 1}
+              defaultValue={curMonth + 1}
+              options={monthOptions}
+              onChange={onMonthOptionsChange}/>
+
       <table className="calendar-table" style={style}>
         <thead>
         <tr>
-          {weeks.map((item, i) => (
+          {weeks.map((item: string, i: number) => (
             <th key={i}>{item}</th>
           ))}
         </tr>
         </thead>
         <tbody>
-        {res.map((dates, i) => (
-          <tr key={i} style={style}>
-            {dates.map((item, index) => (
+        {res.map((dates: DayItem[], warpIndex: number) => (
+          <tr key={warpIndex} style={style}>
+            {dates.map((item: DayItem, childindex: number) => (
               <td
-                key={index}
-                onClick={() => handleItemClick(item, i, index)}
-                onMouseOver={() => handleItemMove(item, i, index)}
+                key={childindex}
+                onClick={() => handleItemClick(item, warpIndex, childindex)}
+                onMouseOver={() => handleItemMove(item, warpIndex, childindex)}
               >
-                {children ? (
-                  <>{children}</>
+                {typeof dayRender === 'function' ? (
+                  <>{dayRender(item)}</>
                 ) : (
                   <div className={`day ${getDayClassName(item)}`}>{item.date}</div>
                 )}

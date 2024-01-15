@@ -13,8 +13,19 @@ export interface CalendarProps {
   shape?: 'circle' | 'default' | 'round' | 'strong'; // 按钮形状 利用样式border-radius 实现
   htmlType?: 'button' | 'submit' | 'reset'; // 原生button类型
   onClick?: () => void; // 点击事件
+  dayRender?: (day: DayItem) => React.ReactNode | null; // 自定义日期渲染
 }
 
+
+export interface DayItem {
+  "date": string,// 日期字符
+  "comprehensive": Date,// 日期类型
+  "comprehensiveStr": "2024-02-02",
+  "monthSortMode": number, // 日期模式 0 上个月 1 当月 2 下个月
+  "isSelected": false, // 是否选中
+  "isRangeSelected": false, // 是否在范围内
+  "isToday": false,// 是否是今年今天
+}
 
 declare const Calendar: React.FC<CalendarProps>;
 

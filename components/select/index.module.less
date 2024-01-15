@@ -124,22 +124,31 @@
 
 .dropdown {
   width: 100%;
+  margin: 0;
   text-align: center;
-  max-height: 200px;
   color: var(--ayong-font-dark);
   background: var(--ayong-light);
   border-radius: 4px;
   box-sizing: border-box;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: 110%;
-  left: 0;
-  transition: all 1s;
+  transition: all .3s cubic-bezier(0.95, 0.02, 0, 0.99);
   z-index: var(--ayong-zindex1);
   list-style: none;
-  margin: 0;
+  overflow: hidden;
+  left: 0;
+  top: 110%;
+  position: absolute;
+}
+
+.dropdownOpen {
   padding: 8px;
+  max-height: 200px; /* 根据实际需要调整最大高度 */
   overflow-y: auto;
+}
+
+.dropdownClose {
+  padding: 0;
+  max-height: 0; /* 根据实际需要调整最大高度 */
 }
 
 .optionHeader {
@@ -160,8 +169,8 @@
 
 //设置滑动条样式
 .dropdown::-webkit-scrollbar {
-  //width: 4px;
-  //height: 4px;
+  width: 5px;
+  height: 5px;
   //background: var(--ayong-grey);
   //border-radius: 100px;
   //padding: 10px 0;
