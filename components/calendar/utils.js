@@ -143,3 +143,14 @@ export function parseTime(time, cFormat) {
   })
   return time_str
 }
+export function isValidDate(dateString) {
+  // 尝试创建一个 Date 对象
+  const dateObject = new Date(dateString);
+
+  // 检查创建的对象是否是有效日期对象，并且输入的字符串在转换后是否仍然相同
+  return (
+    Object.prototype.toString.call(dateObject) === "[object Date]" &&
+    !isNaN(dateObject.getTime()) &&
+    dateString === dateObject.toISOString().split("T")[0]
+  );
+}

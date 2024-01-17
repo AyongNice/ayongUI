@@ -11,7 +11,7 @@ import useDragDrop from "./draggable.ts"; //分组 th组件
 import {groupHandle} from "./group-handle.ts";
 import GroupTbody from "./components/gtoup-tbody/group-tbody.tsx";
 import {UseDragDropRetunrn} from "./index"; //分组 th组件
-function Index({
+function Table({
                    columns,
                    children,
                    data = [],
@@ -233,10 +233,10 @@ const ColumnGroups: ColumnFunction = ({title, children}) => {
 ColumnGroups.displayName = 'ColumnGroup';
 Columns.displayName = 'Column';
 
-Index.ColumnGroup = ColumnGroups;
+Table.ColumnGroup = ColumnGroups;
 
-Index.Column = Columns;
+Table.Column = Columns;
 
-export default Index;
+export default Table;
 
 
