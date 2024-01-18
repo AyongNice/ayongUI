@@ -172,9 +172,10 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
    * 获取select main标签的className
    */
   const getMainClassname = (): string => {
+    const hover = disabled ? '' : selectStyle.mainHover;
     return isDropdownVisible
-      ? `${selectStyle.main} ${selectStyle.active}  `
-      : `${selectStyle.main} `
+      ? `${selectStyle.main} ${hover} ${selectStyle.active}  `
+      : `${selectStyle.main} ${hover} `
   }
   /**
    * 鼠标移入显示清除按钮
