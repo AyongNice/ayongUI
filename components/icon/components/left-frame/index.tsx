@@ -2,7 +2,7 @@ import React from "react";
 import {IconProps} from "../../index";
 import icon from "../../index.module.less";
 
-const Under = (props: IconProps) => {
+const Left = (props: IconProps) => {
     const {
         className = "", style = {}, onClick = () => {
         }
@@ -20,8 +20,9 @@ const Under = (props: IconProps) => {
             focusable="false"
             data-icon="ayong"
         >
-            <path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"/>
+            <path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"/>
         </svg>
     );
 };
-export default Under;
+
+export default Left;

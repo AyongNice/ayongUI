@@ -127,9 +127,12 @@ export { default as Laughing} from "./components/laughing-frame"; // 笑脸
 export { default as Posits} from "./components/posits-frame"; // 定位
 export { default as Skin} from "./components/skin-frame"; // 衣服
 export { default as Handoff} from "./components/handoff-frame"; // 中英文切换
+export { default as Top} from "./components/top-frame"; // 向上箭头
+export { default as Left} from "./components/left-frame"; // 向左箭头
+export { default as Facright} from "./components/facright-frame"; // 向右箭头
 /**
-* 实体icon
-*/
+ * 实体icon
+ */
 export { default as Alipayfull } from "./components/alipayfull-solid"; //支付宝
 export { default as Wechatfull } from "./components/wechatfull-solid"; // 微信
 export { default as Weibofull } from "./components/weibofull-solid"; // 微博
