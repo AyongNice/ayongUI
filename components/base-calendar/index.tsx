@@ -1,3 +1,11 @@
+/**
+ * @file calendar
+ * @description 日历组件 用于选择日期基础组件
+ * @date 2020-09-21
+ * @lastModify 2020-09-21
+ */
+
+
 import React, {useState, useMemo, useImperativeHandle, useRef, useEffect, FC, ReactNode} from 'react';
 import {getDaysInMonth, handleCrateDate, handleCreateDatePicker, parseTime} from './utils.js';
 import {CalendarProps, DayItem} from './index.d'
@@ -14,6 +22,7 @@ let yearDate = [];
 const arr = [];
 const obj = {};
 
+
 const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                         style,
                                                         value,
@@ -25,6 +34,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                         picker = 'day',
                                                         disabled = false,
                                                         dayCellRender = null,
+                                                        dateRender = null,
                                                         dateSelected = () => {
                                                         },
                                                         onChange = (day) => {
@@ -57,6 +67,10 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       const [yearIndex, setYearIndex] = useState<number>(0);
       //年份源数据
       const [sourceData, setSourceData] = useState<number[]>([]);
+
+      //季度
+      const [quarter, setQuarter] = useState<any>(0);
+
       useEffect(() => {
         setWeeks([...weeks.slice(startOfWeek! - 1), ...weeks.slice(0, startOfWeek! - 1)]);
         handleGetDays(curYear, curMonth, startOfWeek!, cFormat);
@@ -106,6 +120,8 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
           setYearIndex((prevState) => obj[curYear])
           setSourceData(arr)
         }
+
+
       }, [])
 
 
@@ -189,16 +205,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         }
       }
 
-
-      /**切换年份**/
-      const toggleNextYear = () => {
-        if (yearIndex > sourceData.length - 1) return
-        setYearIndex((prevState) => ++prevState)
-      }
-      const togglePrevYear = () => {
-        if (yearIndex < 0) return
-        setYearIndex((prevState) => --prevState)
-      }
 
       /** 下一年**/
       const nextYear = () => {
@@ -331,23 +337,21 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       `
       }
 
-      const onYearChange = ({value}: string) => {
-        setSelectedDates(value);
+      const onYearChange = (value: string) => {
         if (selectedMode === 'year') {
           onChange({comprehensiveStr: value})
         }
-        const val = value.replace('年', '');
-        handleGetDays(val, curMonth - 1, startOfWeek!, cFormat);
-        setCurYear(val)
+        handleGetDays(value, curMonth - 1, startOfWeek!, cFormat);
+        setCurYear(value)
 
       }
-      const onMonthChange = (item, value) => {
-        setSelectedDates(item);
+      const onMonthChange = (value) => {
         handleGetDays(curYear, value, startOfWeek!, cFormat);
         setCurMonth(value - 1);
-        if (selectedMode === 'month') {
-          onChange({comprehensiveStr: `${curYear} 年 ${value}月`})
-        }
+
+      }
+      const onQuarterChange = (quarter) => {
+        setQuarter(quarter.value)
       }
       const clearSetSelectedDates = () => {
         if (selectedMode === 'week') {
@@ -379,9 +383,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         prevYear,
         setDateSelected,
         clearSetSelectedDates,
-        togglePrevYear,
-        toggleNextYear,
-
       }))
 
       return (
@@ -391,60 +392,53 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
             curMonth,
             years
           })}
-
-          {['day', 'single', 'noSelect', 'multiple', 'week'].includes(selectedMode) && <table className="calendar-table">
-            <thead>
-            <tr>
-              {weeks.map((item: string, i: number) => (
-                <th className='week' key={i}>{item}</th>
-              ))}
-            </tr>
-            </thead>
-            <tbody>
-            {res.map((dates: DayItem[], rowIndex: number) => (
-              <tr key={rowIndex}
-
-              >
-                {dates.map((item: DayItem, columIndex: number) => (
-                  <td
-                    key={columIndex}
-
-                    onClick={() => handleItemClick(item, rowIndex, columIndex)}
-                  >
-                    {typeof dayCellRender === 'function' ? (
-                      <>{dayCellRender(item)}</>
-                    ) : (
-                      <div style={_style}
-                           className={`day ${getDayClassName(item, rowIndex)} `}>
-                        {item.date}
-                      </div>
-                    )}
-                  </td>
+          {typeof dateRender === 'function' ? dateRender() : <>
+            {['day', 'single', 'noSelect', 'multiple', 'week'].includes(selectedMode) && <table className="calendar-table">
+              <thead>
+              <tr>
+                {weeks.map((item: string, i: number) => (
+                  <th className='week' key={i}>{item}</th>
                 ))}
               </tr>
-            ))}
-            </tbody>
-          </table>}
+              </thead>
+              <tbody>
+              {res.map((dates: DayItem[], rowIndex: number) => (
+                <tr key={rowIndex}
 
-          {'month' === selectedMode && <main className='block-12'>
-            {monthDate.map((item, index) => {
-              return <div key={index} className={`block-12-chlid ${item.value === curMonth + 1 + '月' ? 'onSelect' : ''}`}
-                          onClick={() => {
-                            onMonthChange(item, index + 1)
-                          }}>{item.value}</div>
-            })}
-          </main>
-          }
+                >
+                  {dates.map((item: DayItem, columIndex: number) => (
+                    <td
+                      key={columIndex}
 
-          {'year' === selectedMode && <main className='block-12'>
-            {years.map((item, index) => {
-              return <div key={index} className={`block-12-chlid ${item.value === curYear + '年' ? 'onSelect' : ''}`}
-                          onClick={() => {
-                            onYearChange(item)
-                          }}>{item.value}</div>
-            })}
-          </main>
-          }
+                      onClick={() => handleItemClick(item, rowIndex, columIndex)}
+                    >
+                      {typeof dayCellRender === 'function' ? (
+                        <>{dayCellRender(item)}</>
+                      ) : (
+                        <div style={_style}
+                             className={`day ${getDayClassName(item, rowIndex)} `}>
+                          {item.date}
+                        </div>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              </tbody>
+            </table>}
+
+            {'month' === selectedMode && <main className='block-12'>
+              {monthDate.map((item, index) => {
+                return <div key={index} className={`block-chlid ${item.value === curMonth + 1 + '月' ? 'onSelect' : ''}`}
+                            onClick={() => {
+                              onMonthChange(item, index + 1)
+                            }}>{item.value}</div>
+              })}
+            </main>
+            }
+
+          </>}
+
           {typeof footerRender === 'function' && footerRender()}
           <div className='background'/>
         </div>

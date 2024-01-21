@@ -11,13 +11,14 @@
   border-spacing: 0;
 }
 
-.week{
+.week {
   font-size: 15px;
   font-weight: bold;
   //黑体字体
   font-family: "American Typewriter", "Courier New", serif;
 
 }
+
 .day {
   width: 100px;
   height: 100px;
@@ -114,10 +115,27 @@
   align-items: center;
   flex-wrap: wrap;
 
-  .block-12-chlid {
-    width: 30%;
-    text-align: center;
-    padding: 10px 0;
-    border-radius: var(--ayong-radius);
+
+}
+
+.block-chlid {
+  width: 30%;
+  //触摸手
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: var(--ayong-radius);
+}
+
+.block-4 {
+  width: 180px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .block-chlid {
+    width: 25%;
   }
+
 }
