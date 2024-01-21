@@ -168,6 +168,13 @@ export {
   Top,
   Left,
   Facright,
+  Highlight,
+  Bgcolor,
+  Plus,
+  Minus,
+  Return,
+  Forwards,
+  Bell,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';

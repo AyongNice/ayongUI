@@ -130,6 +130,12 @@ export { default as Handoff} from "./components/handoff-frame"; // 中英文切�
 export { default as Top} from "./components/top-frame"; // 向上箭头
 export { default as Left} from "./components/left-frame"; // 向左箭头
 export { default as Facright} from "./components/facright-frame"; // 向右箭头
+export { default as Highlight} from "./components/highlight-frame"; //高亮
+export { default as Bgcolor} from "./components/bgcolor-frame"; //背景色
+export { default as Plus} from "./components/plus-frame"; //加
+export { default as Minus} from "./components/minus-frame"; //减
+export { default as Return} from "./components/return-frame"; //返回
+export { default as Forwards} from "./components/forwards-frame"; //前进
 /**
  * 实体icon
  */
@@ -170,3 +176,4 @@ export { default as User} from "./components/user-solid"; //用户
 export { default as Addser} from "./components/adduser-solid"; //添加用户
 export { default as Switchusers} from "./components/switchusers-solid"; //切换用户
 export { default as Handsolid} from "./components/handoff-solid"; //中英文切换
+export { default as Bell} from "./components/bell-solid"; //铃铛
