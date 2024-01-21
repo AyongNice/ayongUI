@@ -37,6 +37,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
   const select = useRef(null);
 
   const dropdownRef = useRef(null);
+  const [clcikTarget, setClcikTarget] = useState<boolean>(true);
 
   // useEffect(() => {
   //   const handleScroll = () => {
@@ -65,16 +66,11 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
 
 
   useEffect(() => {
-
-    const handleOutsideClick = (event) => {
-      // 获取选择框的DOM元素
-      const dropdownElement = select.current;
-
-      // 检查点击事件是否发生在选择框之外，且不是在特定的div上
-      if (dropdownElement && !dropdownElement.contains(event.target)) {
-
+    const handleOutsideClick = () => {
+      if (clcikTarget) {
+        setIsDropdownVisible(false);
       }
-      setIsDropdownVisible(false);
+      setClcikTarget(true)
     };
     document.addEventListener('click', handleOutsideClick);
 
@@ -83,7 +79,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
       document.removeEventListener('click', handleOutsideClick);
 
     };
-  }, []);
+  }, [clcikTarget]);
 
 
   useEffect(() => {
@@ -126,10 +122,9 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
     if (mode === 'single') setIsDropdownVisible(false);
   }
 
-  const handleSelectClick = (event) => {
+  const handleSelectClick = () => {
     if (disabled) return
-    event.stopPropagation()
-    console.log('handleSelectClick')
+    setClcikTarget(false)
     setIsDropdownVisible(!isDropdownVisible)
   }
 

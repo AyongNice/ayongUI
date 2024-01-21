@@ -1,5 +1,81 @@
+.warp {
+  width: max-content;
+  position: relative;
+  z-index: var(--ayong-zindex3);
+  display: inline-block;
+}
+
 .main {
-  width: 100%;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--ayong-radius);
+  padding: 0 4px 4px 9px;
+  box-sizing: border-box;
+  color: var(--ayong-stone-gray);
+  font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1px solid var(--ayong-grey);
+
+  input {
+    width: 95%;
+    outline: none;
+    border: none;
+    background: transparent;
+  }
+
+  &:hover {
+    border: 1px solid var(--ayong-primary);
+
+    .pickerCollapse, .pickerWrong {
+      fill: var(--ayong-primary);
+    }
+  }
+
+}
+
+.pickerWrong {
+  display: none;
+}
+
+.hoverMain&:hover {
+  & {
+    .pickerCollapse {
+      display: none;
+    }
+  }
+
+  & {
+    .pickerWrong {
+      display: block;
+    }
+  }
+}
+
+
+/** **/
+.baseCalendar {
+  display: block;
+  transition: all .5s;
+  position: absolute;
+  left: 0;
+  top: 55px;
+  transform: translateX(-30%);
+  overflow: hidden;
+}
+
+.baseCalendarNone {
+  height: 0;
+  padding: 0;
+  border: 0 !important;
+}
+
+.baseCalendarShow {
+  height: max-content;
+}
+
+.picker {
   font-weight: bold;
   display: flex;
   justify-content: space-between;
@@ -25,8 +101,16 @@
 
 }
 
-.text {
+footer {
+  //触摸手
+  cursor: pointer;
+  text-align: center;
+  color: var(--ayong-primary);
 
+  &:active {
+    //css颜色变亮
+    filter: brightness(1.1);
+  }
 }
 
 .icon {
@@ -42,84 +126,6 @@
   }
 }
 
-.day {
-
-  width: 100px;
-  height: 100px;
-  border-radius: var(--ayong-radius);
-  transition: all 1s;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    inset: 0;
-    background: radial-gradient(circle,
-    var(--ayong-primary-grey) 0%,
-    var(--ayong-primary) 100%);
-    background: #000;
-    border-radius: inherit;
-    z-index: 2;
-    transform: translate(var(--x, -1000px), var(--y, -1000px));
-
-  }
-
-  .inner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--ayong-font-dark);
-    position: absolute;
-    width: 98%;
-    height: 98%;
-    background: var(--ayong-light);
-    z-index: 3;
-
-
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-
-}
-
-
-.card {
-  width: 50px;
-  height: 50px;
-}
-
-.show {
-  opacity: 1;
-}
-
-.none {
-  opacity: 0;
-}
-
-.notCurMonth {
-  color: var(--ayong-plaster-grey);
-}
-
-.currentDay {
-  color: var(--ayong-primary);
-}
-
-.selectDay {
-  color: var(--ayong-apricot-yellow);
-}
-
-.onSelect {
-  background: var(--ayong-primary-grey);
-}
 
 .today {
   color: var(--ayong-primary);

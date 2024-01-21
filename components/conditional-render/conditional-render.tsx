@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-
+import './index.less'
 interface ConditionalRenderPorps {
     mode?: 'show' | 'if'; // show: 利用样式 展示隐藏  类似于 vue 的 v-show，if: 利用条件判断展示隐藏 类似于 vue 的 v-if
     show: boolean;

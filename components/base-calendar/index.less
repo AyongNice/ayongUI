@@ -2,13 +2,26 @@
   width: max-content;
   border-radius: var(--ayong-radius);
   border: 1px solid var(--ayong-grey);
-  padding: var(--ayong-large-size);
+  padding: var(--ayong-midle-size);
+  background: var(--ayong-light);
 }
 
-.day {
+.calendar-table {
+  display: block;
+  border-spacing: 0;
+}
 
+.week{
+  font-size: 15px;
+  font-weight: bold;
+  //黑体字体
+  font-family: "American Typewriter", "Courier New", serif;
+
+}
+.day {
   width: 100px;
   height: 100px;
+  font-size: 14px;
   border-radius: var(--ayong-radius);
   transition: all 1s;
   position: relative;
@@ -18,35 +31,35 @@
   justify-content: center;
   align-items: center;
 
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    inset: 0;
-    background: radial-gradient(circle,
-    var(--ayong-primary-grey) 0%,
-    var(--ayong-primary) 100%);
-    background:#000;
-    border-radius: inherit;
-    z-index: 2;
-    transform: translate(var(--x, -1000px), var(--y, -1000px));
+  //&::before {
+  //  content: '';
+  //  position: absolute;
+  //  left: 0;
+  //  top: 0;
+  //  inset: 0;
+  //  background: radial-gradient(circle,
+  //  var(--ayong-primary-grey) 0%,
+  //  var(--ayong-primary) 100%);
+  //  background: #000;
+  //  border-radius: inherit;
+  //  z-index: 2;
+  //  transform: translate(var(--x, -1000px), var(--y, -1000px));
+  //
+  //}
 
-  }
-
-  .inner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--ayong-font-dark);
-    position: absolute;
-    width: 98%;
-    height: 98%;
-    background: var(--ayong-light);
-    z-index: 3;
-
-
-  }
+  //.inner {
+  //  display: flex;
+  //  justify-content: center;
+  //  align-items: center;
+  //  color: var(--ayong-font-dark);
+  //  position: absolute;
+  //  width: 98%;
+  //  height: 98%;
+  //  //background: var(--ayong-light);
+  //  z-index: 3;
+  //
+  //
+  //}
 
   &:hover {
     cursor: pointer;
@@ -54,6 +67,10 @@
 
 }
 
+.weekRow {
+  color: var(--ayong-light);
+  background: var(--ayong-primary);
+}
 
 .card {
   width: 50px;
@@ -87,4 +104,20 @@
 .today {
   color: var(--ayong-primary);
   background: var(--ayong-primary-grey);
+}
+
+
+.block-12 {
+  width: 210px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .block-12-chlid {
+    width: 30%;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: var(--ayong-radius);
+  }
 }

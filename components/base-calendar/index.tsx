@@ -1,20 +1,28 @@
-import React, {useState, useImperativeHandle, useRef, useEffect, FC, ReactNode} from 'react';
+import React, {useState, useMemo, useImperativeHandle, useRef, useEffect, FC, ReactNode} from 'react';
 import {getDaysInMonth, handleCrateDate, handleCreateDatePicker, parseTime} from './utils.js';
 import {CalendarProps, DayItem} from './index.d'
 import Select from '../select/index.tsx'
 import './index.less'
 import {isValidDate} from "ayongUI/components/calendar/utils";
-import {lightHover} from './hover.js'
+import {lightHover} from './hover.js';
+
+import Table from '../table/index.tsx'
+
+let monthDate = [];
+
+let yearDate = [];
+const arr = [];
+const obj = {};
 
 const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                         style,
                                                         value,
+                                                        className,
                                                         defaultValue = '',
                                                         yearsRange = [1970, 2099],
                                                         selectedMode = 'noSelect',
                                                         startOfWeek,
-                                                        // curYear,
-                                                        // curMonth,
+                                                        picker = 'day',
                                                         disabled = false,
                                                         dayCellRender = null,
                                                         dateSelected = () => {
@@ -25,7 +33,8 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                         },
                                                         curMonthChange = () => {
                                                         },
-                                                        headerRender = null
+                                                        headerRender = null,
+                                                        footerRender = null
                                                       }, ref) => {
       const cFormat: string = '{d}';
       const _style = {width: 120, height: 100, ...style}
@@ -34,20 +43,70 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         _defaultValue[1] = _defaultValue[1] - 1;
       }
 
-      const [monthOptions, setMonthOptions] = useState<string[]>([]);
-      const [yearOptions, setYearOptions] = useState<number[]>([]);
       const [weeks, setWeeks] = useState<string[]>(['一', '二', '三', '四', '五', '六', '日']);
       const [curYear, setCurYear] = useState<number>(Number(_defaultValue[0]) || new Date().getFullYear());
       const [curMonth, setCurMonth] = useState<number>(Number(_defaultValue[1]) || new Date().getMonth());
-      const [curDate, setCurDate] = useState<string>(parseTime(new Date().getTime()), cFormat);
+      const [curDate] = useState<string>(parseTime(new Date().getTime()), cFormat);
 
-      const [showComponent, setShowComponent] = useState(true);
       const [res, setRes] = useState<any[][]>([]);
       const [selectedDates, setSelectedDates] = useState<string[]>([]);
+
+      /** 选定的周 **/
+      const [weekRow, setWeekRow] = useState<number | null>(null);
+      //切换年份下标
+      const [yearIndex, setYearIndex] = useState<number>(0);
+      //年份源数据
+      const [sourceData, setSourceData] = useState<number[]>([]);
       useEffect(() => {
         setWeeks([...weeks.slice(startOfWeek! - 1), ...weeks.slice(0, startOfWeek! - 1)]);
         handleGetDays(curYear, curMonth, startOfWeek!, cFormat);
       }, [curYear, curMonth, defaultValue]);
+
+      //使用useMemo优化
+      const years = useMemo(() => {
+        if (yearIndex < 0) return sourceData[0] || []
+        if (yearIndex > sourceData.length - 1) return sourceData[sourceData.length - 1] || []
+        return sourceData[yearIndex] || []
+      }, [yearIndex])
+
+
+      useEffect(() => {
+        if (selectedMode === 'month') {
+          monthDate = [
+            {value: '1月'},
+            {value: '2月'},
+            {value: '3月'},
+            {value: '4月'},
+            {value: '5月'},
+            {value: '6月'},
+            {value: '7月'},
+            {value: '8月'},
+            {value: '9月'},
+            {value: '10月'},
+            {value: '11月'},
+            {value: '12月'},
+          ]
+        }
+
+        if (selectedMode === 'year') {
+          yearDate = handleCreateDatePicker(yearsRange).years.slice(0, 58).map((item) => {
+            return {value: item.label}
+          })
+
+          //处理yearDate 分成二维数组 每12个月一组 不足12个月的一组//还要定义一个对象 用来存储年份的索引
+
+          for (let i = 0; i < yearDate.length; i++) {
+            if (i % 12 == 0) {
+              arr.push([])
+            }
+            arr[arr.length - 1].push(yearDate[i])
+            obj[yearDate[i].value.replace('年', '')]
+              = arr.length - 1
+          }
+          setYearIndex((prevState) => obj[curYear])
+          setSourceData(arr)
+        }
+      }, [])
 
 
       useEffect(() => {
@@ -66,11 +125,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        * @param cFormat
        */
       const handleGetDays = async (year: number, month: number, startOfWeek: number, cFormat: string) => {
-        const monthOptions = handleCreateDatePicker().months;
-        const yearOptions = handleCreateDatePicker(yearsRange).years.slice(0, 58);
-
-        setMonthOptions(monthOptions);
-        setYearOptions(yearOptions);
 
         const curDays = handleCrateDate({year, month, start: 1, end: getDaysInMonth(year, month), cFormat});
 
@@ -78,6 +132,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         const obj: Record<number, string> = {1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日'};
         const firstDayInCN: string = obj[firstDayOfWeek];
         const index: number = weeks.indexOf(firstDayInCN);
+
 
         const newPrevDays = handleCrateDate({year, month, start: 1, end: index + 1, type: 'prev', cFormat});
         const newRearDays = handleCrateDate({
@@ -112,27 +167,42 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
 
       /** 同一年 下一月**/
       const nextMonth = () => {
-
-        if (curMonth <= 12) {
+        if (curMonth + 1 < 12) {
           setCurMonth(prevSate => {
             return prevSate + 1
           });
           handleGetDays(curYear, curMonth - 1, startOfWeek!, cFormat);
+        } else {
+          nextYear()
         }
       }
 
       /** 同一年 上一月**/
       const prevMonth = () => {
-        if (curMonth >= 0) {
+        if (curMonth > 0) {
           setCurMonth(prevSate => {
             return prevSate - 1
           });
           handleGetDays(curYear, curMonth - 1, startOfWeek!, cFormat);
+        } else {
+          prevYear()
         }
+      }
+
+
+      /**切换年份**/
+      const toggleNextYear = () => {
+        if (yearIndex > sourceData.length - 1) return
+        setYearIndex((prevState) => ++prevState)
+      }
+      const togglePrevYear = () => {
+        if (yearIndex < 0) return
+        setYearIndex((prevState) => --prevState)
       }
 
       /** 下一年**/
       const nextYear = () => {
+
         setCurYear(prevSate => {
           return prevSate + 1
         });
@@ -141,12 +211,24 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       }
       /** 上一年**/
       const prevYear = () => {
+
         setCurYear(prevSate => {
           return prevSate - 1
         });
         handleGetDays(curYear, curMonth - 1, startOfWeek!, cFormat);
         setCurMonth(0);
       }
+
+      const setDateSelected = (date: string = '') => {
+        const _date: string[] = date.split('-');
+        const year: number = Number(_date[0]);
+        const month: number = Number(_date[1]) - 1;
+        setCurYear(year);
+        setCurMonth(month);
+        handleGetDays(year, month, startOfWeek!, cFormat);
+      }
+
+
       /**
        * 点击日期
        * @param item
@@ -155,6 +237,11 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        */
       const handleItemClick = (item: DayItem, i: number, j: number) => {
         if (disabled) return;
+        console.log('handleItemClick', item)
+        if (selectedMode === 'week') {
+          setWeekRow(i)
+        }
+
         /** 点击上下月切换月份 **/
         if (selectedMode === 'noSelect') {
           const clickYaerItem = new Date(item.comprehensiveStr).getFullYear();
@@ -163,25 +250,28 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
 
             /** 同一年 上一月**/
             if (item.monthSortMode === 1) {
+              console.log(1)
               prevMonth()
             }
-            console.log('item.monthSortMode', item.monthSortMode)
-
             /** 同一年 下一月**/
             if (item.monthSortMode === 2 && curMonth <= 12) {
+              console.log(2)
+
               nextMonth()
             }
 
           } else {
-            curMonthChange(1)
-
             /** 上一年**/
             if (clickYaerItem > curYear) {
+              console.log(3)
+
               nextYear()
 
             }
             /** 下一年**/
             if (clickYaerItem < curYear) {
+              console.log(4)
+
               prevYear()
 
             }
@@ -191,6 +281,8 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         }
 
         if (selectedMode === 'multiple') {
+          console.log(5)
+
           setRes((prevRes) => {
             const updatedRes = [...prevRes];
             updatedRes[i][j].isSelected = !updatedRes[i][j].isSelected;
@@ -206,14 +298,27 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
             return updatedRes;
           });
         }
-        if (selectedMode === 'single') {
+        if (['day'].includes(selectedMode)) {
           setSelectedDates(item);
+        }
+
+        if (selectedMode === 'week') {
+          onChange(res[i], `${curYear}-${curMonth + 1} ${i + 1}周`)
+        } else {
           onChange(item)
+
         }
       };
 
 
-      const getDayClassName = (item: DayItem) => {
+      /**
+       *
+       * @param item
+       * @param rowIndex
+       */
+
+      const getDayClassName = (item: DayItem, rowIndex: number) => {
+        console.log('getDayClassName', selectedDates.comprehensiveStr)
         return `${
           item.monthSortMode ? 'notCurMonth' : ''}
       ${item.date === curDate ? 'currentDay' : ''}
@@ -222,87 +327,96 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       ${item.isWeekend ? 'weekend' : ''}
       ${item.isToday ? 'today' : ''}
       ${item.comprehensiveStr === selectedDates.comprehensiveStr ? 'onSelect' : ''}
+      ${picker === 'week' && rowIndex == weekRow ? 'weekRow' : ''}
       `
       }
 
-      const handleQuickChange = (type: string) => {
-        if (type === 'prev') {
-          setCurMonth((prevMonth) => {
-            const newMonth = prevMonth - 1;
-            if (newMonth === -1) {
-              setCurYear((prevYear) => prevYear - 1);
-              return 11;
-            }
-            return newMonth;
-          });
-        } else if (type === 'next') {
-          setCurMonth((prevMonth) => {
-            const newMonth = prevMonth + 1;
-            if (newMonth === 12) {
-              setCurYear((prevYear) => prevYear + 1);
-              return 0;
-            }
-            return newMonth;
-          });
+      const onYearChange = ({value}: string) => {
+        setSelectedDates(value);
+        if (selectedMode === 'year') {
+          onChange({comprehensiveStr: value})
         }
-      };
+        const val = value.replace('年', '');
+        handleGetDays(val, curMonth - 1, startOfWeek!, cFormat);
+        setCurYear(val)
 
-      const onYearChange = (value) => {
-        handleGetDays(value, curMonth - 1, startOfWeek!, cFormat);
-        setCurYear(value)
       }
-      const onMonthChange = (value) => {
+      const onMonthChange = (item, value) => {
+        setSelectedDates(item);
         handleGetDays(curYear, value, startOfWeek!, cFormat);
-        setCurMonth(value - 1)
+        setCurMonth(value - 1);
+        if (selectedMode === 'month') {
+          onChange({comprehensiveStr: `${curYear} 年 ${value}月`})
+        }
+      }
+      const clearSetSelectedDates = () => {
+        if (selectedMode === 'week') {
+          setWeekRow(null)
+        }
+        if (selectedMode === 'day') {
+          setSelectedDates(() => ({}))
+
+        }
+        if (selectedMode === 'month') {
+          setCurMonth(-1)
+
+        }
+        if (selectedMode === 'year') {
+          setCurYear(null)
+
+        }
+        console.log('clearSetSelectedDates', selectedDates)
+
       }
       useImperativeHandle(ref, () => ({
         handleGetDays,
-        monthOptions,
-        yearOptions,
+        handleCreateDatePicker,
         onYearChange,
         onMonthChange,
         prevMonth,
         nextMonth,
         nextYear,
-        prevYear
+        prevYear,
+        setDateSelected,
+        clearSetSelectedDates,
+        togglePrevYear,
+        toggleNextYear,
 
       }))
-      const trRefs = useRef([]);
 
       return (
-        <div className="calendar">
+        <div onClick={(event) => event.stopPropagation()} className={`calendar ${className}`}>
           {typeof headerRender === 'function' && headerRender({
             curYear,
             curMonth,
-            monthOptions,
-            yearOptions,
+            years
           })}
 
-          <table className="calendar-table">
+          {['day', 'single', 'noSelect', 'multiple', 'week'].includes(selectedMode) && <table className="calendar-table">
             <thead>
             <tr>
               {weeks.map((item: string, i: number) => (
-                <th key={i}>{item}</th>
+                <th className='week' key={i}>{item}</th>
               ))}
             </tr>
             </thead>
             <tbody>
-            {res.map((dates: DayItem[], warpIndex: number) => (
-              <tr key={warpIndex}>
-                {dates.map((item: DayItem, childindex: number) => (
-                  <td
-                    key={childindex}
-                    onClick={() => handleItemClick(item, warpIndex, childindex)}
+            {res.map((dates: DayItem[], rowIndex: number) => (
+              <tr key={rowIndex}
 
+              >
+                {dates.map((item: DayItem, columIndex: number) => (
+                  <td
+                    key={columIndex}
+
+                    onClick={() => handleItemClick(item, rowIndex, columIndex)}
                   >
                     {typeof dayCellRender === 'function' ? (
                       <>{dayCellRender(item)}</>
                     ) : (
-                      <div ref={(trRef) => trRefs.current.push(trRef)} style={_style}
-                           className={`day ${getDayClassName(item)}`}>
-                        <div className='inner'>
-                          {item.date}
-                        </div>
+                      <div style={_style}
+                           className={`day ${getDayClassName(item, rowIndex)} `}>
+                        {item.date}
                       </div>
                     )}
                   </td>
@@ -310,7 +424,29 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
               </tr>
             ))}
             </tbody>
-          </table>
+          </table>}
+
+          {'month' === selectedMode && <main className='block-12'>
+            {monthDate.map((item, index) => {
+              return <div key={index} className={`block-12-chlid ${item.value === curMonth + 1 + '月' ? 'onSelect' : ''}`}
+                          onClick={() => {
+                            onMonthChange(item, index + 1)
+                          }}>{item.value}</div>
+            })}
+          </main>
+          }
+
+          {'year' === selectedMode && <main className='block-12'>
+            {years.map((item, index) => {
+              return <div key={index} className={`block-12-chlid ${item.value === curYear + '年' ? 'onSelect' : ''}`}
+                          onClick={() => {
+                            onYearChange(item)
+                          }}>{item.value}</div>
+            })}
+          </main>
+          }
+          {typeof footerRender === 'function' && footerRender()}
+          <div className='background'/>
         </div>
       );
     }

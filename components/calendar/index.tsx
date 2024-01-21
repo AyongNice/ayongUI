@@ -1,4 +1,4 @@
-import React, {useState, useRef, FC, useEffect} from 'react';
+import React, {useRef, FC, useEffect, useState} from 'react';
 import {CalendarProps} from './index.d'
 import Select from '../select/index.tsx'
 import './index.less'
@@ -25,10 +25,17 @@ const Calendar: FC<CalendarProps> = (porps) => {
   const _style = {width: 120, height: 100, ...style}
 
   const childRef = useRef(null);
-
+  const [monthOptions, setMonthOptions] = useState<string[]>([]);
+  const [yearOptions, setYearOptions] = useState<number[]>([]);
 
   useEffect(() => {
-  }, [childRef.current])
+
+    const monthOptions = childRef.current.handleCreateDatePicker().months;
+    const yearOptions = childRef.current.handleCreateDatePicker(yearsRange).years.slice(0, 58);
+    setMonthOptions(monthOptions);
+    setYearOptions(yearOptions);
+  }, [])
+
 
   /**
    * 年份选择
@@ -49,7 +56,7 @@ const Calendar: FC<CalendarProps> = (porps) => {
   return <BaseCalendar ref={childRef}
                        {...porps}
                        style={_style}
-                       headerRender={({curYear, curMonth,yearOptions,monthOptions}) => {
+                       headerRender={({curYear, curMonth}) => {
                          return <>
                            <Select style={{width: 80, marginRight: '20px'}}
                                    value={curYear}
