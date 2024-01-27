@@ -6,14 +6,15 @@
  */
 
 
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
 import BaseCalendar from '../base-calendar/index.tsx'
 import pickerStyle from './index.module.less'
 
 import {Doubleleft, Under, Doubleright} from '../icon/icon.ts'
 import ConditionalRender from '../conditional-render/conditional-render.tsx'
-import {Collapse, Wrong} from '../icon/icon.ts'
+import {Collapse, Cendas, Wrong} from '../icon/icon.ts'
 import {DayItem} from './index.d'
+import {DatePickerProps} from "ayongUI/components/date-picker";
 
 
 let yearDate = [];
@@ -21,7 +22,7 @@ let monthDate = [];
 let quarterDate = [];
 const arr = [];
 const obj = {};
-const DatePicker = (props) => {
+const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
 
   const {
     picker = 'day',
@@ -32,7 +33,8 @@ const DatePicker = (props) => {
     },
     onMonthChange = () => {
 
-    }
+    },
+    isRange = false,
   } = props
   const childRef = useRef(null);
   const placeholder = {
@@ -112,9 +114,6 @@ const DatePicker = (props) => {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(years)
-  }, [years])
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -126,6 +125,7 @@ const DatePicker = (props) => {
       }
       setClcikTarget(true)
     };
+    if (isRange) return
     document.addEventListener('click', handleOutsideClick);
 
     return () => {
@@ -134,13 +134,18 @@ const DatePicker = (props) => {
     };
   }, [clcikTarget])
 
-  const setDropdown = (e) => {
+
+  const openDropdown = (e) => {
     setClcikTarget(false)
     setIsDropdownVisible(true)
   }
+  const closeDropdown = (e) => {
+    setClcikTarget(true)
+    setIsDropdownVisible(false)
+  }
+
   const onSelectChange = (e) => {
     setSelectDate(e.target.value)
-
   }
   const onWrong = (e) => {
     e.stopPropagation()
@@ -152,20 +157,16 @@ const DatePicker = (props) => {
 
   const _onChange = (item: DayItem, week) => {
 
-
     if (picker === 'week') {
       setSelectDate(week)
       setSelectDateTemporary(week)
-      console.log('_onChange', selectDateTemporary)
       onChange(item, week)
     } else {
-      console.log('_onChange', item)
       setSelectDate(item.comprehensiveStr)
       setSelectDateTemporary(item.comprehensiveStr)
       onChange(item)
     }
-
-
+    if (isRange) return;
     setIsDropdownVisible(false)
   }
   /** 切换年份+ 切换年份区间 */
@@ -211,11 +212,15 @@ const DatePicker = (props) => {
     }
 
   }
+  useImperativeHandle(ref, () => ({
+    openDropdown,
+    closeDropdown
+  }))
 
-  return <div className={pickerStyle.warp}>
-    <main
+  return <div className={isRange ? '' : pickerStyle.warp}>
+    {!isRange && <main
       className={`${pickerStyle.main} ${selectDate ? pickerStyle.hoverMain : ''}`}
-      onClick={setDropdown}
+      onClick={openDropdown}
     >
       <input value={selectDate}
              onChange={onSelectChange}
@@ -225,10 +230,10 @@ const DatePicker = (props) => {
         onClick={onWrong}
         className={pickerStyle.pickerWrong}
       />
-      <Collapse className={pickerStyle.pickerCollapse}/>
-    </main>
+      <Cendas className={pickerStyle.pickerCollapse}/>
+    </main>}
     <BaseCalendar
-      className={`${pickerStyle.baseCalendar} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}
+      className={`${isRange ? '' : pickerStyle.baseCalendar} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}
       ref={childRef}
       {...props}
       selectedMode={picker}
@@ -314,5 +319,7 @@ const DatePicker = (props) => {
     />
 
   </div>
-}
+})
+
+
 export default DatePicker

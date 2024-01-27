@@ -2,11 +2,11 @@
   width: max-content;
   position: relative;
   z-index: var(--ayong-zindex3);
-  //display: inline-block;
+  display: inline-block;
 }
 
 .main {
-  width: 150px;
+  width: max-content;
   height: 35px;
   display: flex;
   align-items: center;
@@ -74,59 +74,11 @@
   height: max-content;
 }
 
-.picker {
-  font-weight: bold;
+.dropdown {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--ayong-default-size) var(--ayong-large-size);
-  box-sizing: border-box;
 
-  .spacing {
-    margin: 0 15px;
-  }
-
-  &:hover {
-    //
-    cursor: pointer;
-    color: var(--ayong-primary);
-    fill: var(--ayong-primary);
-  }
-
-  span:active {
-    //css颜色变亮
-    filter: brightness(1.1);
-  }
-
-}
-
-footer {
-  //触摸手
-  cursor: pointer;
-  text-align: center;
-  color: var(--ayong-primary);
-
-  &:active {
-    //css颜色变亮
-    filter: brightness(1.1);
-  }
-}
-
-.icon {
-  &:active {
-    //css颜色变亮
-    filter: brightness(1.1);
-  }
-
-  &:hover {
-    //
-    cursor: pointer;
-    fill: var(--ayong-primary);
-  }
-}
-
-
-.today {
-  color: var(--ayong-primary);
-  background: var(--ayong-primary-grey);
+  position: absolute;
+  z-index: var(--ayong-zindex3);
 }

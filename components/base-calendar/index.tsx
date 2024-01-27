@@ -241,9 +241,10 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        * @param i
        * @param j
        */
-      const handleItemClick = (item: DayItem, i: number, j: number) => {
+      const handleItemClick = (e, item: DayItem, i: number, j: number) => {
+        e.stopPropagation()
+        console.log(11)
         if (disabled) return;
-        console.log('handleItemClick', item)
         if (selectedMode === 'week') {
           setWeekRow(i)
         }
@@ -324,7 +325,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        */
 
       const getDayClassName = (item: DayItem, rowIndex: number) => {
-        console.log('getDayClassName', selectedDates.comprehensiveStr)
         return `${
           item.monthSortMode ? 'notCurMonth' : ''}
       ${item.date === curDate ? 'currentDay' : ''}
@@ -384,9 +384,11 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         setDateSelected,
         clearSetSelectedDates,
       }))
-
+      const base = (event) => {
+        event.stopPropagation()
+      }
       return (
-        <div onClick={(event) => event.stopPropagation()} className={`calendar ${className}`}>
+        <div onClick={base} className={`calendar ${className}`}>
           {typeof headerRender === 'function' && headerRender({
             curYear,
             curMonth,
@@ -410,7 +412,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
                     <td
                       key={columIndex}
 
-                      onClick={() => handleItemClick(item, rowIndex, columIndex)}
+                      onClick={(e) => handleItemClick(e, item, rowIndex, columIndex)}
                     >
                       {typeof dayCellRender === 'function' ? (
                         <>{dayCellRender(item)}</>

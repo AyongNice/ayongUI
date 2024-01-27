@@ -1,7 +1,6 @@
 import React, {useRef, FC, useEffect, useState} from 'react';
 import {CalendarProps} from './index.d'
 import Select from '../select/index.tsx'
-import './index.less'
 import BaseCalendar from '../base-calendar/index.tsx'
 
 const Calendar: FC<CalendarProps> = (porps) => {

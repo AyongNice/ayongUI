@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Wrongs } from '../icon/icon';
+import React, {useState, useRef, useEffect} from 'react';
+import {Wrongs} from '../icon/icon';
 import styles from './index.module.less';
 
 export default function Input(props) {
@@ -9,11 +9,13 @@ export default function Input(props) {
     type = 'text',
     className = '',
     size = 'normal',
-    onFocus = () => {},
-    onBlur = () => {},
-    onKeyUp = () => {},
+    onFocus = () => {
+    },
+    onBlur = () => {
+    },
+    onKeyUp = () => {
+    },
     onChange = (e) => {
-      setValue(e.target.value);
     },
     placeholder = '请输入值',
     prefix = null,
@@ -23,7 +25,7 @@ export default function Input(props) {
 
   const [valueInner, setValue] = useState(value);
 
-  const styleClassName = `${styles.ayongInput} ${className} ${styles[size]} 
+  const styleClassName = `${styles.ayongInput} ${className} ${styles[size]}
     ${styles[type]} ${disabled && styles.notAllowed}`;
 
   const prefixRef = useRef(null);
@@ -31,84 +33,92 @@ export default function Input(props) {
   const clearRef = useRef(null);
 
   const compensate = 5;
-  const [paddingLeft,setPdl] = useState('5px');
-  const [paddingRight,setPdr] = useState('5px');
+  const [paddingLeft, setPdl] = useState('5px');
+  const [paddingRight, setPdr] = useState('5px');
 
-  
+
   const [rightPlace, setRightPlace] = useState('5px');
 
-  const [reset,setReset] = useState(false);
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     if (prefixRef.current) {
-        setPdl(prefix?prefixRef.current?.offsetWidth + compensate + 'px':'5px');
+      setPdl(prefix ? prefixRef.current?.offsetWidth + compensate + 'px' : '5px');
     }
-  }, [prefixRef.current ]);
+  }, [prefixRef.current]);
 
   useEffect(() => {
-      if (suffixRef.current&&!clearRef.current) {
-        if (type=='number') {
-            const res = suffixRef.current?.offsetWidth + 4 + 'px';
-            setPdr(res);
-            console.log(res);
-        }else{
-            setPdr('5px');
-        } 
-      }else if(suffixRef.current&&clearRef.current){
-        if (type=='number') {
-            const clearWidth = clearRef.current?.offsetWidth+4;
-            const suffixWidth = suffixRef.current?.offsetWidth+4;
-            const res1 = clearWidth + suffixWidth + 'px';
-            setPdr(res1);
-            const res2 = suffixWidth + 'px';
-            setRightPlace(res2);
-        }else{
-            setPdr('5px');
-        }
-      }else{
-        //有删除,没有后插槽
-        if (type=='number') {
-            const res =  20 + 'px';
-            setPdr(res);
-        }else{
-            setPdr('5px');
-        }
-        /* if (clerabled) {
-            if (type=='number') {
-                const res =  20 + 'px';
-                setPdr(res);
-            }else{
-                setPdr('5px');
-            }
-        }else{
-            setPdr('5px');
-        } */
+    if (suffixRef.current && !clearRef.current) {
+      if (type == 'number') {
+        const res = suffixRef.current?.offsetWidth + 4 + 'px';
+        setPdr(res);
+        console.log(res);
+      } else {
+        setPdr('5px');
       }
-  }, [suffixRef.current,clearRef.current,reset]);
+    } else if (suffixRef.current && clearRef.current) {
+      if (type == 'number') {
+        const clearWidth = clearRef.current?.offsetWidth + 4;
+        const suffixWidth = suffixRef.current?.offsetWidth + 4;
+        const res1 = clearWidth + suffixWidth + 'px';
+        setPdr(res1);
+        const res2 = suffixWidth + 'px';
+        setRightPlace(res2);
+      } else {
+        setPdr('5px');
+      }
+    } else {
+      //有删除,没有后插槽
+      if (type == 'number') {
+        const res = 20 + 'px';
+        setPdr(res);
+      } else {
+        setPdr('5px');
+      }
+      /* if (clerabled) {
+          if (type=='number') {
+              const res =  20 + 'px';
+              setPdr(res);
+          }else{
+              setPdr('5px');
+          }
+      }else{
+          setPdr('5px');
+      } */
+    }
+  }, [suffixRef.current, clearRef.current, reset]);
 
   const handleClear = () => {
     setValue('');
     setReset(!reset);
     setTimeout(() => {
-        setReset(!reset);
+      setReset(!reset);
     }, 0);
     // setPdr('5px');
   };
 
 
- /*  useEffect(() => {
-      if (clearRef.current) {
-        if (type=='number') {
-            const res = clearRef.current?.offsetWidth + 8 + 'px';
-            setRightPlace(res);
-        }else{
-            setRightPlace('5px');
-        }
-    }
-  }, [clearRef.current]); */
+  /*  useEffect(() => {
+       if (clearRef.current) {
+         if (type=='number') {
+             const res = clearRef.current?.offsetWidth + 8 + 'px';
+             setRightPlace(res);
+         }else{
+             setRightPlace('5px');
+         }
+     }
+   }, [clearRef.current]); */
+
+  const _onChange = (e) => {
+    setValue(e.target.value)
+    onChange()
+  }
+  useEffect(() => {
+    setValue(() => value)
+  }, [value])
 
   return (
-    <div style={{ position: 'relative', maxWidth: 'max-content',boxSizing:'border-box',animation:'all 0.5s ' }}>
+    <div style={{position: 'relative', maxWidth: 'max-content', boxSizing: 'border-box', animation: 'all 0.5s '}}>
       {prefix && (
         <span
           ref={prefixRef}
@@ -123,36 +133,36 @@ export default function Input(props) {
         </span>
       )}
       <input
-        style={{ paddingLeft, paddingRight,boxSizing:'border-box',animation:'all 0.5s ' }}
+        style={{paddingLeft, paddingRight, boxSizing: 'border-box', animation: 'all 0.5s '}}
         type={type}
-        value={valueInner}
         onBlur={onBlur}
         onKeyUp={onKeyUp}
         onFocus={onFocus}
-        onChange={onChange}
+        value={valueInner}
+        onChange={_onChange}
         placeholder={placeholder}
         className={styleClassName}
       />
-      {clerabled&&valueInner && (
-        <span
-        ref={clearRef}
-          style={{
-            position: 'absolute',
-            right: rightPlace,
-            top: '50%',
-            transform: 'translateY(-50%)',
-          }}
-          onClick={handleClear}
-        >
-          <Wrongs />
-        </span>
-      )}
-      {suffix && <span ref={suffixRef}  style={{
-            position: 'absolute',
-            right: '5px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-          }}>{suffix}</span>}
+      {/*{clerabled && valueInner && (*/}
+      {/*  <span*/}
+      {/*    ref={clearRef}*/}
+      {/*    style={{*/}
+      {/*      position: 'absolute',*/}
+      {/*      right: rightPlace,*/}
+      {/*      top: '50%',*/}
+      {/*      transform: 'translateY(-50%)',*/}
+      {/*    }}*/}
+      {/*    onClick={handleClear}*/}
+      {/*  >*/}
+      {/*    <Wrongs/>*/}
+      {/*  </span>*/}
+      {/*)}*/}
+      {suffix && <span ref={suffixRef} style={{
+        position: 'absolute',
+        right: '5px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+      }}>{suffix}</span>}
     </div>
   );
 }
