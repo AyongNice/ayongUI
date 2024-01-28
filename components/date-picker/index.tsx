@@ -12,7 +12,7 @@ import pickerStyle from './index.module.less'
 
 import {Doubleleft, Under, Doubleright} from '../icon/icon.ts'
 import ConditionalRender from '../conditional-render/conditional-render.tsx'
-import {Collapse, Cendas, Wrong} from '../icon/icon.ts'
+import {Collapse, Cendas, Left, Wrong, Facright} from '../icon/icon.ts'
 import {DayItem} from './index.d'
 import {DatePickerProps} from "ayongUI/components/date-picker";
 
@@ -34,8 +34,9 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     onMonthChange = () => {
 
     },
+    footerRender = null,
     isRange = false,
-  } = props
+  } = props;
   const childRef = useRef(null);
   const placeholder = {
     'day': '请选择日期',
@@ -213,9 +214,13 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     }
 
   }
+  const clearSetSelectedDates = () => {
+    childRef.current?.clearSetSelectedDates()
+  }
   useImperativeHandle(ref, () => ({
     openDropdown,
-    closeDropdown
+    closeDropdown,
+    clearSetSelectedDates
   }))
 
   return <div className={isRange ? '' : pickerStyle.warp}>
@@ -249,8 +254,8 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
           <div>
             {['day', 'week', 'quarter', 'month', 'year'].includes(picker) && <Doubleleft onClick={togglePrevYear}
                                                                                          className={pickerStyle.icon}/>}
-            {['day', 'week'].includes(picker) && <Under onClick={() => childRef.current.prevMonth()}
-                                                        className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
+            {['day', 'week'].includes(picker) && <Left onClick={() => childRef.current.prevMonth()}
+                                                       className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
 
           </div>
           <div>
@@ -264,8 +269,8 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
             {picker === 'day' && <span>{curMonth + 1}月</span>}
           </div>
           <div>
-            {['day', 'week'].includes(picker) && <Under onClick={() => childRef.current.nextMonth()}
-                                                        className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
+            {['day', 'week'].includes(picker) && <Facright onClick={() => childRef.current.nextMonth()}
+                                                           className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
 
             {['day', 'week', 'quarter', 'month', 'year'].includes(picker) && <Doubleright onClick={toggleNextYear}
                                                                                           className={pickerStyle.icon}/>}
@@ -311,7 +316,7 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
 
       } : null}
       footerRender={() => {
-        return picker === 'day' && <footer onClick={(event) => {
+        return typeof footerRender === 'function' ? footerRender() : picker === 'day' && <footer onClick={(event) => {
           childRef.current.setDateSelected(new Date().toISOString().slice(0, 10))
         }}>
           今天

@@ -19,7 +19,6 @@
   border: 1px solid var(--ayong-grey);
 
   input {
-    width: 95%;
     outline: none;
     border: none;
     background: transparent;
@@ -35,6 +34,14 @@
 
 }
 
+.startInput {
+  width: 123px;
+}
+
+.swapright {
+  position: relative;
+  right: 10px;
+}
 
 .pickerWrong {
   display: none;
@@ -42,13 +49,11 @@
 }
 
 .iconSize {
-  width: 20px;
-  height: 20px;
+
 }
 
 .pickerCollapse {
-  width: 20px;
-  height: 20px;
+
 }
 
 .hoverMain&:hover {
@@ -61,8 +66,6 @@
   & {
     .pickerWrong {
       display: block;
-      width: 20px;
-      height: 20px;
     }
   }
 }
@@ -92,7 +95,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  box-shadow: 0 4px 10px 0 var(--ayong-primary-grey);
   position: absolute;
   z-index: var(--ayong-zindex3);
+  overflow: hidden;
 }

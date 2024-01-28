@@ -230,7 +230,14 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         const _date: string[] = date.split('-');
         const year: number = Number(_date[0]);
         const month: number = Number(_date[1]) - 1;
-        setSelectedDates({comprehensiveStr: _date.join('-')})
+        setSelectedDates({
+          date: Number(_date[2]),
+          comprehensiveStr: _date.join('-'),
+          comprehensive: new Date(_date.join('-')),
+          isSelected: true,
+          isRangeSelected: true,
+          isToday: true,
+        })
         setCurYear(year);
         setCurMonth(month);
         handleGetDays(year, month, startOfWeek!, cFormat);
@@ -379,7 +386,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
           setCurYear(null)
 
         }
-        console.log('clearSetSelectedDates', selectedDates)
 
       }
       useImperativeHandle(ref, () => ({
