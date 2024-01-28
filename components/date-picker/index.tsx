@@ -140,8 +140,9 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     setIsDropdownVisible(true)
   }
   const closeDropdown = (e) => {
-    setClcikTarget(true)
+    // setClcikTarget(true)
     setIsDropdownVisible(false)
+    console.log('closeDropdown')
   }
 
   const onSelectChange = (e) => {
@@ -233,7 +234,7 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
       <Cendas className={pickerStyle.pickerCollapse}/>
     </main>}
     <BaseCalendar
-      className={`${isRange ? '' : pickerStyle.baseCalendar} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}
+      className={`${isRange ? '' : pickerStyle.baseCalendarabsolute} ${pickerStyle.baseCalendar} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}
       ref={childRef}
       {...props}
       selectedMode={picker}

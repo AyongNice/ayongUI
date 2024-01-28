@@ -31,6 +31,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                         yearsRange = [1970, 2099],
                                                         selectedMode = 'noSelect',
                                                         startOfWeek,
+                                                        rangMode = '',
                                                         picker = 'day',
                                                         disabled = false,
                                                         dayCellRender = null,
@@ -59,7 +60,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       const [curDate] = useState<string>(parseTime(new Date().getTime()), cFormat);
 
       const [res, setRes] = useState<any[][]>([]);
-      const [selectedDates, setSelectedDates] = useState<string[]>([]);
+      const [selectedDates, setSelectedDates] = useState<DayItem[]>([]);
 
       /** 选定的周 **/
       const [weekRow, setWeekRow] = useState<number | null>(null);
@@ -229,6 +230,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         const _date: string[] = date.split('-');
         const year: number = Number(_date[0]);
         const month: number = Number(_date[1]) - 1;
+        setSelectedDates({comprehensiveStr: _date.join('-')})
         setCurYear(year);
         setCurMonth(month);
         handleGetDays(year, month, startOfWeek!, cFormat);
@@ -242,8 +244,8 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        * @param j
        */
       const handleItemClick = (e, item: DayItem, i: number, j: number) => {
+        console.log(item)
         e.stopPropagation()
-        console.log(11)
         if (disabled) return;
         if (selectedMode === 'week') {
           setWeekRow(i)
@@ -325,6 +327,13 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        */
 
       const getDayClassName = (item: DayItem, rowIndex: number) => {
+        let _classCompute = '';
+        if (rangMode === 'rangbefore') {
+          _classCompute = `${item.comprehensive > selectedDates.comprehensive ? 'range' : ''}`
+        }
+        if (rangMode === 'rangeafter') {
+          _classCompute = `${item.comprehensive < selectedDates.comprehensive ? 'range' : ''}`
+        }
         return `${
           item.monthSortMode ? 'notCurMonth' : ''}
       ${item.date === curDate ? 'currentDay' : ''}
@@ -334,6 +343,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       ${item.isToday ? 'today' : ''}
       ${item.comprehensiveStr === selectedDates.comprehensiveStr ? 'onSelect' : ''}
       ${picker === 'week' && rowIndex == weekRow ? 'weekRow' : ''}
+      ${_classCompute}
       `
       }
 
