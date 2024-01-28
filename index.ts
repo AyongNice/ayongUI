@@ -175,6 +175,11 @@ export {
   Return,
   Forwards,
   Bell,
+  Questions,
+  Uploadss,
+  Deletes,
+  Thumb,
+  Stepon,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';

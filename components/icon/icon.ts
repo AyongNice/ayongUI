@@ -177,3 +177,8 @@ export { default as Addser} from "./components/adduser-solid"; //添加用户
 export { default as Switchusers} from "./components/switchusers-solid"; //切换用户
 export { default as Handsolid} from "./components/handoff-solid"; //中英文切换
 export { default as Bell} from "./components/bell-solid"; //铃铛
+export { default as Questions} from "./components/question-solid"; //问号
+export { default as Uploadss} from "./components/upload-solid"; //上传
+export { default as Deletes} from "./components/delete-solid"; //删除
+export { default as Thumb} from "./components/thumb-solid"; //点赞
+export { default as Stepon} from "./components/stepon-solid"; //踩
