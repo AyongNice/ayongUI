@@ -1,0 +1,75 @@
+.time-picker-container {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  transition: all 1s;
+  justify-content: center;
+  position: absolute;
+  border-radius: var(--ayong-radius);
+
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 1px;
+    bottom: 68px;
+    //从上倒下渐变
+    background: linear-gradient(to right, var(--ayong-primary-grey), var(--ayong-primary), var(--ayong-primary-grey));
+    //background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 1px;
+    top: 98px;
+    //background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+
+    //三个色渐变  从左到中到右
+    background: linear-gradient(to right, var(--ayong-primary-grey), var(--ayong-primary), var(--ayong-primary-grey));
+  }
+}
+
+
+.scroll-container {
+  overflow-y: auto;
+  max-height: 120px;
+  width: 60px;
+  box-sizing: border-box;
+  padding: 100px 0;
+  transition: all 1s;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 5px;
+  background-color: var(--ayong-plaster-grey);
+}
+
+/*//滚动滑块颜色*/
+::-webkit-scrollbar-thumb {
+  background-color: var(--ayong-primary);
+  border-radius: 5px;
+}
+
+.option {
+  padding: var(--ayong-small-size);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: var(--ayong-radius);
+  text-align: center;
+  color: var(--ayong-dark-green-gray);
+}
+
+.option:hover {
+  background-color: #f0f0f0;
+}
+
+.selected {
+  color: var(--ayong-primary);
+  font-size: 18px;
+  font-weight: bold;
+}

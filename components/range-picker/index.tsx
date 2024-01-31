@@ -31,50 +31,77 @@ const RangePicker = (props: DatePickerProps) => {
   const [startValue, setStartValue] = useState<string>('')
   const [endValue, setEndValue] = useState<string>('')
 
+  //下拉框
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
 
-  const [selectedHour, setSelectedHour] = useState();
-  const [selectedMinute, setSelectedMinute] = useState();
-  const [selectedSecond, setSelectedSecond] = useState();
+//时分秒数据
+  const [timeDate, setTimeDate] = useState({});
 
+  //是否点击input框
+  const [clcikTarget, setClcikTarget] = useState<boolean>(false);
 
-  const startFocus = () => {
-    openDropdown()
-  }
+  //聚集input方向
+  const [foucsDirection, setFoucsDirection] = useState<string>('');
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      e.stopPropagation()
+      if (clcikTarget) {
+        setIsDropdownVisible(false);
+      }
+      setClcikTarget(true)
+    };
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+
+    };
+  }, [])
+
 
   const closeDropdown = () => {
     setIsDropdownVisible(false)
     start.current?.closeDropdown();
     end.current?.closeDropdown();
+    setFoucsDirection('')
   }
-  const openDropdown = () => {
+  const openDropdown = (e) => {
+    console.log('openDropdown', e)
     start.current?.openDropdown();
     end.current?.openDropdown();
     setIsDropdownVisible(true)
+    // setClcikTarget(false)
   }
 
   const startChange = (data) => {
-    setStartValue(() => data.comprehensiveStr)
+    if (showTime) {
+      const shm: string = timeDate.selectedHour + ':' + timeDate.selectedMinute + ':' + timeDate.selectedSecond;
+      setStartValue(() => data.comprehensiveStr + ' ' + shm)
+    } else {
+      setStartValue(() => data.comprehensiveStr)
+
+    }
   }
   const endChange = (data) => {
-    setEndValue(data.comprehensiveStr)
+
+    if (showTime) {
+      const shm: string = timeDate.selectedHour + ':' + timeDate.selectedMinute + ':' + timeDate.selectedSecond;
+
+      setEndValue(data.comprehensiveStr + ' ' + shm)
+    } else {
+      setEndValue(data.comprehensiveStr)
+    }
   }
 
   useEffect(() => {
+
     if (startValue && endValue) {
-      if (showTime) {
-        const shm: string = selectedHour + '-' + selectedMinute + '-' + selectedSecond
-        onChange([startValue + selectedHour + shm, endValue + shm]);
-      } else {
-        onChange([startValue, endValue])
-      }
+      onChange([startValue, endValue])
       closeDropdown();
     }
   }, [startValue, endValue])
-  const endFocus = () => {
 
-
-  }
   const onWrong = (e) => {
     e.stopPropagation()
     setStartValue('')
@@ -82,30 +109,60 @@ const RangePicker = (props: DatePickerProps) => {
     end.current?.clearSetSelectedDates()
     start.current?.clearSetSelectedDates()
     onClear()
+    setFoucsDirection('')
+    setTimeDate(() => ({
+      selectedHour: '',
+      selectedMinute: '',
+      selectedSecond: ''
+    }))
   }
-  const onSelectChange = () => {
 
-  }
   /**
    * 时分秒改变
    * @param selectedHour
    * @param selectedMinute
    * @param selectedSecond
    */
-  const onSHMChange = ({selectedHour, selectedMinute, selectedSecond}) => {
+  const onSHMChange = (data) => {
+    setTimeDate(data)
+  }
+  const onSure = () => {
+    if (endValue && startValue) {
+      closeDropdown();
+
+      return
+    }
+
+    if (!startValue) setFoucsDirection('left')
+    if (!endValue) setFoucsDirection('right')
+  }
+  const rightFocus = () => {
+    openDropdown()
+    setFoucsDirection('right')
 
   }
+  const leftFocus = () => {
+    openDropdown()
+    setFoucsDirection('left')
+
+  }
+  console.log(pickerStyle.startInput)
   return <div className={pickerStyle.warp}>
-    <main className={`${pickerStyle.main} ${startValue && endValue ? pickerStyle.hoverMain : ''}`}
+    <main
+      className={`${pickerStyle.main}
+      ${startValue && endValue ? pickerStyle.hoverMain : ''}
+      ${foucsDirection && pickerStyle.hoverActive}
+       ${foucsDirection && foucsDirection === 'left' ? pickerStyle.hoverActiveRight : pickerStyle.hoverActiveLeft}
+      `}
     >
-      <Input className={pickerStyle.startInput} value={startValue} placeholder='请选择开始日期' onFocus={openDropdown}/>
+      <Input className={pickerStyle.startInput} value={startValue} placeholder='请选择开始日期' onFocus={leftFocus}/>
       <Swapright className={pickerStyle.swapright}/>
 
       <input value={endValue}
              className={pickerStyle.startInput}
              onChange={() => {
              }}
-             onFocus={openDropdown}
+             onFocus={rightFocus}
              placeholder='请选择结束日期'
       />
       <Wrong
@@ -117,24 +174,23 @@ const RangePicker = (props: DatePickerProps) => {
 
     <div
       className={`${pickerStyle.dropdown} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}>
+
       <DatePicker ref={start}
+                  showTime={showTime}
                   onChange={startChange}
                   footerRender={() => {
                   }}
                   rangMode='rangbefore'
                   isRange/>
       <DatePicker ref={end}
+                  showTime={showTime}
                   footerRender={() => {
-                    return <Button onClick={closeDropdown} size='small'> 确定</Button>
+                    return <Button onClick={onSure} size='small'> 确定</Button>
                   }}
                   onChange={endChange}
                   rangMode='rangeafter'
                   isRange/>
-      {showTime && <SHM onChange={onSHMChange}
-                        selectedHourProp={selectedHour}
-                        selectedMinuteProp={selectedMinute}
-                        selectedSecond={selectedSecond}
-      />}
+
     </div>
 
   </div>

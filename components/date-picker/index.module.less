@@ -5,7 +5,6 @@
 }
 
 .main {
-  width: 150px;
   height: 35px;
   display: flex;
   align-items: center;
@@ -13,7 +12,6 @@
   border-radius: var(--ayong-radius);
   padding: 0 4px 4px 9px;
   box-sizing: border-box;
-  color: var(--ayong-stone-gray);
   font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   border: 1px solid var(--ayong-grey);
 
@@ -22,6 +20,7 @@
     outline: none;
     border: none;
     background: transparent;
+    color: var(--ayong-dark-green-gray);
   }
 
   &:hover {
@@ -32,6 +31,15 @@
     }
   }
 
+}
+
+.input {
+  width: 95%;
+  outline: none;
+  border: 1px solid var(--ayong-grey);
+  border-radius: var(--ayong-radius);
+  color: var(--ayong-dark-green-gray);
+  padding: 6px 12px;
 }
 
 .pickerWrong {
@@ -134,4 +142,19 @@ footer {
 .today {
   color: var(--ayong-primary);
   background: var(--ayong-primary-grey);
+}
+
+.SHM {
+  position: absolute;
+  overflow: hidden;
+  height: 0;
+  z-index: 100;
+  background: var(--ayong-light);
+  box-shadow: 0 4px 10px 0 rgba(55, 99, 170, 0.1);
+  margin-top: 10px;
+
+}
+
+.SHMShow {
+  height: max-content;
 }

@@ -13,9 +13,8 @@ import pickerStyle from './index.module.less'
 import {Doubleleft, Under, Doubleright} from '../icon/icon.ts'
 import ConditionalRender from '../conditional-render/conditional-render.tsx'
 import {Collapse, Cendas, Left, Wrong, Facright} from '../icon/icon.ts'
-import {DayItem} from './index.d'
-import {DatePickerProps} from "ayongUI/components/date-picker";
-
+import {DayItem, DatePickerProps} from './index.d'
+import SHM from '../s-h-m/index.tsx';
 
 let yearDate = [];
 let monthDate = [];
@@ -36,6 +35,7 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     },
     footerRender = null,
     isRange = false,
+    showTime = false
   } = props;
   const childRef = useRef(null);
   const placeholder = {
@@ -59,6 +59,10 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
   //年份源数据
   const [sourceData, setSourceData] = useState<number[]>([]);
   const [curYear, setCurYear] = useState<number>(new Date().getFullYear());
+
+  const [timeDate, setTimeDate] = useState({});
+
+  const [showDownTime, setShowDownTime] = useState<boolean>(false)
   //使用useMemo优化
   const years = useMemo(() => {
     if (yearIndex < 0) return sourceData[0] || []
@@ -214,6 +218,9 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     }
 
   }
+  const onSHMChange = () => {
+
+  }
   const clearSetSelectedDates = () => {
     childRef.current?.clearSetSelectedDates()
   }
@@ -250,33 +257,47 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
                        yearOptions,
                        monthOptions,
                      }) => {
-        return <main className={pickerStyle.picker}>
-          <div>
-            {['day', 'week', 'quarter', 'month', 'year'].includes(picker) && <Doubleleft onClick={togglePrevYear}
-                                                                                         className={pickerStyle.icon}/>}
-            {['day', 'week'].includes(picker) && <Left onClick={() => childRef.current.prevMonth()}
-                                                       className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
+        return <div style={{position: 'relative'}}>
 
-          </div>
-          <div>
+          {showTime && <>
+            <input className={pickerStyle.input}
+                   onFocus={() => setShowDownTime(true)}
+                   placeholder='选择几点钟'/>
+            <SHM onChange={onSHMChange}
+                 className={`${pickerStyle.SHM} ${showDownTime && pickerStyle.SHMShow}`}
+                 selectedHourProp={timeDate.selectedHour}
+                 selectedMinuteProp={timeDate.selectedMinute}
+                 selectedSecondProp={timeDate.selectedSecond}
+            />
+          </>}
+          <main className={pickerStyle.picker}>
+            <div>
+              {['day', 'week', 'quarter', 'month', 'year'].includes(picker) && <Doubleleft onClick={togglePrevYear}
+                                                                                           className={pickerStyle.icon}/>}
+              {['day', 'week'].includes(picker) && <Left onClick={() => childRef.current.prevMonth()}
+                                                         className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
 
-            {picker === 'year' && <span>
+            </div>
+            <div>
+
+              {picker === 'year' && <span>
                 {years[0]?.value + '-' + years[years.length - 1]?.value}
             </span>}
-            {['month', 'quarter', 'day', 'week'].includes(picker) && <span> {curYear}年 </span>
-            }
-            &nbsp;
-            {picker === 'day' && <span>{curMonth + 1}月</span>}
-          </div>
-          <div>
-            {['day', 'week'].includes(picker) && <Facright onClick={() => childRef.current.nextMonth()}
-                                                           className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
+              {['month', 'quarter', 'day', 'week'].includes(picker) && <span> {curYear}年 </span>
+              }
+              &nbsp;
+              {picker === 'day' && <span>{curMonth + 1}月</span>}
+            </div>
+            <div>
+              {['day', 'week'].includes(picker) && <Facright onClick={() => childRef.current.nextMonth()}
+                                                             className={`${pickerStyle.spacing}  ${pickerStyle.icon} `}/>}
 
-            {['day', 'week', 'quarter', 'month', 'year'].includes(picker) && <Doubleright onClick={toggleNextYear}
-                                                                                          className={pickerStyle.icon}/>}
+              {['day', 'week', 'quarter', 'month', 'year'].includes(picker) && <Doubleright onClick={toggleNextYear}
+                                                                                            className={pickerStyle.icon}/>}
 
-          </div>
-        </main>
+            </div>
+          </main>
+        </div>
       }}
       dateRender={['quarter', 'month', 'year'].includes(picker) ? (item) => {
         return <React.Fragment>

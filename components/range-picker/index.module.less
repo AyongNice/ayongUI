@@ -1,7 +1,6 @@
 .warp {
   width: max-content;
   position: relative;
-  z-index: var(--ayong-zindex3);
   display: inline-block;
 }
 
@@ -14,14 +13,17 @@
   border-radius: var(--ayong-radius);
   padding: 0 4px 4px 9px;
   box-sizing: border-box;
-  color: var(--ayong-stone-gray);
   font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   border: 1px solid var(--ayong-grey);
+  position: relative;
+
 
   input {
     outline: none;
     border: none;
     background: transparent;
+    color: var(--ayong-dark-green-gray);
+
   }
 
   &:hover {
@@ -32,10 +34,37 @@
     }
   }
 
+
+}
+
+.hoverActive {
+
+
+  &::after {
+    transition: all .5s;
+    position: absolute;
+    content: '';
+    width: 40%;
+    height: 1px;
+    bottom: 0;
+    background: var(--ayong-primary);
+  }
+}
+
+.hoverActiveLeft {
+  &::after {
+    transform: translateX(120%);
+  }
+}
+
+.hoverActiveRight {
+  &::after {
+    transform: translateX(0);
+  }
 }
 
 .startInput {
-  width: 123px;
+  //width: 123px;
 }
 
 .swapright {
@@ -45,14 +74,6 @@
 
 .pickerWrong {
   display: none;
-
-}
-
-.iconSize {
-
-}
-
-.pickerCollapse {
 
 }
 
@@ -92,11 +113,30 @@
 }
 
 .dropdown {
+  //width: 600px;
   display: flex;
+  //flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 10px 0 var(--ayong-primary-grey);
   position: absolute;
   z-index: var(--ayong-zindex3);
   overflow: hidden;
+}
+
+.startInput {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 100px;
+    height: 1px;
+    background: var(--ayong-primary);
+
+  }
+}
+
+.SHM {
+  //background: #8e8e8e;
 }
