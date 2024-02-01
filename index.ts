@@ -180,6 +180,14 @@ export {
   Deletes,
   Thumb,
   Stepon,
+  Open,
+  Openoff,
+  Key,
+  Addfile,
+  Deletefile,
+  Warning,
+  Addsfile,
+  Erasefile,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
 export {default as Table} from './components/table/index.tsx';

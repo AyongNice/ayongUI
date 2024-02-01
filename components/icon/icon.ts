@@ -136,6 +136,12 @@ export { default as Plus} from "./components/plus-frame"; //加
 export { default as Minus} from "./components/minus-frame"; //减
 export { default as Return} from "./components/return-frame"; //返回
 export { default as Forwards} from "./components/forwards-frame"; //前进
+export { default as Open} from "./components/open-frame"; //打开
+export { default as Openoff} from "./components/openoff-frame"; //关闭
+export { default as Key} from "./components/key-frame"; //钥匙
+export { default as Addfile} from "./components/addfile-frame"; //添加文件
+export { default as Deletefile} from "./components/deletefile-frame"; //删除文件
+export { default as Warning} from "./components/warning-frame"; //警告
 /**
  * 实体icon
  */
@@ -182,3 +188,5 @@ export { default as Uploadss} from "./components/upload-solid"; //上传
 export { default as Deletes} from "./components/delete-solid"; //删除
 export { default as Thumb} from "./components/thumb-solid"; //点赞
 export { default as Stepon} from "./components/stepon-solid"; //踩
+export { default as Addsfile} from "./components/addsfile-solid"; //添加文件
+export { default as Erasefile} from "./components/erasefile-solid"; //删除文件
