@@ -3,15 +3,15 @@ import DatePicker from '../date-picker';
 import Input from "../input/index.tsx";
 import pickerStyle from './index.module.less'
 import {Cendas, Swapright, Wrong} from '../icon/icon.ts';
-import {DayItem, DatePickerProps} from '.././date-picker/index.d';
+import {DayItem, CalendarProps} from '.././base-calendar/index.d';
 import SHM from '../s-h-m/index.tsx';
-import Button from '../button/index.tsx'
+import Button from '../button/index.tsx';
 
 /**
  * 日期范围选择器
  * @constructor
  */
-const RangePicker = (props: DatePickerProps) => {
+const RangePicker = (props: CalendarProps) => {
   const {
     picker = 'day',
     yearsRange = [1970, 2099],
@@ -38,26 +38,31 @@ const RangePicker = (props: DatePickerProps) => {
   const [timeDate, setTimeDate] = useState({});
 
   //是否点击input框
-  const [clcikTarget, setClcikTarget] = useState<boolean>(false);
+  const [clcikTarget, setClcikTarget] = useState<boolean>(true);
+  const [clcikTarget2, setClcikTarget2] = useState<boolean>(true);
 
-  //聚集input方向
+  //聚集input 下划线方向
   const [foucsDirection, setFoucsDirection] = useState<string>('');
+
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
       e.stopPropagation()
-      if (clcikTarget) {
+      if (clcikTarget && clcikTarget2) {
         setIsDropdownVisible(false);
+        setFoucsDirection('')
       }
       setClcikTarget(true)
+      setClcikTarget2(true)
     };
+
     document.addEventListener('click', handleOutsideClick);
 
     return () => {
       document.removeEventListener('click', handleOutsideClick);
 
     };
-  }, [])
+  }, [clcikTarget, clcikTarget2])
 
 
   const closeDropdown = () => {
@@ -71,31 +76,18 @@ const RangePicker = (props: DatePickerProps) => {
     start.current?.openDropdown();
     end.current?.openDropdown();
     setIsDropdownVisible(true)
-    // setClcikTarget(false)
+    setClcikTarget(false)
+    setClcikTarget2(false)
   }
 
-  const startChange = (data) => {
-    if (showTime) {
-      const shm: string = timeDate.selectedHour + ':' + timeDate.selectedMinute + ':' + timeDate.selectedSecond;
-      setStartValue(() => data.comprehensiveStr + ' ' + shm)
-    } else {
-      setStartValue(() => data.comprehensiveStr)
-
-    }
+  const startChange = (data: DayItem) => {
+    setStartValue(data.comprehensiveStr)
   }
-  const endChange = (data) => {
-
-    if (showTime) {
-      const shm: string = timeDate.selectedHour + ':' + timeDate.selectedMinute + ':' + timeDate.selectedSecond;
-
-      setEndValue(data.comprehensiveStr + ' ' + shm)
-    } else {
-      setEndValue(data.comprehensiveStr)
-    }
+  const endChange = (data: DayItem) => {
+    setEndValue(data.comprehensiveStr)
   }
 
   useEffect(() => {
-
     if (startValue && endValue) {
       onChange([startValue, endValue])
       closeDropdown();
@@ -106,8 +98,8 @@ const RangePicker = (props: DatePickerProps) => {
     e.stopPropagation()
     setStartValue('')
     setEndValue('')
-    end.current?.clearSetSelectedDates()
-    start.current?.clearSetSelectedDates()
+    end.current?.onWrong()
+    start.current?.onWrong()
     onClear()
     setFoucsDirection('')
     setTimeDate(() => ({
@@ -123,30 +115,28 @@ const RangePicker = (props: DatePickerProps) => {
    * @param selectedMinute
    * @param selectedSecond
    */
-  const onSHMChange = (data) => {
+  const onSHMChange = (data: DayItem): void => {
     setTimeDate(data)
   }
-  const onSure = () => {
+  const onSure = (): void => {
     if (endValue && startValue) {
       closeDropdown();
-
       return
     }
 
     if (!startValue) setFoucsDirection('left')
     if (!endValue) setFoucsDirection('right')
   }
-  const rightFocus = () => {
+  const rightFocus = (): void => {
     openDropdown()
     setFoucsDirection('right')
 
   }
-  const leftFocus = () => {
+  const leftFocus = (): void => {
     openDropdown()
     setFoucsDirection('left')
 
   }
-  console.log(pickerStyle.startInput)
   return <div className={pickerStyle.warp}>
     <main
       className={`${pickerStyle.main}
@@ -175,21 +165,27 @@ const RangePicker = (props: DatePickerProps) => {
     <div
       className={`${pickerStyle.dropdown} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}>
 
-      <DatePicker ref={start}
-                  showTime={showTime}
-                  onChange={startChange}
-                  footerRender={() => {
-                  }}
-                  rangMode='rangbefore'
-                  isRange/>
-      <DatePicker ref={end}
-                  showTime={showTime}
-                  footerRender={() => {
-                    return <Button onClick={onSure} size='small'> 确定</Button>
-                  }}
-                  onChange={endChange}
-                  rangMode='rangeafter'
-                  isRange/>
+      <div className={pickerStyle.transverseBox}>
+        <DatePicker ref={start}
+                    showTime={showTime}
+                    onChange={startChange}
+                    footerRender={() => {
+                    }}
+                    rangMode='rangbefore'
+                    isRange/>
+        <DatePicker ref={end}
+                    showTime={showTime}
+                    footerRender={() => {
+
+                    }}
+                    onChange={endChange}
+                    rangMode='rangeafter'
+                    isRange/>
+      </div>
+
+      <div style={{width: '100%', textAlign: 'right', padding: '0 6px 6px 0'}}>
+        <Button onClick={onSure} size='small'> 确定</Button>
+      </div>
 
     </div>
 

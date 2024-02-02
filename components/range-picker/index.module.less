@@ -113,15 +113,21 @@
 }
 
 .dropdown {
-  //width: 600px;
   display: flex;
-  //flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  flex-direction: column;
   box-shadow: 0 4px 10px 0 var(--ayong-primary-grey);
   position: absolute;
   z-index: var(--ayong-zindex3);
   overflow: hidden;
+  background: var(--ayong-light);
+
+  .transverseBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .startInput {

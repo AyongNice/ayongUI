@@ -13,15 +13,20 @@ import pickerStyle from './index.module.less'
 import {Doubleleft, Under, Doubleright} from '../icon/icon.ts'
 import ConditionalRender from '../conditional-render/conditional-render.tsx'
 import {Collapse, Cendas, Left, Wrong, Facright} from '../icon/icon.ts'
-import {DayItem, DatePickerProps} from './index.d'
+import {DayItem, CalendarProps} from '.././base-calendar/index.d';
 import SHM from '../s-h-m/index.tsx';
 
-let yearDate = [];
-let monthDate = [];
-let quarterDate = [];
+
+interface DateItem {
+
+}
+
+let yearDate: DateItem = [];
+let monthDate: DateItem = [];
+let quarterDate: DateItem = [];
 const arr = [];
 const obj = {};
-const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
+const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
 
   const {
     picker = 'day',
@@ -60,7 +65,7 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
   const [sourceData, setSourceData] = useState<number[]>([]);
   const [curYear, setCurYear] = useState<number>(new Date().getFullYear());
 
-  const [timeDate, setTimeDate] = useState({});
+  const [timeDate, setTimeDate] = useState<string>('');
 
   const [showDownTime, setShowDownTime] = useState<boolean>(false)
   //使用useMemo优化
@@ -93,7 +98,6 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
         return {value: item.label}
       })
 
-
       //处理yearDate 分成二维数组 每12个月一组 不足12个月的一组//还要定义一个对象 用来存储年份的索引
 
       for (let i = 0; i < yearDate.length; i++) {
@@ -104,6 +108,8 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
         obj[yearDate[i].value.replace('年', '')]
           = arr.length - 1
       }
+      console.log('obj', obj)
+
       setYearIndex((prevState) => obj[curYear])
       setSourceData(arr)
     }
@@ -154,11 +160,12 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     setSelectDate(e.target.value)
   }
   const onWrong = (e) => {
-    e.stopPropagation()
+    e?.stopPropagation()
     setSelectDate('')
     setSelectDateTemporary('')
+    setTimeDate(() => '')
     onClear()
-    childRef.current.clearSetSelectedDates()
+    childRef.current?.clearSetSelectedDates()
   }
 
   const _onChange = (item: DayItem, week) => {
@@ -168,6 +175,9 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
       setSelectDateTemporary(week)
       onChange(item, week)
     } else {
+      if (showTime) {
+        item.comprehensiveStr += " " + timeDate;
+      }
       setSelectDate(item.comprehensiveStr)
       setSelectDateTemporary(item.comprehensiveStr)
       onChange(item)
@@ -218,16 +228,15 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
     }
 
   }
-  const onSHMChange = () => {
+  const onSHMChange = (time) => {
+    setTimeDate(time)
+    setShowDownTime(false)
+  }
 
-  }
-  const clearSetSelectedDates = () => {
-    childRef.current?.clearSetSelectedDates()
-  }
   useImperativeHandle(ref, () => ({
+    onWrong,
     openDropdown,
-    closeDropdown,
-    clearSetSelectedDates
+    closeDropdown
   }))
 
   return <div className={isRange ? '' : pickerStyle.warp}>
@@ -261,13 +270,15 @@ const DatePicker = React.forwardRef((props: DatePickerProps, ref) => {
 
           {showTime && <>
             <input className={pickerStyle.input}
+                   value={timeDate}
+                   onChange={() => {
+                   }}
                    onFocus={() => setShowDownTime(true)}
                    placeholder='选择几点钟'/>
             <SHM onChange={onSHMChange}
+                 onCancel={() => setShowDownTime(false)}
                  className={`${pickerStyle.SHM} ${showDownTime && pickerStyle.SHMShow}`}
-                 selectedHourProp={timeDate.selectedHour}
-                 selectedMinuteProp={timeDate.selectedMinute}
-                 selectedSecondProp={timeDate.selectedSecond}
+                 timeDate={timeDate}
             />
           </>}
           <main className={pickerStyle.picker}>

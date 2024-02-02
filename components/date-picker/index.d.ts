@@ -16,7 +16,7 @@ export interface DatePickerProps {
   onChange?: (day: DayItem | DayItem[]) => void; // 日期变化
   onClear?: () => void; // 清空
   onMonthChange?: (month: number) => void; // 月份变化
-  showTmie?:boolean;
+  showTmie?: boolean;
 }
 
 

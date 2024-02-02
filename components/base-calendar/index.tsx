@@ -251,7 +251,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        * @param j
        */
       const handleItemClick = (e, item: DayItem, i: number, j: number) => {
-        console.log(item)
         e.stopPropagation()
         if (disabled) return;
         if (selectedMode === 'week') {
@@ -266,28 +265,21 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
 
             /** 同一年 上一月**/
             if (item.monthSortMode === 1) {
-              console.log(1)
               prevMonth()
             }
             /** 同一年 下一月**/
             if (item.monthSortMode === 2 && curMonth <= 12) {
-              console.log(2)
-
               nextMonth()
             }
 
           } else {
             /** 上一年**/
             if (clickYaerItem > curYear) {
-              console.log(3)
-
               nextYear()
 
             }
             /** 下一年**/
             if (clickYaerItem < curYear) {
-              console.log(4)
-
               prevYear()
 
             }
