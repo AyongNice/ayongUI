@@ -39,7 +39,7 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
         picker = 'day',
         yearsRange = [1970, 2099],
         defaultValue = null,
-        value = '',
+        value = null,
         onChange = () => {
         },
         onClear = () => {
@@ -54,6 +54,8 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
     let _defaultValue = '';
     let yyymmmddd = '';//年月日
     let ssshhhmmm = ''//时分秒
+    let _value = '';//年月日
+    let ssshhhmmmValue = ''//时分秒
     if (defaultValue instanceof Date) {
         yyymmmddd = defaultValue.toISOString().slice(0, 10);
         if (showTime) {
@@ -61,6 +63,16 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
             _defaultValue = yyymmmddd + ' ' + ssshhhmmm
         } else {
             _defaultValue = yyymmmddd
+        }
+    }
+
+    if (value instanceof Date) {
+        yyymmmddd = value.toISOString().slice(0, 10);
+        if (showTime) {
+            ssshhhmmm = value.toTimeString().slice(0, 8);
+            _value = yyymmmddd + ' ' + ssshhhmmm
+        } else {
+            _value = yyymmmddd
         }
     }
 
@@ -91,9 +103,18 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
 
 
     useEffect(() => {
-
-
-        console.log('value', value)
+        if (value) {
+            childRef.current?.handleItemClick(null, {
+                date: value.getDate(),
+                comprehensiveStr: _value,
+                comprehensive: value,
+                isSelected: true,
+                //判断value是否今年今天
+                isToday: yyymmmddd === new Date().toISOString().slice(0, 10),
+            }, 0, 0, true)
+            setTimeDate(ssshhhmmm)
+            setSelectDate(_value)
+        }
     }, [value])
 
     useEffect(() => {
@@ -101,8 +122,8 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
         if (defaultValue) {
             childRef.current?.handleItemClick(null, {
                 date: defaultValue.getDate(),
-                comprehensiveStr: yyymmmddd,
-                comprehensive: yyymmmddd,
+                comprehensiveStr: _defaultValue,
+                comprehensive: defaultValue,
                 isSelected: true,
                 //判断value是否今年今天
                 isToday: yyymmmddd === new Date().toISOString().slice(0, 10),
@@ -306,6 +327,7 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
                                onFocus={() => setShowDownTime(true)}
                                placeholder='选择几点钟'/>
                         <SHM onChange={onSHMChange}
+                             value={ssshhhmmm}
                              onCancel={() => setShowDownTime(false)}
                              className={`${pickerStyle.SHM} ${showDownTime && pickerStyle.SHMShow}`}
                              defaultValue={ssshhhmmm}

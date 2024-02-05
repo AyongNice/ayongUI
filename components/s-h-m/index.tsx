@@ -21,16 +21,17 @@ const TimePicker = ({
                         timeDate = {},
                         defaultValue,
                         className,
+                        value,
                         onChange = () => {
                         },
                         onCancel = () => {
                         },
                     }) => {
     const _defaultValue = defaultValue.split(':');
-    console.log('_defaultValue-TimePicker--',_defaultValue)
-    const [selectedHour, setSelectedHour] = useState(Number(_defaultValue[0]) || currentHours);
-    const [selectedMinute, setSelectedMinute] = useState(Number(_defaultValue[1])  || currentMinutes);
-    const [selectedSecond, setSelectedSecond] = useState(Number(_defaultValue[2])  || currentSeconds);
+    const _value = value.split(':');
+    const [selectedHour, setSelectedHour] = useState(_defaultValue[0] || currentHours);
+    const [selectedMinute, setSelectedMinute] = useState(_defaultValue[1] || currentMinutes);
+    const [selectedSecond, setSelectedSecond] = useState(_defaultValue[2] || currentSeconds);
 
     const hourRef = useRef(null);
     const minuteRef = useRef(null);
@@ -50,12 +51,10 @@ const TimePicker = ({
 
 
     useEffect(() => {
-        // setSelectedHour(timeDate.selectedHour || '00');
-        // setSelectedMinute(timeDate.selectedMinute || '00')
-        // setSelectedSecond(timeDate.selectedSecond || '00')
-
-        console.log('timeDate', timeDate)
-    }, [timeDate])
+        setSelectedHour(_value[0] || '00');
+        setSelectedMinute(_value[1] || '00')
+        setSelectedSecond(_value[2] || '00')
+    }, [value])
 
     useEffect(() => {
         onSure()
