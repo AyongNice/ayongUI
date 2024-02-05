@@ -8,7 +8,6 @@ const Calendar: FC<CalendarProps> = (porps) => {
   const {
     style,
     value,
-    defaultValue = '',
     yearsRange = [1970, 2099],
     selectedMode = 'noSelect',
     startOfWeek,

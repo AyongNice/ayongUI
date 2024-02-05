@@ -27,7 +27,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                         style,
                                                         value,
                                                         className,
-                                                        defaultValue = '',
+                                                        defaultValue,
                                                         yearsRange = [1970, 2099],
                                                         selectedMode = 'noSelect',
                                                         startOfWeek,
@@ -49,10 +49,16 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
                                                       }, ref) => {
       const cFormat: string = '{d}';
       const _style = {width: 120, height: 100, ...style}
-      const _defaultValue = defaultValue.split('-');
-      if (_defaultValue[1]) {//月份-1
-        _defaultValue[1] = _defaultValue[1] - 1;
+      let _defaultValue = [];
+
+      console.log('base-defaultValue', typeof defaultValue)
+      if (defaultValue instanceof Date) {
+        _defaultValue = defaultValue.toISOString().slice(0, 10).split('-');
+        if (_defaultValue[1]) {//月份-1
+          _defaultValue[1] = _defaultValue[1] - 1;
+        }
       }
+
 
       const [weeks, setWeeks] = useState<string[]>(['一', '二', '三', '四', '五', '六', '日']);
       const [curYear, setCurYear] = useState<number>(Number(_defaultValue[0]) || new Date().getFullYear());
@@ -251,7 +257,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
        * @param j
        */
       const handleItemClick = (e, item: DayItem, i: number, j: number) => {
-        e.stopPropagation()
+        e?.stopPropagation()
         if (disabled) return;
         if (selectedMode === 'week') {
           setWeekRow(i)
@@ -289,7 +295,6 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         }
 
         if (selectedMode === 'multiple') {
-          console.log(5)
 
           setRes((prevRes) => {
             const updatedRes = [...prevRes];
@@ -391,6 +396,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         prevYear,
         setDateSelected,
         clearSetSelectedDates,
+        handleItemClick
       }))
       const base = (event) => {
         event.stopPropagation()

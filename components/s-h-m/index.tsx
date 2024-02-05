@@ -11,8 +11,14 @@ const generateNumberList = (start, end) => {
 const hourList = generateNumberList(0, 23);
 const minuteList = generateNumberList(0, 59);
 const secondList = generateNumberList(0, 59);
+let currentDate, currentHours, currentMinutes, currentSeconds;
+currentDate = new Date();
+currentHours = String(currentDate.getHours()).padStart(2, '0');
+currentMinutes = String(currentDate.getMinutes()).padStart(2, '0');
+currentSeconds = String(currentDate.getSeconds()).padStart(2, '0');
+
 const TimePicker = ({
-                      timeDate,
+                      timeDate = {},
                       className,
                       onChange = () => {
                       },
@@ -20,10 +26,9 @@ const TimePicker = ({
                       },
                     }) => {
 
-
-  const [selectedHour, setSelectedHour] = useState(timeDate.selectedHour || hourList[0].label);
-  const [selectedMinute, setSelectedMinute] = useState(timeDate.selectedMinute || minuteList[0].label);
-  const [selectedSecond, setSelectedSecond] = useState(timeDate.selectedSecond || secondList[0].label);
+  const [selectedHour, setSelectedHour] = useState(timeDate.selectedHour || currentHours);
+  const [selectedMinute, setSelectedMinute] = useState(timeDate.selectedMinute || currentMinutes);
+  const [selectedSecond, setSelectedSecond] = useState(timeDate.selectedSecond || currentSeconds);
 
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
@@ -40,18 +45,32 @@ const TimePicker = ({
   const handleSecondChange = (second) => {
     setSelectedSecond(second);
   };
+
+
   useEffect(() => {
-    setSelectedHour(timeDate.selectedHour || '00');
-    setSelectedMinute(timeDate.selectedMinute || '00')
-    setSelectedSecond(timeDate.selectedSecond || '00')
+    // setSelectedHour(timeDate.selectedHour || '00');
+    // setSelectedMinute(timeDate.selectedMinute || '00')
+    // setSelectedSecond(timeDate.selectedSecond || '00')
+
+    console.log('timeDate', timeDate)
   }, [timeDate])
+
+  useEffect(() => {
+    onSure()
+  }, [])
+
+  const scrollTop = () => {
+
+  }
+
   const onSure = () => {
     onChange(selectedHour + ":" + selectedMinute + ":" + selectedSecond);
   }
   useEffect(() => {
     if (hourRef.current) {
       const optionHeight = (hourRef.current.scrollHeight - 200) / hourList.length;
-      hourRef.current.scrollTop = hourList.findIndex((hour) => hour.label === selectedHour) * optionHeight;
+      const scrolltop = hourList.findIndex((hour) => hour.label === selectedHour) * optionHeight;
+      hourRef.current.scrollTop = scrolltop;
     }
 
     if (minuteRef.current) {

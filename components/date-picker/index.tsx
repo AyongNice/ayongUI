@@ -7,8 +7,8 @@
 
 
 import React, {useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
-import BaseCalendar from '../base-calendar/index.tsx'
-import pickerStyle from './index.module.less'
+import BaseCalendar from '../base-calendar/index.tsx';
+import pickerStyle from './index.module.less';
 
 import {Doubleleft, Under, Doubleright} from '../icon/icon.ts'
 import ConditionalRender from '../conditional-render/conditional-render.tsx'
@@ -26,11 +26,20 @@ let monthDate: DateItem = [];
 let quarterDate: DateItem = [];
 const arr = [];
 const obj = {};
+const placeholder = {
+  'day': '请选择日期',
+  'week': '请选择周',
+  'month': '请选择月份',
+  'quarter': '请选择季度',
+  'year': '请选择年份'
+}
 const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
 
   const {
     picker = 'day',
     yearsRange = [1970, 2099],
+    defaultValue = null,
+    value = '',
     onChange = () => {
     },
     onClear = () => {
@@ -42,17 +51,20 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
     isRange = false,
     showTime = false
   } = props;
-  const childRef = useRef(null);
-  const placeholder = {
-    'day': '请选择日期',
-    'week': '请选择周',
-    'month': '请选择月份',
-    'quarter': '请选择季度',
-    'year': '请选择年份'
+  let _defaultValue = '';
+  let cFormatdefaultValue = '';
+  if (defaultValue instanceof Date) {
+    cFormatdefaultValue = defaultValue.toISOString().slice(0, 10);
+    if (showTime) {
+      _defaultValue = cFormatdefaultValue + ' ' + defaultValue.toTimeString().slice(0, 8)
+    } else {
+      _defaultValue = cFormatdefaultValue
+    }
   }
 
+  const childRef = useRef(null);
 
-  const [selectDate, setSelectDate] = useState<Date | string>('')
+  const [selectDate, setSelectDate] = useState<Date | string>(_defaultValue)
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false)
   const [selectDateTemporary, setSelectDateTemporary] = useState<Date | string>('')
 
@@ -75,7 +87,27 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
     return sourceData[yearIndex] || []
   }, [yearIndex])
 
+
   useEffect(() => {
+
+
+    console.log('value', value)
+  }, [value])
+
+  useEffect(() => {
+
+    console.log('useEffect---childRef.current', typeof defaultValue)
+    if (defaultValue) {
+      childRef.current?.handleItemClick(null, {
+        date: defaultValue.getDate(),
+        comprehensiveStr: cFormatdefaultValue,
+        comprehensive: cFormatdefaultValue,
+        isSelected: true,
+        //判断value是否今年今天
+        isToday: cFormatdefaultValue === new Date().toISOString().slice(0, 10),
+      }, 0, 0)
+    }
+
     if (picker === 'month') {
       monthDate = [
         {value: '1月'},
@@ -257,10 +289,11 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
     <BaseCalendar
       className={`${isRange ? '' : pickerStyle.baseCalendarabsolute} ${pickerStyle.baseCalendar} ${isDropdownVisible ? pickerStyle.baseCalendarShow : pickerStyle.baseCalendarNone}`}
       ref={childRef}
-      {...props}
       selectedMode={picker}
       onChange={_onChange}
       style={{width: '32px', height: '32px'}}
+      {...props}
+      defaultValue={defaultValue}
       headerRender={({
                        curMonth,
                        yearOptions,
@@ -278,7 +311,6 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
             <SHM onChange={onSHMChange}
                  onCancel={() => setShowDownTime(false)}
                  className={`${pickerStyle.SHM} ${showDownTime && pickerStyle.SHMShow}`}
-                 timeDate={timeDate}
             />
           </>}
           <main className={pickerStyle.picker}>

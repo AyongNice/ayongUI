@@ -4,6 +4,8 @@ export interface CalendarProps {
   style?: React.CSSProperties; // 自定义样式
   className?: string; // 自定义类名
   disabled?: boolean; // 禁用
+  defaultValue?: Date | Date[]; // 默认日期值
+  value?: Date | Date[]; // 日期值
   onChange: (day: DayItem | DayItem[]) => void;//选择变化
   dayCellRender?: (day: DayItem) => React.ReactNode | null; // 自定义日期渲染
   picker: 'date' | 'month' | 'year' | 'quarter';// 选择器类型,
