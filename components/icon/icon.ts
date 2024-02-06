@@ -142,6 +142,10 @@ export { default as Key} from "./components/key-frame"; //钥匙
 export { default as Addfile} from "./components/addfile-frame"; //添加文件
 export { default as Deletefile} from "./components/deletefile-frame"; //删除文件
 export { default as Warning} from "./components/warning-frame"; //警告
+export { default as Carry} from "./components/carry-frame"; //日历图标对勾
+export { default as Clear} from "./components/clear-frame"; //清除
+export { default as Link} from "./components/link-frame"; //链接
+export { default as Wifi} from "./components/wifi-frame"; //Wifi
 /**
  * 实体icon
  */
@@ -190,3 +194,8 @@ export { default as Thumb} from "./components/thumb-solid"; //点赞
 export { default as Stepon} from "./components/stepon-solid"; //踩
 export { default as Addsfile} from "./components/addsfile-solid"; //添加文件
 export { default as Erasefile} from "./components/erasefile-solid"; //删除文件
+export { default as Mute} from "./components/mute-solid"; //声音关
+export { default as Sounds} from "./components/opensound-solid"; //声音关
+export { default as Begin} from "./components/begin-solid"; //暂停
+export { default as Timeout} from "./components/timeout-solid"; //播放
+export { default as Downloads} from "./components/download-solid"; //下载
