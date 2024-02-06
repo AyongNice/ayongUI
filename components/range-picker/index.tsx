@@ -169,14 +169,15 @@ const RangePicker = (props: CalendarProps) => {
         <DatePicker ref={start}
                     showTime={showTime}
                     onChange={startChange}
+                    selectedMode={picker}
                     footerRender={() => {
                     }}
                     rangMode='rangbefore'
                     isRange/>
         <DatePicker ref={end}
                     showTime={showTime}
+                    selectedMode={picker}
                     footerRender={() => {
-
                     }}
                     onChange={endChange}
                     rangMode='rangeafter'

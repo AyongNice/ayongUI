@@ -12,11 +12,10 @@ export const useDragDrop = ({
                                 }
                             }: DragDropParma): UseDragDropRetunrn => {
 
-
     const [tableColumns, setTableColumns] = useState<Column[]>(_tableColumns);
     const [tableData, setTableData] = useState<DataItem[]>(data as DataItem[]);
     const [activeTR, setActiveTR] = useState<null | number>(null);
-    const [activeTD, setActiveTD] = useState<null | string>(null);
+    const [activeTD, setActiveTD] = useState<null | number>(null);
 
 
     const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, index: number): void => {

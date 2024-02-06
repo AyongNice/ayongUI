@@ -22,37 +22,46 @@ function Table({
                  },
                  cellActiveClassName = () => {
                  },
+                 demo
                }: TableProps) {
+
   const styleClassName: string = `${table.table} ${className} `;
-  if (!columns.length) return <table className={styleClassName}>
+// 用于存储处理后的columns
+  let _tableColumns: Column[] = [];
+  // 用于计算colSpanSize 分组表头的列数
+  let colSpanSize: number = 0;
+  // 展开自定义渲染
+  const {expandedRowRender} = expandable || {};
+
+
+  /**
+   * 数据处理的第一步骤 数据处理
+   * 从props传递的columns或者通过<Table.Column>定义的列都可以使用 将其转换为统一的columns
+   */
+  const groupHandleData = groupHandle({columns, children});
+
+  if (!groupHandleData.columns.length) return <table className={styleClassName}>
     <tbody>
     <Empty length={data.length}/>
     </tbody>
   </table>
 
-  let _tableColumns: Column[] = [];
-  let colSpanSize: number = 0;
-  const {expandedRowRender} = expandable || {};
-
-  // 从props传递的columns或者通过<Table.Column>定义的列都可以使用
-  const groupHandleData = groupHandle({columns, children});
-
   _tableColumns = groupHandleData.columns;
   colSpanSize = groupHandleData.colSpanSize;
 
+
+  /** 展开折叠记录状态 **/
   const [ayonEexpandedRowKeys, setAyonExpandedRowKeys] = useState<Array<number | string>>([]);
 
+
+  /**
+   *数据处理的第二步骤
+   */
 
   /** 每一列排序状态 **/
   const _sortOrderMap: { [key: string]: string } = {};
 
-  /**
-   * age:状态
-   * 身高:状态
-   *数据处理的第三步骤
-   */
 
-  /** 默认排序功能 **/
   _tableColumns.forEach((column: Column | ColumnGroup) => {
     if (column.type !== 'columnGroup') {
       const {sorter, dataIndex, defaultSortOrder} = column;
@@ -69,6 +78,19 @@ function Table({
     }
   })
 
+  /**
+   * 数据处理的第三步骤
+   * @param tableColumns  {Column[]}最终渲染的列
+   * @param tableData {DataItem[]} 最终渲染的数据
+   * @param activeTR {number}  拖拽的行
+   * @param activeTD {number} 拖拽的列
+   * @param setTableData {Function}  设置渲染的数据hook方法
+   * @param handleDragStart {Function} 拖拽列开始
+   * @param handleDragStartData {Function} 拖拽行开始
+   * @param handleDragOver {Function} 拖拽中
+   * @param handleDrop {Function} 拖拽列结束
+   * @param handleDropData {Function} 拖拽行结束
+   */
   const {
     tableColumns,
     tableData,
@@ -80,9 +102,10 @@ function Table({
     handleDragOver,
     handleDrop,
     handleDropData,
-  }: UseDragDropRetunrn = useDragDrop({_tableColumns, data, draggable, onDragAfter});
+  }: UseDragDropRetunrn = useDragDrop({_tableColumns, data, draggable, onDragAfter, demo});
 
-  const [sortOrderMap, stateSortOrderMap] = useState<{ [key: string]: string }>(_sortOrderMap);//排序状态
+//排序状态
+  const [sortOrderMap, stateSortOrderMap] = useState<{ [key: string]: string }>(_sortOrderMap);
 
   const handleSort = (column: Column) => {
     // 提取当前列的 sorter 函数
@@ -126,6 +149,11 @@ function Table({
     return activeTR === index ? table.aticve + _className : _className
 
   }
+
+  /**
+   *   展开折叠
+   * @param rowIndex
+   */
   const toggleExpand = (rowIndex: number): void => {
     const newExpandedRowKeys = [...ayonEexpandedRowKeys];
     if (newExpandedRowKeys.includes(rowIndex)) {

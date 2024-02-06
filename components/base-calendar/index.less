@@ -3,6 +3,7 @@
   border-radius: var(--ayong-radius);
   padding: var(--ayong-midle-size);
   background: var(--ayong-light);
+  position: relative;
 }
 
 .calendar-table {
@@ -121,7 +122,6 @@
 .block-chlid {
   width: 30%;
   //触摸手
-  cursor: pointer;
   text-align: center;
   padding: 10px 0;
   border-radius: var(--ayong-radius);
@@ -140,6 +140,15 @@
 
 }
 
+.dayDisabled {
+  color: var(--ayong-plaster-grey);
+  background: var(--ayong-stone-gray);
+
+  &:hover {
+    cursor: not-allowed;
+  }
+
+}
 
 .range {
   //虚线

@@ -19,6 +19,8 @@ export interface CalendarProps {
   onClear?: () => void; // 清空
   onMonthChange?: (month: number) => void; // 月份变化
   showTmie?: boolean;
+  dayFormatter?: (day: DayItem) => string; // 日期格式化
+  disabledTime?: (day: DayItem) => boolean; // 禁用时间
 }
 
 

@@ -1,3 +1,4 @@
+
 .warp {
   width: max-content;
   position: relative;
@@ -23,6 +24,10 @@
     color: var(--ayong-dark-green-gray);
   }
 
+
+}
+
+.mainHover {
   &:hover {
     border: 1px solid var(--ayong-primary);
 
@@ -33,13 +38,29 @@
 
 }
 
+//less 混入 @minxin
+
+//分割线
+.tshanHien {
+  &:after {
+    position: absolute;
+    content: '';
+    width: 106%;
+    transform: translateX(-3%);
+    height: 1px;
+    bottom: -2px;
+    background: var(--ayong-premium-grey);
+  }
+}
+
+
 .input {
   width: 95%;
   outline: none;
   border: 1px solid var(--ayong-grey);
   border-radius: var(--ayong-radius);
   color: var(--ayong-dark-green-gray);
-  padding: 6px 3px;
+  padding: 4.5px 3px;
 }
 
 .pickerWrong {
@@ -113,15 +134,26 @@
 
 }
 
-footer {
+.footer {
   //触摸手
   cursor: pointer;
   text-align: center;
   color: var(--ayong-primary);
+  margin-top: 10px;
 
   &:active {
     //css颜色变亮
     filter: brightness(1.1);
+  }
+
+  &:after {
+    position: absolute;
+    content: '';
+    width: 106%;
+    transform: translateX(-3%);
+    height: 1px;
+    bottom: 28px;
+    background: var(--ayong-premium-grey);
   }
 }
 
