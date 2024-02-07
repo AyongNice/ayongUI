@@ -58,14 +58,13 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
         }
       }
 
-
       const [weeks, setWeeks] = useState<string[]>(['一', '二', '三', '四', '五', '六', '日']);
       const [curYear, setCurYear] = useState<number>(Number(_defaultValue[0]) || new Date().getFullYear());
       const [curMonth, setCurMonth] = useState<number>(Number(_defaultValue[1]) || new Date().getMonth());
       const [curDate] = useState<string>(parseTime(new Date().getTime()), cFormat);
 
       const [res, setRes] = useState<any[][]>([]);
-      const [selectedDates, setSelectedDates] = useState<DayItem[]>([]);
+      const [selectedDates, setSelectedDates] = useState<DayItem | DayItem[]>([]);
       /** 选定的周 **/
       const [weekRow, setWeekRow] = useState<number | null>(null);
       //切换年份下标
@@ -259,6 +258,7 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
       //使用useMemo优化 选中的日期存储map结果 利用className判断赋值样式
       const selectedDateMap = useMemo(() => {
         const map = {};
+
         //多选 只有日历组件才有多选
         if (Array.isArray(selectedDates)) {
           selectedDates.map((date) => {
@@ -266,14 +266,23 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
           })
           return map
         }
-        //单选
-        map[selectedDates.comprehensive.toISOString().slice(0, 10)] = selectedDates;
+
+        if (Object.keys(selectedDates).length) {
+          const key = selectedDates.comprehensiveStr.substring(0, 10)
+          console.log(selectedDates, map, key)
+          //单选
+          map[key] = selectedDates;
+        }
+        console.log('map---', map)
         return map
       }, [selectedDates])
 
+
       useEffect(() => {
-        console.log('selectedDateMap', selectedDateMap)
-      }, [selectedDateMap])
+        if (selectedMode === 'multiple') {
+          onChange(selectedDates)
+        }
+      }, [selectedDates])
 
       /**
        * 点击日期
@@ -338,17 +347,13 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
 
         //单选
         if (['day', 'single'].includes(selectedMode)) {
-          if (item.date === '08') {
-            console.log('item=======', item)
-          }
+
           setSelectedDates(item);
 
         }
         if (notrigger) return;
 
-        if (selectedMode === 'multiple') {
-          onChange(selectedDates)
-        }
+
         if (selectedMode === 'week') {
           onChange(res[i], `${curYear}-${curMonth + 1} ${i + 1}周`)
         }

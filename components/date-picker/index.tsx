@@ -123,7 +123,6 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
   }, [value])
 
   useEffect(() => {
-    console.log('_defaultValue', _defaultValue)
     if (defaultValue) {
       childRef.current?.handleItemClick(null, {
         date: defaultValue.getDate().toString().padStart(2, '0'),
@@ -224,8 +223,6 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
   }
 
   const _onChange = (item: DayItem, week) => {
-
-    console.log('aaa', item)
     if (picker === 'week') {
       setSelectDate(week)
       setSelectDateTemporary(week)

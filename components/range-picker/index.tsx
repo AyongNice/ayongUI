@@ -15,12 +15,10 @@ const RangePicker = (props: CalendarProps) => {
   const {
     picker = 'day',
     yearsRange = [1970, 2099],
+    className,
     onChange = () => {
     },
     onClear = () => {
-    },
-    onMonthChange = () => {
-
     },
     showTime = false
   } = props;
@@ -72,7 +70,6 @@ const RangePicker = (props: CalendarProps) => {
     setFoucsDirection('')
   }
   const openDropdown = (e) => {
-    console.log('openDropdown', e)
     start.current?.openDropdown();
     end.current?.openDropdown();
     setIsDropdownVisible(true)
@@ -80,11 +77,20 @@ const RangePicker = (props: CalendarProps) => {
     setClcikTarget2(false)
   }
 
-  const startChange = (data: DayItem) => {
-    setStartValue(data.comprehensiveStr)
+  const startChange = (data: DayItem, dateString) => {
+    if (picker === 'week') {
+      setStartValue(dateString)
+    } else {
+      setStartValue(data.comprehensiveStr)
+    }
   }
-  const endChange = (data: DayItem) => {
-    setEndValue(data.comprehensiveStr)
+  const endChange = (data: DayItem, dateString) => {
+    if (picker === 'week') {
+      setEndValue(dateString)
+    } else {
+      setEndValue(data.comprehensiveStr)
+
+    }
   }
 
   useEffect(() => {
@@ -143,9 +149,11 @@ const RangePicker = (props: CalendarProps) => {
       ${startValue && endValue ? pickerStyle.hoverMain : ''}
       ${foucsDirection && pickerStyle.hoverActive}
        ${foucsDirection && foucsDirection === 'left' ? pickerStyle.hoverActiveRight : pickerStyle.hoverActiveLeft}
+       ${className}
       `}
     >
-      <Input className={pickerStyle.startInput} value={startValue} placeholder='请选择开始日期' onFocus={leftFocus}/>
+      <Input className={pickerStyle.startInput} value={startValue} onChange={() => {
+      }} placeholder='请选择开始日期' onFocus={leftFocus}/>
       <Swapright className={pickerStyle.swapright}/>
 
       <input value={endValue}
@@ -169,14 +177,16 @@ const RangePicker = (props: CalendarProps) => {
         <DatePicker ref={start}
                     showTime={showTime}
                     onChange={startChange}
-                    selectedMode={picker}
+                    picker={picker}
+                    yearsRange={yearsRange}
                     footerRender={() => {
                     }}
                     rangMode='rangbefore'
                     isRange/>
         <DatePicker ref={end}
                     showTime={showTime}
-                    selectedMode={picker}
+                    picker={picker}
+                    yearsRange={yearsRange}
                     footerRender={() => {
                     }}
                     onChange={endChange}
