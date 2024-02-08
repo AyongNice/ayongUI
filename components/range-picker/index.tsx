@@ -6,6 +6,8 @@ import {Cendas, Swapright, Wrong} from '../icon/icon.ts';
 import {DayItem, CalendarProps} from '.././base-calendar/index.d';
 import SHM from '../s-h-m/index.tsx';
 import Button from '../button/index.tsx';
+import globe from "../../config/style.module.less";
+
 
 /**
  * 日期范围选择器
@@ -16,6 +18,7 @@ const RangePicker = (props: CalendarProps) => {
     picker = 'day',
     yearsRange = [1970, 2099],
     className,
+    disabled = false,
     onChange = () => {
     },
     onClear = () => {
@@ -134,11 +137,13 @@ const RangePicker = (props: CalendarProps) => {
     if (!endValue) setFoucsDirection('right')
   }
   const rightFocus = (): void => {
+    if (disabled) return
     openDropdown()
     setFoucsDirection('right')
 
   }
   const leftFocus = (): void => {
+    if (disabled) return
     openDropdown()
     setFoucsDirection('left')
 
@@ -149,14 +154,17 @@ const RangePicker = (props: CalendarProps) => {
       ${startValue && endValue ? pickerStyle.hoverMain : ''}
       ${foucsDirection && pickerStyle.hoverActive}
        ${foucsDirection && foucsDirection === 'left' ? pickerStyle.hoverActiveRight : pickerStyle.hoverActiveLeft}
+      ${disabled ? globe.disabled : ''}
        ${className}
       `}
     >
-      <Input className={pickerStyle.startInput} value={startValue} onChange={() => {
-      }} placeholder='请选择开始日期' onFocus={leftFocus}/>
+      <Input className={pickerStyle.startInput} disabled={disabled} value={startValue}
+             onChange={() => {
+             }} placeholder='请选择开始日期' onFocus={leftFocus}/>
       <Swapright className={pickerStyle.swapright}/>
 
       <input value={endValue}
+             disabled={disabled}
              className={pickerStyle.startInput}
              onChange={() => {
              }}

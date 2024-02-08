@@ -46,6 +46,7 @@ const DatePicker = React.forwardRef((props: CalendarProps, ref) => {
     onChange = () => {
     },
     onClear = () => {
+
     },
     footerRender = null,
     showTime = false,

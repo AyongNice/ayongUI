@@ -269,11 +269,10 @@ const Calendar: FC<CalendarProps> = React.forwardRef(({
 
         if (Object.keys(selectedDates).length) {
           const key = selectedDates.comprehensiveStr.substring(0, 10)
-          console.log(selectedDates, map, key)
           //单选
           map[key] = selectedDates;
+
         }
-        console.log('map---', map)
         return map
       }, [selectedDates])
 
