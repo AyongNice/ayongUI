@@ -162,15 +162,17 @@ const RangePicker = (props: CalendarProps) => {
              onChange={() => {
              }} placeholder='请选择开始日期' onFocus={leftFocus}/>
       <Swapright className={pickerStyle.swapright}/>
-
-      <input value={endValue}
-             disabled={disabled}
-             className={pickerStyle.startInput}
+      <Input className={pickerStyle.startInput} disabled={disabled} value={endValue}
              onChange={() => {
-             }}
-             onFocus={rightFocus}
-             placeholder='请选择结束日期'
-      />
+             }} placeholder='请选择结束日期' onFocus={rightFocus}/>
+      {/*<input value={endValue}*/}
+      {/*       disabled={disabled}*/}
+      {/*       className={pickerStyle.startInput}*/}
+      {/*       onChange={() => {*/}
+      {/*       }}*/}
+      {/*       onFocus={rightFocus}*/}
+      {/*       placeholder='请选择结束日期'*/}
+      {/*/>*/}
       <Wrong
         onClick={onWrong}
         className={pickerStyle.pickerWrong}
