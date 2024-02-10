@@ -5,7 +5,7 @@ export interface DrawerProps {
   width?: number | string; // 宽度
   zIndex?: number; // z-index
   open?: boolean; // 是否显示
-  mainClassName?: string; // 自定义类名
+  bodyClassName?: string; // 自定义类名
   headerCalssName?: React.CSSProperties; // 头部样式
   getContainer?: string | HTMLElement | (() => HTMLElement); // 容器
   size?: 'string'; // 像素大小 top/bottom 时使用 高度  left/right 时使用 宽度
@@ -15,8 +15,8 @@ export interface DrawerProps {
   onClose?: (e: React.MouseEvent<HTMLElement>) => void; // 关闭回调
   children: React.ReactNode; // 内容
   mainRender?: React.ReactNode; // 自定义抽屉内容
+  headerRender?: React.ReactNode; // 自定义抽屉内容
   afterOpenChange?: (visible: boolean) => void; // 显示隐藏回调
-  maskClosable?: boolean; // 点击遮罩是否关闭
   maskStyle?: React.CSSProperties; // 遮罩样式
   closeIcon?: React.ReactNode; // 关闭按钮
   destroyOnClose?: boolean; // 关闭时销毁

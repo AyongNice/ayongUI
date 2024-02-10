@@ -1,17 +1,45 @@
 import React, {useEffect, useState} from 'react';
 import drawerStyle from './index.module.less'
-import Button from '../button/index.tsx'
+import Button from '../button/index.tsx';
+import {Wrongs} from '../icon/icon.ts'
+import {DrawerProps} from "./index.d";
+import ReactDOM from 'react-dom';
 
-const Drawer = ({
-                  children,
-                  open = false,
-                  placement = 'bottom',
-                  size = '380px',
-                  onClose = () => {
-                  },
-                }) => {
+
+const styletMap = {
+  top: (size: string) => ({width: '100%', height: size}),
+  bottom: (size: string) => ({width: '100%', height: size,}),
+  right: (size: string) => ({width: size, height: '100%',}),
+  left: (size: string) => ({width: size, height: '100%',}),
+}
+
+
+const Component: React.FC<DrawerProps> = ({
+                                            children,
+                                            title,
+                                            zIndex,
+                                            targetNode = {},
+                                            getContainer = true,
+                                            headerCalssName = '',
+                                            bodyClassName = '',
+                                            open = false,
+                                            placement = 'bottom',
+                                            size = '380px',
+                                            maskClosable = true,
+                                            onClose = () => {
+                                            },
+                                            mainRender = null,
+                                            headerRender = null
+                                          } = {}) => {
   const [openWarp, setOpenWarp] = useState<boolean>(open);
   const [enter, setEnter] = useState<boolean>(open);
+  const _style = {
+    ...(zIndex ? {zIndex} : {}),
+    ...(getContainer ? {} : {position: "absolute"})
+  }
+  useEffect(() => {
+    console.log('useEffect', targetNode)
+  }, [])
   const toggleDrawer = () => {
     onClose()
   };
@@ -33,21 +61,45 @@ const Drawer = ({
   const onAnimationEnd = (e) => {
     setEnter(true)
   }
-  return (
 
-    <div className={`${drawerStyle.drawer} ${openWarp ? '' : drawerStyle.warpclose}`}>
-      <div onClick={toggleDrawer}
-           onAnimationEnd={onAnimationEnd}
-           className={`${drawerStyle.make} ${openWarp ? drawerStyle.makeTram : ''}`}>
-        <div onTransitionEnd={onTransitionEnd}
-             className={`${drawerStyle.main}  ${enter ? `${drawerStyle.openmian} ${drawerStyle[placement]}` : drawerStyle[placement]}`}>
-          <Button onClick={toggleDrawer}>Close</Button>
-          {openWarp ? 1 : 0}
-        </div>
-      </div>
+
+  return <div onClick={() => {
+    maskClosable && toggleDrawer()
+  }}
+              onAnimationEnd={onAnimationEnd}
+              style={_style}
+              className={`${openWarp ? '' : drawerStyle.warpclose} ${drawerStyle.make}  ${openWarp ? drawerStyle.makeTram : ''}`}>
+    <div onTransitionEnd={onTransitionEnd}
+         style={styletMap[placement](size)}
+         className={`${drawerStyle.main}  ${enter ? `${drawerStyle.openmian} ${drawerStyle[placement]}` : drawerStyle[placement]}`}>
+      {typeof mainRender === 'function' ? mainRender() :
+        <React.Fragment>
+          {typeof headerRender === 'function' ? headerRender(toggleDrawer) : <header className={headerCalssName}>
+            <Wrongs onClick={toggleDrawer}/>
+            <h3>{title}</h3>
+          </header>}
+
+          <main className={bodyClassName}>
+            {children}
+          </main>
+
+        </React.Fragment>
+      }
 
     </div>
-  );
+  </div>
+
 };
+
+const Drawer: React.FC<DrawerProps> = (props) => {
+
+  if (props.getContainer) {
+    return ReactDOM.createPortal(<Component
+      {...props}
+    >{props.children}</Component>, document.body)
+  }
+  return <Component    {...props}>{props.children}</Component>
+
+}
 
 export default Drawer;
