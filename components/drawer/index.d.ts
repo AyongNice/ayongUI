@@ -6,7 +6,8 @@ export interface DrawerProps {
   zIndex?: number; // z-index
   open?: boolean; // 是否显示
   bodyClassName?: string; // 自定义类名
-  headerCalssName?: React.CSSProperties; // 头部样式
+  headerClassName?: React.CSSProperties; // 头部样式
+  makeClassName?: React.CSSProperties; //蒙版样式
   getContainer?: string | HTMLElement | (() => HTMLElement); // 容器
   size?: 'string'; // 像素大小 top/bottom 时使用 高度  left/right 时使用 宽度
   mask?: boolean; // 是否显示遮罩

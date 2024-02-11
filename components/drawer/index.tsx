@@ -20,8 +20,9 @@ const Component: React.FC<DrawerProps> = ({
                                             zIndex,
                                             targetNode = {},
                                             getContainer = true,
-                                            headerCalssName = '',
+                                            headerClassName = '',
                                             bodyClassName = '',
+                                            makeClassName = '',
                                             open = false,
                                             placement = 'bottom',
                                             size = '380px',
@@ -33,17 +34,19 @@ const Component: React.FC<DrawerProps> = ({
                                           } = {}) => {
   const [openWarp, setOpenWarp] = useState<boolean>(open);
   const [enter, setEnter] = useState<boolean>(open);
+  let _maskClosable = maskClosable
   const _style = {
     ...(zIndex ? {zIndex} : {}),
     ...(getContainer ? {} : {position: "absolute"})
   }
-  useEffect(() => {
-    console.log('useEffect', targetNode)
-  }, [])
+
   const toggleDrawer = () => {
+    console.log('----', title)
     onClose()
   };
   useEffect(() => {
+
+    console.log('open', title, open)
     if (open) {
       setOpenWarp(true)
     }
@@ -55,7 +58,7 @@ const Component: React.FC<DrawerProps> = ({
   }, [open])
 
   const onTransitionEnd = (e) => {
-    setOpenWarp(e.target.className.includes(drawerStyle.openmian))
+    setOpenWarp(open)
   }
 
   const onAnimationEnd = (e) => {
@@ -64,17 +67,17 @@ const Component: React.FC<DrawerProps> = ({
 
 
   return <div onClick={() => {
-    maskClosable && toggleDrawer()
+    _maskClosable && toggleDrawer()
   }}
               onAnimationEnd={onAnimationEnd}
               style={_style}
-              className={`${openWarp ? '' : drawerStyle.warpclose} ${drawerStyle.make}  ${openWarp ? drawerStyle.makeTram : ''}`}>
+              className={`${openWarp ? drawerStyle.makeTram : drawerStyle.warpclose} ${drawerStyle.make} ${makeClassName} `}>
     <div onTransitionEnd={onTransitionEnd}
          style={styletMap[placement](size)}
          className={`${drawerStyle.main}  ${enter ? `${drawerStyle.openmian} ${drawerStyle[placement]}` : drawerStyle[placement]}`}>
       {typeof mainRender === 'function' ? mainRender() :
         <React.Fragment>
-          {typeof headerRender === 'function' ? headerRender(toggleDrawer) : <header className={headerCalssName}>
+          {typeof headerRender === 'function' ? headerRender(toggleDrawer) : <header className={headerClassName}>
             <Wrongs onClick={toggleDrawer}/>
             <h3>{title}</h3>
           </header>}
@@ -92,14 +95,22 @@ const Component: React.FC<DrawerProps> = ({
 };
 
 const Drawer: React.FC<DrawerProps> = (props) => {
+  let _maskClosable = props.maskClosable;
+  let _getContainer = props.getContainer
+  React.Children.toArray(props.children).some(child => {
 
-  if (props.getContainer) {
+    if (child?.type?.displayName === 'Drawer') {
+      _maskClosable = false;
+      _getContainer = false;
+    }
+  });
+  if (_getContainer) {
     return ReactDOM.createPortal(<Component
       {...props}
     >{props.children}</Component>, document.body)
   }
-  return <Component    {...props}>{props.children}</Component>
+  return <Component    {...props} maskClosable={_maskClosable}>{props.children}</Component>
 
 }
-
+Drawer.displayName = 'Drawer'
 export default Drawer;
