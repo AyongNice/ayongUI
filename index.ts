@@ -231,7 +231,9 @@ export {default as RangePicker} from './components/range-picker/index.tsx';
 export {default as Drawer} from './components/drawer/index.tsx';
 export type {DrawerProps} from './components/drawer/index.d';
 
-// export {default as Radio} from './components/radio/radio';
+export {default as Radio} from './components/radio/index.tsx';
+export type {RadioProps} from './components/radio/index.d';
+
 // export {default as Checkbox} from './components/checkbox/checkbox';
 // export {default as Select} from './components/select/select';
 // export {default as Switch} from './components/switch/switch';
