@@ -1,29 +1,24 @@
 import React from 'react';
 
 export interface DrawerProps {
-  title?: React.ReactNode; // 标题
-  width?: number | string; // 宽度
-  zIndex?: number; // z-index
-  open?: boolean; // 是否显示
-  bodyClassName?: string; // 自定义类名
-  headerClassName?: React.CSSProperties; // 头部样式
-  makeClassName?: React.CSSProperties; //蒙版样式
-  getContainer?: string | HTMLElement | (() => HTMLElement); // 容器
-  size?: 'string'; // 像素大小 top/bottom 时使用 高度  left/right 时使用 宽度
-  mask?: boolean; // 是否显示遮罩
-  maskClosable?: boolean; // 点击遮罩是否关闭
-  placement?: 'top' | 'right' | 'bottom' | 'left'; // 位置
+  title?: React.ReactNode; // 标题 默认值''
+  zIndex?: number; // z-index 默认值 999
+  open?: boolean; // 是否显示  默认值 false
+  bodyClassName?: string; // 自定义类名 默认值''
+  headerClassName?: React.CSSProperties; // 头部样式 默认值''
+  getContainer?: boolean; // 容器 默认值 false
+  size?: 'string'; // 像素大小 top/bottom 时使用 高度  left/right 时使用 宽度 默认值''
+  maskClosable?: boolean; // 点击遮罩是否关闭  默认值 true
+  placement?: 'top' | 'right' | 'bottom' | 'left'; // 位置 默认值 right
   onClose?: (e: React.MouseEvent<HTMLElement>) => void; // 关闭回调
   children: React.ReactNode; // 内容
   mainRender?: React.ReactNode; // 自定义抽屉内容
   headerRender?: React.ReactNode; // 自定义抽屉内容
   afterOpenChange?: (visible: boolean) => void; // 显示隐藏回调
-  maskStyle?: React.CSSProperties; // 遮罩样式
-  closeIcon?: React.ReactNode; // 关闭按钮
+  closeIcon?: React.ReactNode | null; // 关闭按钮 默认值 null
   destroyOnClose?: boolean; // 关闭时销毁
   forceRender?: boolean; // 强制渲染
   keyboard?: boolean; // 是否支持键盘 esc 关闭
-
 }
 
 

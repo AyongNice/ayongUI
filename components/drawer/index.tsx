@@ -17,7 +17,8 @@ const styletMap = {
 const Component: React.FC<DrawerProps> = ({
                                             children,
                                             title,
-                                            zIndex,
+                                            closeIcon,
+                                            zIndex = 999,
                                             targetNode = {},
                                             getContainer = true,
                                             headerClassName = '',
@@ -78,7 +79,8 @@ const Component: React.FC<DrawerProps> = ({
       {typeof mainRender === 'function' ? mainRender() :
         <React.Fragment>
           {typeof headerRender === 'function' ? headerRender(toggleDrawer) : <header className={headerClassName}>
-            <Wrongs onClick={toggleDrawer}/>
+
+            {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) : <Wrongs onClick={toggleDrawer}/>}
             <h3>{title}</h3>
           </header>}
 
