@@ -40,7 +40,7 @@ const Radio = ({value, className, checked, onChange, disabled, children, isGroup
 
 const Button = ({
                   value, className, checked, onChange = () => {
-  }, disabled, children, isGroup = false
+  }, disabled, children, isGroup = false, index, isLast, size,
                 }) => {
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
@@ -54,12 +54,28 @@ const Button = ({
   const onButton = () => {
     onChange(value)
   }
+  const getClassName = () => {
+    console.log('getClassName', !index, !isLast)
+    if (index && !isLast) {
+      console.log('1')
+      return styleRadio.button
+    }
+    if (!index) {
 
+      return styleRadio.buttonFirst
+    }
+    if (isLast) {
+      console.log('3')
+      return styleRadio.buttonLast
+    }
+  }
   if (isGroup) {
     // 如果存在 Radio.Group 父组件，则渲染多个 Radio
     return (
       <label className={_className}>
-        <_Button disabled={disabled} type={checked ? 'primary' : 'default'} value={value}
+        <_Button disabled={disabled} className={getClassName()}
+                 type={checked ? 'primary' : 'default'} value={value}
+                 size={size}
                  onClick={onButton}> {children}</_Button>
       </label>
     );
@@ -67,16 +83,20 @@ const Button = ({
     // 如果不存在 Radio.Group 父组件，则渲染单个 Radio
     return (
       <label className={_className}>
-        <_Button disabled={disabled} type={isChecked ? 'primary' : 'default'} onClick={handleChange}
+        <_Button disabled={disabled} type={isChecked ? 'primary' : 'default'}
+                 onClick={handleChange}
+                 size={size}
                  value={value}> {children}</_Button>
       </label>
     );
   }
 };
-const RadioGroup = ({children, value, onChange, type = Radio}) => {
-
+const RadioGroup = ({children, value, onChange, size}) => {
+  const length = React.Children.count(children) - 1;
+  console.log(length)
   return <label>
-    {React.Children.map(children, (child) => {
+    {React.Children.map(children, (child, index) => {
+      console.log(index, React.Children.toArray().length)
       // 确保子元素是 Radio 组件
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
@@ -84,6 +104,9 @@ const RadioGroup = ({children, value, onChange, type = Radio}) => {
           disabled: child.props.disabled,
           isGroup: true,
           onChange: () => onChange(child.props.value),
+          index,
+          size,
+          isLast: length === index
         });
       }
       return null;
