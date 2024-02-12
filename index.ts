@@ -190,8 +190,8 @@ export {
   Erasefile,
   Carry,
   Clear,
-    Link,
-    Wifi,
+  Link,
+  Wifi,
   Mute,
   Sounds,
   Begin,
@@ -233,6 +233,9 @@ export type {DrawerProps} from './components/drawer/index.d';
 
 export {default as Radio} from './components/radio/index.tsx';
 export type {RadioProps} from './components/radio/index.d';
+
+export {default as Modal} from './components/modal/index.tsx';
+export type {ModalProps} from './components/modal/index.d';
 
 // export {default as Checkbox} from './components/checkbox/checkbox';
 // export {default as Select} from './components/select/select';

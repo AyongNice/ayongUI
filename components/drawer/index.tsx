@@ -19,7 +19,6 @@ const Component: React.FC<DrawerProps> = ({
                                             title,
                                             closeIcon,
                                             zIndex = 999,
-                                            targetNode = {},
                                             getContainer = true,
                                             headerClassName = '',
                                             bodyClassName = '',
@@ -42,7 +41,6 @@ const Component: React.FC<DrawerProps> = ({
   }
 
   const toggleDrawer = () => {
-    console.log('----', title)
     onClose()
   };
   useEffect(() => {
@@ -75,12 +73,14 @@ const Component: React.FC<DrawerProps> = ({
               className={`${openWarp ? drawerStyle.makeTram : drawerStyle.warpclose} ${drawerStyle.make} ${makeClassName} `}>
     <div onTransitionEnd={onTransitionEnd}
          style={styletMap[placement](size)}
+         onClick={(e) => e.stopPropagation()}
          className={`${drawerStyle.main}  ${enter ? `${drawerStyle.openmian} ${drawerStyle[placement]}` : drawerStyle[placement]}`}>
       {typeof mainRender === 'function' ? mainRender() :
         <React.Fragment>
           {typeof headerRender === 'function' ? headerRender(toggleDrawer) : <header className={headerClassName}>
 
-            {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) : <Wrongs onClick={toggleDrawer}/>}
+            {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) :
+              <Wrongs onClick={toggleDrawer}/>}
             <h3>{title}</h3>
           </header>}
 

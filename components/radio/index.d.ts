@@ -10,4 +10,6 @@ export interface RadioProps {
   type?: 'primary' | 'dashed' | 'safe' | 'error' | 'warn'; // 按钮类型 继承Button组件参数
 }
 
-export function Radio(props: RadioProps): React.FC<Props>;
+declare const Radio: React.FC<RadioProps>;
+
+export default Radio;
