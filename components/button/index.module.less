@@ -7,21 +7,19 @@
   border: 1px solid var(--ayong-primary);
   color: var(--ayong-primary);
   background: none;
+  margin: 0;
+}
+
+.mutual {
+  &:hover { //触摸颜色变浅色
+    opacity: 0.9;
+  }
 
   &:active {
     //css颜色变亮
     filter: brightness(1.1);
   }
-
-  //
-  &:hover { //触摸颜色变浅色
-    opacity: 0.9;
-  }
-
-
-  margin: 0;
 }
-
 
 //禁用手图标
 .notAllowed {
@@ -111,6 +109,9 @@
   text-align: center;
 }
 
+.loading {
+  opacity: 0.7;
+}
 
 //button {
 //  padding: 10px 20px;

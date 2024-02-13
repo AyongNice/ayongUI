@@ -9,6 +9,7 @@ import {
 import {ButtonProps} from "./index.d"
 import {useDebounce} from '../../utils/index.ts';
 import coomStlye from '../../config/style.module.less';
+import {Loading} from '../icon/icon.ts'
 
 
 const Button = (props: ButtonProps) => {
@@ -25,6 +26,7 @@ const Button = (props: ButtonProps) => {
     text,
     time = 0,
     icon = '',
+    loading = false,
     onClick = () => {
     },
   } = props;
@@ -54,12 +56,12 @@ const Button = (props: ButtonProps) => {
   return (
     <button
       style={style}
-      className={styleClassName}
+      className={`${styleClassName} ${disabled ? '' : but.mutual} ${loading ? but.loading : ''}`}
       onClick={time ? useDebounce(ayongClick, time) : ayongClick}
       disabled={disabled}
       type={htmlType}
     >
-      {icon}{children}
+      {loading ? <Loading/> : icon} {children}
     </button>
 
   )
