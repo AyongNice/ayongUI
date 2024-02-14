@@ -4,7 +4,6 @@ import {Wrongs, Wrong, Lament, Illustrate, Tick} from '../icon/icon.ts'
 import {ModalProps, ConfirmProps} from './index.d';
 import Button from '../button/index.tsx';
 import MountDom from "../mount-dom/index.ts"; //挂在dom公共方法
-import ConditionalRender from "../conditional-render/conditional-render.tsx";
 
 let time: number = 0;
 const leftIcon: { [key: string]: React.FC } = {

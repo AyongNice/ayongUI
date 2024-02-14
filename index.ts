@@ -237,6 +237,8 @@ export type {RadioProps} from './components/radio/index.d';
 export {default as Modal} from './components/modal/index.tsx';
 export type {ModalProps} from './components/modal/index.d';
 
+export {default as Notification} from './components/notification/index.tsx';
+export type {NotificationProps} from './components/notification/index.d';
 // export {default as Checkbox} from './components/checkbox/checkbox';
 // export {default as Select} from './components/select/select';
 // export {default as Switch} from './components/switch/switch';
