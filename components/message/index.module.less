@@ -4,10 +4,8 @@
   top: 0;
   z-index: 1000;
   left: 50%;
-  fill: #58BA2DFF; //颜色加深
+  color: var(--ayong-light);
   transform: translateX(-50%);
-  background-color: var(--ayong-beige);
-  border: 2px solid var(--ayong-leaf-yellow);
   padding: 10px 15px;
   border-radius: var(--ayong-radius);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -19,49 +17,39 @@
 }
 
 .info {
-  color: var(--ayong-apricot-yellow);
-  fill: var(--ayong-apricot-yellow); //颜色加深
+  fill: var(--ayong-light); //颜色加深
+  background: var(--ayong-info);
 }
 
 .success {
-  color: #fff;
-  fill: #fff; //颜色加深
-  border-color: darken(#8aabec, 10%); //颜色加深
+  fill: var(--ayong-light);; //颜色加深
   background: var(--ayong-primary);
 }
 
 .warning {
-  color: #fff;
-  border-color: darken(#d6af0c, 3%); //颜色加深
   background: var(--ayong-warn);
-  fill: #fff; //颜色加深
+  fill: var(--ayong-light); //颜色加深
 }
 
 .error {
-  color: #fff;
-  border-color: darken(#f79797, 10%); //颜色加深
-  background: var(--ayong-message-error);
-  fill: #fff; //颜色加深
+  background: var(--ayong-error);
+  fill: var(--ayong-light); //颜色加深--ayong-error
 }
 
 .close {
   width: 15px;
   height: 15px;
   margin-left: 10px;
-  //position: absolute;
   right: 5px;
   top: 50%;
-  //transform: translateY(-50%);
 }
 
 .tag {
   width: 15px;
   height: 15px;
   margin-right: 10px;
-  //position: absolute;
   left: 5px;
   top: 50%;
-  //transform: translateY(-50%);
 }
 
 //写个动画 从上到下 间隔0.5秒 从下到上 然后渐变消失 0.5秒
