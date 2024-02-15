@@ -29,36 +29,25 @@ const Component: React.FC<NotificationProps> = ({
 
                                                   }
                                                 }) => {
-  const [openWarp, setOpenWarp] = useState<boolean>(open);
-  const [enter, setEnter] = useState<boolean>(open);
+  const [enter, setEnter] = useState<boolean>(false);
+  console.log(style)
   const _style = {
     zIndex,
     ...style
   }
-  console.log(`onAyongClose.${onAyongClose}`)
   const toggleDrawer = () => {
-    onClose()
-    onAyongClose()
+    setEnter(false)
+
   };
-  useEffect(() => {
-    if (open) {
-      setOpenWarp(true)
-    }
-    if (!open) {
-      clearTimeout(time)
-      time = setTimeout(() => {
-        setEnter(false);
-      }, 500)
-    }
-  }, [open])
 
   const onTransitionEnd = (e) => {
-    setOpenWarp(open)
-    setEnter(true)
+    if (!Array.from(e.target.classList).includes(NotificationStyle.openmian)) {
+      onAyongClose()
+    }
   }
 
   const onAnimationEnd = (e) => {
-
+    setEnter(true)
   }
   const _onOk = () => {
     onAyongClose()
@@ -71,7 +60,7 @@ const Component: React.FC<NotificationProps> = ({
     onTransitionEnd={onTransitionEnd}
     style={_style}
     onClick={(e) => e.stopPropagation()}
-    className={`${NotificationStyle.main}  ${enter ? `${NotificationStyle.openmian} ${NotificationStyle[placement]}` : NotificationStyle[placement]}`}>
+    className={` ${open ? NotificationStyle.makeTram : ''} ${NotificationStyle.main} ${NotificationStyle[placement]} ${enter ? NotificationStyle.openmian : ''}`}>
 
     <header>
       {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) : leftIcon[type as Type]}

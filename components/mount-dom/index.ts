@@ -41,11 +41,11 @@ const Index = (props) => {
     };
 
     const initialTop: number = notificationState.length * 70; // 设置初始top值，根据需求调整
-    console.log('initialTop', props)
+    console.log('initialTop', initialTop)
     const notification: DetailedReactHTMLElement<React.FC, HTMLElement> = React.createElement(props.element, {
       onAyongClose,
-      style: {top: initialTop + 'px'},
       ...props,
+      style: {top: initialTop + 'px', ...props.style},
     })
 
     const root = createRoot(cloneNode as HTMLElement);
