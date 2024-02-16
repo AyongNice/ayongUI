@@ -22,7 +22,7 @@ createNotificationPortal();
 const notificationState: MountProps[] = [];
 const portalContainer: HTMLElement | null = document.getElementById('notification-portal');
 const Index = (props) => {
-
+  const {YAxisPlacement = 'top'} = props;
   if (!portalContainer) return;
   //浏览器渲染空闲时执行 浏览器没秒60帧
   window.requestIdleCallback(() => {
@@ -41,11 +41,11 @@ const Index = (props) => {
     };
 
     const initialTop: number = notificationState.length * 70; // 设置初始top值，根据需求调整
-    console.log('initialTop', initialTop)
+    console.log('initialTop', [YAxisPlacement])
     const notification: DetailedReactHTMLElement<React.FC, HTMLElement> = React.createElement(props.element, {
       onAyongClose,
       ...props,
-      style: {top: initialTop + 'px', ...props.style},
+      style: {[YAxisPlacement]: initialTop + 'px', ...props.style},
     })
 
     const root = createRoot(cloneNode as HTMLElement);

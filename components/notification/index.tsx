@@ -30,7 +30,7 @@ const Component: React.FC<NotificationProps> = ({
                                                   }
                                                 }) => {
   const [enter, setEnter] = useState<boolean>(false);
-  console.log(style)
+  console.log('Component', style, placement)
   const _style = {
     zIndex,
     ...style
@@ -80,10 +80,20 @@ const defaultPorps = {
   },
 
 }
+const placementMap = {
+  topRight: 'top',
+  topLeft: 'top',
+  bottomRight: 'bottom',
+  bottomLeft: 'bottom',
+  undefined: undefined
+}
 const Notification = {
   info: (props: NotificationProps) => {
     MountDom({
-      element: (data: NotificationProps) => <Component {...data}/>, ...defaultPorps, ...props as NotificationProps,
+      element: (data: NotificationProps) => <Component {...data}/>,
+      ...defaultPorps,
+      ...props as NotificationProps,
+      YAxisPlacement: placementMap[props.placement],
       type: 'info'
     });
   },
@@ -93,7 +103,7 @@ const Notification = {
       ...defaultPorps,
       ...props,
       type: 'success',
-
+      YAxisPlacement: placementMap[props.placement],
     });
   },
   warning: (props: NotificationProps) => {
@@ -102,6 +112,7 @@ const Notification = {
       ...defaultPorps,
       ...props,
       type: 'warning',
+      YAxisPlacement: placementMap[props.placement],
     });
   },
   error: (props: NotificationProps) => {
@@ -110,7 +121,7 @@ const Notification = {
       ...defaultPorps,
       ...props,
       type: 'error',
-
+      YAxisPlacement: placementMap[props.placement],
     });
   }
 

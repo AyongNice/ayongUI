@@ -10,6 +10,7 @@
   }
 
   .main {
+    max-height: max-content;
     background: var(--ayong-light);
     border-radius: var(--ayong-radius);
     z-index: 999;
@@ -79,20 +80,6 @@
   .top {
     top: 100px;
     left: 50%;
-    position: absolute;
-
-  }
-
-  .topRight {
-    top: 100px;
-    right: 10px;
-    position: fixed;
-    transform: translateX(100%);
-  }
-
-  .top {
-    top: 100px;
-    left: 50%;
     position: fixed;
     transform: translateX(-50%);
   }
@@ -116,9 +103,15 @@
     right: 10px;
     position: fixed;
     transform: translateY(-100%);
-
   }
 
+
+  .topRight {
+    top: 100px;
+    right: 10px;
+    position: fixed;
+    transform: translateX(100%);
+  }
 
   .topLeft {
     top: 100px;
