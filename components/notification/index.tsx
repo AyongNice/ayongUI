@@ -42,7 +42,7 @@ const Component: React.FC<NotificationProps> = ({
 
   const onTransitionEnd = (e) => {
     if (!Array.from(e.target.classList).includes(NotificationStyle.openmian)) {
-      onAyongClose()
+      // onAyongClose()
     }
   }
 
@@ -55,12 +55,13 @@ const Component: React.FC<NotificationProps> = ({
   const _onCancel = () => {
     onAyongClose()
   }
+  // ['top', 'bottom'].includes(placement) ? NotificationStyle.openMainAxis :
   return <div
     onAnimationEnd={onAnimationEnd}
     onTransitionEnd={onTransitionEnd}
     style={_style}
     onClick={(e) => e.stopPropagation()}
-    className={` ${open ? NotificationStyle.makeTram : ''} ${NotificationStyle.main} ${NotificationStyle[placement]} ${enter ? NotificationStyle.openmian : ''}`}>
+    className={` ${open ? NotificationStyle.makeTram : ''} ${NotificationStyle.main} ${NotificationStyle[placement]} ${enter ?  NotificationStyle.openMain : ''}`}>
 
     <header>
       {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) : leftIcon[type as Type]}
@@ -85,7 +86,8 @@ const placementMap = {
   topLeft: 'top',
   bottomRight: 'bottom',
   bottomLeft: 'bottom',
-  undefined: undefined
+  bottom: 'bottom',
+  undefined: 'top'
 }
 const Notification = {
   info: (props: NotificationProps) => {
@@ -94,7 +96,8 @@ const Notification = {
       ...defaultPorps,
       ...props as NotificationProps,
       YAxisPlacement: placementMap[props.placement],
-      type: 'info'
+      type: 'info',
+
     });
   },
   success: (props: NotificationProps) => {

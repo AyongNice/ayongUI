@@ -78,10 +78,10 @@
 
 
   .top {
-    top: 100px;
+    top: 150px;
     left: 50%;
     position: fixed;
-    transform: translateX(-50%);
+    transform: translateY(-50%);
   }
 
   .bottom {
@@ -91,54 +91,43 @@
     transform: translateX(-50%);
   }
 
-  .left {
-    top: 50%;
-    left: 10px;
-    position: fixed;
-    transform: translateY(-100%);
-  }
-
-  .right {
-    top: 50%;
-    right: 10px;
-    position: fixed;
-    transform: translateY(-100%);
-  }
-
 
   .topRight {
     top: 100px;
-    right: 10px;
+    right: 0;
     position: fixed;
     transform: translateX(100%);
   }
 
   .topLeft {
     top: 100px;
-    left: 10px;
+    left: 0;
     position: fixed;
     transform: translateX(-100%);
   }
 
   .bottomLeft {
     bottom: 100px;
-    left: 10px;
-    position: fixed;
-    transform: translateX(100%);
-  }
-
-  .bottomRight {
-    bottom: 100px;
-    right: 10px;
+    left: 0;
     position: fixed;
     transform: translateX(-100%);
   }
 
+  .bottomRight {
+    bottom: 100px;
+    right: 0;
+    position: fixed;
+    transform: translateX(100%);
+  }
 
-  .openmian {
+
+  .openMain {
     transform: translate(0, 0);
   }
 
+  .openMainAxis {
+    transform: translate(-50%, 0);
+  }
 
   .makeTram {
     animation: enter .3s;
