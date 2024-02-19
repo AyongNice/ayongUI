@@ -87,7 +87,11 @@ const Component: React.FC<DrawerProps> = ({
           <main className={bodyClassName}>
             {children}
           </main>
-
+          {typeof footerRender === 'function' ? footerRender() : <footer>
+            <Button style={{marginRight: '15px'}} onClick={_onCancel}>{cancelText || '取消'}</Button>
+            <Button type='primary' disabled={disabledDelay || confirmLoading} loading={confirmLoading}
+                    onClick={_onOk}>{okText || '确定'}</Button>
+          </footer>}
         </React.Fragment>
       }
 

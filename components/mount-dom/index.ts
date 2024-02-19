@@ -29,7 +29,8 @@ const createNotificationPortal = async (make) => {
 const notificationState: MountProps[] = [];
 const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPlacement?: string; }) => {
   const {YAxisPlacement = 'top'} = props;
-  const make = props.placement || 'message'
+  const make = props.placement || 'message';
+  const baseHieght: number = props.baseHieght || 70
   createNotificationPortal(make);
   const portalContainer: HTMLElement | null = document.getElementById(id);
   if (!portalContainer) return;
@@ -57,7 +58,7 @@ const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPl
     const length = notificationState.filter(_ => _.container.getAttribute('make') === make).length
     console.log(length)
 
-    const initialTop: number = length * 70; // 设置初始top值，根据需求调整
+    const initialTop: number = length * baseHieght; // 设置初始top值，乘机基础高度根据需求调整
     console.log('initialTop', [YAxisPlacement])
     const notification: DetailedReactHTMLElement<any, HTMLElement> = React.createElement(props.element, {
       onAyongClose,

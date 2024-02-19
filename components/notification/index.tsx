@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {isValidElement, useEffect, useState} from 'react';
 import {NotificationProps} from './index.d';
 import {Wrongs, Wrong, Lament, Illustrate, Tick} from '../icon/icon.ts'
 import NotificationStyle from './index.module.less'
@@ -22,7 +22,8 @@ const Component: React.FC<NotificationProps> = ({
                                                   style,
                                                   type,
                                                   placement = 'topRight',
-                                                  duration = 3,
+                                                  duration = 1600,
+                                                  btn = null,
                                                   onClose = () => {
                                                   },
                                                   onAyongClose = () => {
@@ -30,20 +31,24 @@ const Component: React.FC<NotificationProps> = ({
                                                   }
                                                 }) => {
   const [enter, setEnter] = useState<boolean>(false);
-  console.log('Component', style, placement)
   const _style = {
     zIndex,
     ...style
   }
+  useEffect(() => {
+    if (typeof btn === 'function' && isValidElement(btn())) return
+    setTimeout(() => {
+      toggleDrawer()
+    }, duration)
+
+  }, [])
   const toggleDrawer = () => {
     setEnter(false)
-
   };
 
   const onTransitionEnd = (e) => {
-    if (!Array.from(e.target.classList).includes(NotificationStyle.openmian)) {
-      // onAyongClose()
-    }
+    if (!Array.from(e.target.classList).includes(NotificationStyle.openMain)) onAyongClose()
+
   }
 
   const onAnimationEnd = (e) => {
@@ -61,21 +66,25 @@ const Component: React.FC<NotificationProps> = ({
     onTransitionEnd={onTransitionEnd}
     style={_style}
     onClick={(e) => e.stopPropagation()}
-    className={` ${open ? NotificationStyle.makeTram : ''} ${NotificationStyle.main} ${NotificationStyle[placement]} ${enter ?  NotificationStyle.openMain : ''}`}>
+    className={` ${open ? NotificationStyle.makeTram : ''} ${NotificationStyle.main} ${NotificationStyle[placement]} ${enter ? NotificationStyle.openMain : ''}`}>
 
     <header>
-      {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) : leftIcon[type as Type]}
+      {closeIcon ? React.createElement(closeIcon.type, {
+        onClick: toggleDrawer,
+        className: NotificationStyle.iconSize
+      }) : leftIcon[type as Type]}
       <h3 onClick={toggleDrawer}>{title}</h3>
       <Wrongs onClick={toggleDrawer}/>
     </header>
     <main className={className}>
       {messages}
     </main>
-
+    {typeof btn === 'function' ? btn(toggleDrawer) : ''}
   </div>
 }
 const defaultPorps = {
   open: true,
+  baseHieght: 100,
   style: {
     width: '20%'
   },
