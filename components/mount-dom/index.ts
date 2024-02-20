@@ -39,8 +39,6 @@ const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPl
   window.requestIdleCallback(() => {
     const cloneNode: Node = portalContainer.cloneNode(true) as Node;
     portalContainer.setAttribute('make', '');
-
-    console.log(cloneNode)
     portalContainer.appendChild(cloneNode);
     /**
      * 关闭通知

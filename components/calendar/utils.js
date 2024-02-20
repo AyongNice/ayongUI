@@ -27,7 +27,6 @@ export const handleCrateDate = ({year, month, start, end, type, cFormat}) => {
   if (type === 'prev') { // 上一月
     if (start === end) return []
     const daysInLastMonth = getDaysInMonth(year, month - 1) // 获取上一个月有多少天
-    console.log(`当前月是${month + 1}月, 上一月${month}月的天数是${daysInLastMonth}天`)
     for (let i = daysInLastMonth - end + 2; i <= daysInLastMonth; i++) {// 上一月
       arr.push({
         // date: `${month === 0 ? year - 1 : year}-${(month + 1) < 10 ? month === 0 ? 12 : `0${month}` : month}-${i < 10 ? `0${i}` : i}`,

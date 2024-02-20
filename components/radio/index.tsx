@@ -30,7 +30,6 @@ const Radio = ({value, className, checked, onChange, disabled, children, isGroup
         <input type="radio" value={value} className={`${styleRadio.customRadio} `}
                checked={isChecked} onClick={handleChange}
                onChange={onChange}
-
                disabled={disabled}/>
         {children}
       </label>
@@ -55,7 +54,6 @@ const Button = ({
     onChange(value)
   }
   const getClassName = () => {
-    console.log('getClassName', !index, !isLast)
     if (index && !isLast) {
       console.log('1')
       return styleRadio.button

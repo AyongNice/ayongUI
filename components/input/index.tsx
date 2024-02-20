@@ -52,7 +52,6 @@ export default function Input(props) {
       if (type == 'number') {
         const res = suffixRef.current?.offsetWidth + 4 + 'px';
         setPdr(res);
-        console.log(res);
       } else {
         setPdr('5px');
       }
