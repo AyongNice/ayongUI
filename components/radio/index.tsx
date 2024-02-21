@@ -91,7 +91,6 @@ const Button = ({
 };
 const RadioGroup = ({children, value, onChange, size}) => {
   const length = React.Children.count(children) - 1;
-  console.log(length)
   return <label>
     {React.Children.map(children, (child, index) => {
       console.log(index, React.Children.toArray().length)
