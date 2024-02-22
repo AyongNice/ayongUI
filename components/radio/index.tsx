@@ -17,7 +17,7 @@ const Radio = ({value, className, checked, onChange, disabled, children, isGroup
   if (isGroup) {
     // 如果存在 Radio.Group 父组件，则渲染多个 Radio
     return (
-      <label className={`${_className} ${styleRadio.group}`}>
+      <label className={`${_className} ${styleRadio.group} ${disabled ? styleRadio.disabled : ''}`}>
         <input type="radio" className={styleRadio.customRadio} value={value} checked={checked} onChange={onChange}
                disabled={disabled}/>
         {children}
@@ -26,7 +26,7 @@ const Radio = ({value, className, checked, onChange, disabled, children, isGroup
   } else {
     // 如果不存在 Radio.Group 父组件，则渲染单个 Radio
     return (
-      <label className={_className}>
+      <label className={`${_className} ${disabled ? styleRadio.disabled : ''}`}>
         <input type="radio" value={value} className={`${styleRadio.customRadio} `}
                checked={isChecked} onClick={handleChange}
                onChange={onChange}
