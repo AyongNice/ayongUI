@@ -117,7 +117,7 @@ export default function Input(props) {
   }, [value])
 
   return (
-    <div style={{position: 'relative', maxWidth: 'max-content', boxSizing: 'border-box', animation: 'all 0.5s '}}>
+    <div style={{position: 'relative', boxSizing: 'border-box', animation: 'all 0.5s '}}>
       {prefix && (
         <span
           ref={prefixRef}

@@ -242,6 +242,9 @@ export type {NotificationProps} from './components/notification/index.d';
 
 export {default as Checkbox} from './components/checkbox/index.tsx';
 export type {CheckboxProps} from './components/checkbox/index.d';
+
+export {default as Form} from './components/form/index.tsx';
+export type {FormProps} from './components/form/index.d';
 // export {default as Select} from './components/select/select';
 // export {default as Switch} from './components/switch/switch';
 // export {default as Slider} from './components/slider/slider';

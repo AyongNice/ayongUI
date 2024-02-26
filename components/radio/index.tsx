@@ -98,9 +98,9 @@ const Button = ({
     );
   }
 };
-const RadioGroup = ({children, value, onChange, size}) => {
+const RadioGroup = ({children, style, value, onChange, size}) => {
   const length = React.Children.count(children) - 1;
-  return <label>
+  return <div style={style}>
     {React.Children.map(children, (child, index) => {
       console.log(index, React.Children.toArray().length)
       // 确保子元素是 Radio 组件
@@ -117,7 +117,7 @@ const RadioGroup = ({children, value, onChange, size}) => {
       }
       return null;
     })}
-  </label>
+  </div>
 
 };
 
