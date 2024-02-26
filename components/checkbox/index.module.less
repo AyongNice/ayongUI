@@ -1,0 +1,81 @@
+@import "../../config/style.module.less";
+
+.label {
+  font-size: 14px;
+  color: var(--ayong-font-dark);
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+
+
+  &:hover {
+    input {
+      border: 1px solid var(--ayong-info);
+    }
+
+  }
+
+
+  input {
+    margin: 0 5px 0;
+  }
+}
+
+.customCheckbox {
+  /* 隐藏默认的 radio 按钮 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* 自定义 radio 按钮样式 */
+  width: 15px;
+  height: 15px;
+  border-radius: var(--ayong-radius);
+  border: 1px solid var(--ayong-primary);
+  outline: none;
+  transition: all .5s;
+  background: var(--ayong-light);
+}
+
+.ok {
+  position: absolute;
+  opacity: 0;
+  left: 6px;
+}
+
+.okShow {
+  position: absolute;
+  color: var(--ayong-font-light-color);
+  left: 6px;
+  opacity: 1;
+}
+
+/* 选中状态 */
+.customCheckbox:checked {
+  background-color: var(--ayong-primary);
+}
+
+/* 禁用状态 */
+.customCheckbox:disabled {
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  background-color: var(--ayong-grey-crescent);
+  border: 1px solid var(--ayong-grey);
+  cursor: not-allowed;
+}
+
+/* 使用通用 CSS 选择器选择处于 indeterminate 状态的多选框的父元素 */
+.customCheckbox.indeterminate {
+  /* 在这里添加你想要应用的样式 */
+  /* 例如改变背景色、边框样式、文字颜色等 */
+  background-color: var(--ayong-primary);
+  border: 4px solid var(--ayong-light);
+  color: #333;
+}
+
+.group {
+  margin-right: 10px;
+}
+
+

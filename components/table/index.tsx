@@ -175,57 +175,46 @@ function Table({
   //选择框监听
   useEffect(() => {
     if (typeof rowSelection?.onChange === "function") {
-      if (rowSelection.type === 'radio') {
-        // if (!selectRowkeys) return rowSelection.onChange([])
-      } else {
-        rowSelection.onChange(selectRowkeys.map(_ => (tableData[_])))
-
-      }
+      rowSelection.onChange(selectRowkeys.map(_ => (tableData[_])))
     }
   }, [selectRowkeys])
 
   useEffect(() => {
-
-    if (rowSelection?.type === 'radio') {
-      setSelectRowkeys(null)
-    }
-    if (rowSelection?.type === 'checkbox') {
-      setSelectRowkeys([])
-    }
-
+    setSelectRowkeys([])
   }, [rowSelection])
   //选择框出发
   const onChange = (index: number) => {
     // 房间号
     setSelectRowkeys((prevState) => {
       if (rowSelection.type === 'radio') {
-        if (prevState === index) {
-          rowSelection.onChange([])
-          return null
+        return [index]
+      } else {
+        if (prevState.includes(index)) {
+          return prevState.filter(_ => _ !== index)
         } else {
-          rowSelection.onChange([tableData[index]])
-          return index
+          return [...prevState, index]
         }
       }
-      if (prevState.includes(index)) {
-        return prevState.filter(_ => _ !== index)
-      } else {
-        return [...prevState, index]
-      }
+
 
     })
 
   }
 
-  const onAllChange = () => {
+  const onAllChange = (check) => {
+
+    console.log(check)
     const newArr: number[] = [];
-    tableData.map((_, index) => {
-      const checkbox: CheckboxDataItem | null = rowSelection?.getCheckboxProps(_) || null;
-      if (!checkbox?.disabled) {
-        return newArr.push(index)
-      }
-    })
-    setSelectRowkeys((prevState) => prevState.length === newArr.length ? [] : newArr)
+    if (check) {
+      tableData.map((_, index) => {
+        const checkbox: CheckboxDataItem | null = rowSelection?.getCheckboxProps(_) || null;
+        if (!checkbox?.disabled) {
+          return newArr.push(index)
+        }
+      })
+    }
+
+    setSelectRowkeys(newArr)
   }
   return (
     <table className={styleClassName}>
@@ -241,7 +230,9 @@ function Table({
             show={rowSelection?.type === 'radio'}
             renderIf={() => <th style={{width: ' 39px'}} rowSpan={colSpanSize}/>}
             renderElse={() => <th style={{width: ' 39px'}} rowSpan={colSpanSize}>
-              <Checkbox onChange={onAllChange} checked={tableData.length == rowSelection?.selectedRowKeys?.length}/>
+              <Checkbox onChange={onAllChange}
+                        indeterminate={selectRowkeys.length && tableData.length > selectRowkeys.length}
+                        checked={tableData.length == selectRowkeys.length}/>
             </th>}
           >
           </ConditionalRender>
@@ -296,13 +287,13 @@ function Table({
                   renderIf={() => <td style={{width: ' 39px'}}>
                     <Radio onChange={() => onChange(index)}
                            {...rowSelection.getCheckboxProps(item)}
-                           checked={selectRowkeys === index}
+                           checked={selectRowkeys.includes(index)}
                     />
                   </td>}
                   renderElse={() => <td style={{width: ' 39px'}}>
                     <Checkbox onChange={() => onChange(index)}
                               {...rowSelection.getCheckboxProps(item)}
-                              checked={selectRowkeys.includes(index)}
+                              checked={selectRowkeys ? selectRowkeys.includes(index) : false}
                     />
                   </td>}
                 >

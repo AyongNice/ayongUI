@@ -1,24 +1,30 @@
 import {RadioProps} from "./index.d";
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styleRadio from './index.module.less';
 import _Button from '../button/index.tsx'
 
 const Radio = ({value, className, checked, onChange, disabled, children, isGroup = false}) => {
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
-  let isUseGroup = false
   const _className = `${styleRadio.label} ${className}`
   const handleChange = (event) => {
     onChange(!isChecked)
     setIsChecked(() => !isChecked);
   };
+  useEffect(() => {
+    setIsChecked(checked)
+  }, [checked])
 
   if (isGroup) {
     // 如果存在 Radio.Group 父组件，则渲染多个 Radio
     return (
       <label className={`${_className} ${styleRadio.group} ${disabled ? styleRadio.disabled : ''}`}>
-        <input type="radio" className={styleRadio.customRadio} value={value} checked={checked} onChange={onChange}
+        <input type="radio"
+               className={styleRadio.customRadio}
+               value={value}
+               checked={checked}
+               onChange={onChange}
                disabled={disabled}/>
         {children}
       </label>
@@ -27,8 +33,11 @@ const Radio = ({value, className, checked, onChange, disabled, children, isGroup
     // 如果不存在 Radio.Group 父组件，则渲染单个 Radio
     return (
       <label className={`${_className} ${disabled ? styleRadio.disabled : ''}`}>
-        <input type="radio" value={value} className={`${styleRadio.customRadio} `}
-               checked={isChecked} onClick={handleChange}
+        <input type="radio"
+               value={value}
+               className={styleRadio.customRadio}
+               checked={isChecked}
+               onClick={handleChange}
                onChange={onChange}
                disabled={disabled}/>
         {children}
