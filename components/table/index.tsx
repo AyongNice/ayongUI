@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import table from './index.module.less'
-import {TableProps, Column, DataItem, ColumnGroup, DraggableProps} from "./index.d";
+import {TableProps, Column, DataItem, ColumnGroup, CheckboxDataItem} from "./index.d";
 import ConditionalRender from "../conditional-render/conditional-render.tsx";
 import UnfoldTd from "./components/unfold-td/unfold-td.tsx"; // 展开渲染组件
 import UnfoldButton from "./components/unfold-button/unfold-button.tsx"; //展开折叠按钮组件
@@ -11,6 +11,9 @@ import useDragDrop from "./draggable.ts"; //分组 th组件
 import {groupHandle} from "./group-handle.ts";
 import GroupTbody from "./components/gtoup-tbody/group-tbody.tsx";
 import {UseDragDropRetunrn} from "./index"; //分组 th组件
+import Checkbox from '../checkbox/index.tsx';
+import Radio from '../radio/index.tsx';
+
 function Table({
                  columns = [],
                  children,
@@ -18,11 +21,11 @@ function Table({
                  className,
                  draggable = false,
                  expandable,
+                 rowSelection,
                  onDragAfter = () => {
                  },
                  cellActiveClassName = () => {
                  },
-                 demo
                }: TableProps) {
 
   const styleClassName: string = `${table.table} ${className} `;
@@ -53,6 +56,8 @@ function Table({
   /** 展开折叠记录状态 **/
   const [ayonEexpandedRowKeys, setAyonExpandedRowKeys] = useState<Array<number | string>>([]);
 
+  /** 多选记录状态 **/
+  const [selectRowkeys, setSelectRowkeys] = useState<number[] | number | null>([]);
 
   /**
    *数据处理的第二步骤
@@ -102,7 +107,7 @@ function Table({
     handleDragOver,
     handleDrop,
     handleDropData,
-  }: UseDragDropRetunrn = useDragDrop({_tableColumns, data, draggable, onDragAfter, demo});
+  }: UseDragDropRetunrn = useDragDrop({_tableColumns, data, draggable, onDragAfter});
 
 //排序状态
   const [sortOrderMap, stateSortOrderMap] = useState<{ [key: string]: string }>(_sortOrderMap);
@@ -167,12 +172,79 @@ function Table({
     setAyonExpandedRowKeys(newExpandedRowKeys);
   };
 
+  //选择框监听
+  useEffect(() => {
+    if (typeof rowSelection?.onChange === "function") {
+      if (rowSelection.type === 'radio') {
+        // if (!selectRowkeys) return rowSelection.onChange([])
+      } else {
+        rowSelection.onChange(selectRowkeys.map(_ => (tableData[_])))
+
+      }
+    }
+  }, [selectRowkeys])
+
+  useEffect(() => {
+
+    if (rowSelection?.type === 'radio') {
+      setSelectRowkeys(null)
+    }
+    if (rowSelection?.type === 'checkbox') {
+      setSelectRowkeys([])
+    }
+
+  }, [rowSelection])
+  //选择框出发
+  const onChange = (index: number) => {
+    // 房间号
+    setSelectRowkeys((prevState) => {
+      if (rowSelection.type === 'radio') {
+        if (prevState === index) {
+          rowSelection.onChange([])
+          return null
+        } else {
+          rowSelection.onChange([tableData[index]])
+          return index
+        }
+      }
+      if (prevState.includes(index)) {
+        return prevState.filter(_ => _ !== index)
+      } else {
+        return [...prevState, index]
+      }
+
+    })
+
+  }
+
+  const onAllChange = () => {
+    const newArr: number[] = [];
+    tableData.map((_, index) => {
+      const checkbox: CheckboxDataItem | null = rowSelection?.getCheckboxProps(_) || null;
+      if (!checkbox?.disabled) {
+        return newArr.push(index)
+      }
+    })
+    setSelectRowkeys((prevState) => prevState.length === newArr.length ? [] : newArr)
+  }
   return (
     <table className={styleClassName}>
       <thead>
       <tr>
         <ConditionalRender mode='if' show={expandedRowRender}>
           <th style={{width: ' 39px'}} rowSpan={colSpanSize}/>
+        </ConditionalRender>
+
+        <ConditionalRender mode='if' show={rowSelection}>
+          <ConditionalRender
+            mode='else'
+            show={rowSelection?.type === 'radio'}
+            renderIf={() => <th style={{width: ' 39px'}} rowSpan={colSpanSize}/>}
+            renderElse={() => <th style={{width: ' 39px'}} rowSpan={colSpanSize}>
+              <Checkbox onChange={onAllChange} checked={tableData.length == rowSelection?.selectedRowKeys?.length}/>
+            </th>}
+          >
+          </ConditionalRender>
         </ConditionalRender>
 
         {tableColumns.map((column: Column | ColumnGroup, index: number) => (
@@ -213,10 +285,30 @@ function Table({
             <tr
               draggable={draggable}
               className={tableStyle(item, index)}
-              onDragStart={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragStartData(e, index)}
-              onDragOver={(e: React.DragEvent<HTMLTableRowElement>,) => handleDragOver(e)}
-              onDrop={(e: React.DragEvent<HTMLTableRowElement>,) => handleDropData(e, index)}
+              onDragStart={(e: React.DragEvent<HTMLTableRowElement>) => handleDragStartData(e, index)}
+              onDragOver={(e: React.DragEvent<HTMLTableRowElement>) => handleDragOver(e)}
+              onDrop={(e: React.DragEvent<HTMLTableRowElement>) => handleDropData(e, index)}
             >
+              <ConditionalRender mode='if' show={rowSelection}>
+                <ConditionalRender
+                  mode='else'
+                  show={rowSelection?.type === 'radio'}
+                  renderIf={() => <td style={{width: ' 39px'}}>
+                    <Radio onChange={() => onChange(index)}
+                           {...rowSelection.getCheckboxProps(item)}
+                           checked={selectRowkeys === index}
+                    />
+                  </td>}
+                  renderElse={() => <td style={{width: ' 39px'}}>
+                    <Checkbox onChange={() => onChange(index)}
+                              {...rowSelection.getCheckboxProps(item)}
+                              checked={selectRowkeys.includes(index)}
+                    />
+                  </td>}
+                >
+                </ConditionalRender>
+              </ConditionalRender>
+
               <UnfoldButton
                 index={index}
                 expandable={expandable}
@@ -231,12 +323,15 @@ function Table({
                 activeTD={activeTD}/>
 
             </tr>
+
             <UnfoldTd
               item={item}
               index={index}
               expandable={expandable}
               ayonEexpandedRowKeys={ayonEexpandedRowKeys}
             />
+
+
           </React.Fragment>
         ))}
 
@@ -246,7 +341,8 @@ function Table({
 
       </tbody>
     </table>
-  );
+  )
+    ;
 }
 
 // JSX函数
