@@ -202,8 +202,6 @@ function Table({
   }
 
   const onAllChange = (check) => {
-
-    console.log(check)
     const newArr: number[] = [];
     if (check) {
       tableData.map((_, index) => {
