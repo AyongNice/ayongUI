@@ -19,7 +19,6 @@ const FileList = ({
                   }) => {
 
   const getClassName = (item: UploadFile, index: number,): string => {
-    console.log('item', item)
     return `${style.fileListItem} ${item.status === 'error' ? style.fileListErrorItem : ''}  ${deleteIndex === index ? 'fileListItemExit' : ''}`
   }
   return <div className={style.box}>

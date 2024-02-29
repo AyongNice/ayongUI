@@ -4,7 +4,16 @@ import React, {useEffect, useState} from 'react';
 import styleRadio from './index.module.less';
 import _Button from '../button/index.tsx'
 
-const Radio = ({value, className, checked, onChange, disabled, children, isGroup = false}) => {
+const Radio = ({
+                 value = '',
+                 className,
+                 checked=false,
+                 disabled,
+                 children,
+                 isGroup = false,
+                 onChange = () => {
+                 },
+               }) => {
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
   const _className = `${styleRadio.label} ${className}`
@@ -38,7 +47,8 @@ const Radio = ({value, className, checked, onChange, disabled, children, isGroup
                className={styleRadio.customRadio}
                checked={isChecked}
                onClick={handleChange}
-               onChange={onChange}
+               onChange={() => {
+               }}
                disabled={disabled}/>
         {children}
       </label>
@@ -64,7 +74,6 @@ const Button = ({
   }
   const getClassName = () => {
     if (index && !isLast) {
-      console.log('1')
       return styleRadio.button
     }
     if (!index) {
@@ -72,7 +81,6 @@ const Button = ({
       return styleRadio.buttonFirst
     }
     if (isLast) {
-      console.log('3')
       return styleRadio.buttonLast
     }
   }
@@ -102,7 +110,6 @@ const RadioGroup = ({children, style, value, onChange, size}) => {
   const length = React.Children.count(children) - 1;
   return <div style={style}>
     {React.Children.map(children, (child, index) => {
-      console.log(index, React.Children.toArray().length)
       // 确保子元素是 Radio 组件
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
