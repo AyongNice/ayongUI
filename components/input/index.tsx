@@ -4,7 +4,7 @@ import styles from './index.module.less';
 
 export default function Input(props) {
   const {
-    value,
+    value='',
     disabled,
     type = 'text',
     className = '',
@@ -110,7 +110,7 @@ export default function Input(props) {
 
   const _onChange = (e) => {
     setValue(e.target.value)
-    onChange()
+    onChange(e.target.value)
   }
   useEffect(() => {
     setValue(() => value)
