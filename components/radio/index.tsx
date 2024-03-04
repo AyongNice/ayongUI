@@ -3,17 +3,18 @@ import {RadioProps} from "./index.d";
 import React, {useEffect, useState} from 'react';
 import styleRadio from './index.module.less';
 import _Button from '../button/index.tsx'
+import {ButtonProps} from "ayongUI/components/radio";
 
 const Radio = ({
                  value = '',
                  className,
-                 checked=false,
+                 checked = false,
                  disabled,
                  children,
                  isGroup = false,
                  onChange = () => {
                  },
-               }) => {
+               }: RadioProps) => {
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
   const _className = `${styleRadio.label} ${className}`
@@ -57,9 +58,18 @@ const Radio = ({
 };
 
 const Button = ({
-                  value, className, checked, onChange = () => {
-  }, disabled, children, isGroup = false, index, isLast, size,
-                }) => {
+                  size,
+                  index,
+                  value,
+                  isLast,
+                  checked,
+                  disabled,
+                  children,
+                  className,
+                  isGroup = false,
+                  onChange = () => {
+                  },
+                }: ButtonProps) => {
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
   let isUseGroup = false
@@ -106,17 +116,34 @@ const Button = ({
     );
   }
 };
-const RadioGroup = ({children, style, value, onChange, size}) => {
+const RadioGroup = ({
+                      size,
+                      children,
+                      style,
+                      value,
+                      onChange = () => {
+                      },
+                    }:RadioProps) => {
+  const [setlect, setSetlect] = useState(value)
   const length = React.Children.count(children) - 1;
+  const _onChange = (_value) => {
+    onChange(_value)
+    setSetlect(_value)
+
+  }
+  useEffect(() => {
+    setSetlect(value)
+  }, [value])
+
   return <div style={style}>
     {React.Children.map(children, (child, index) => {
       // 确保子元素是 Radio 组件
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
-          checked: child.props.value === value,
+          checked: setlect === child.props.value,
           disabled: child.props.disabled,
           isGroup: true,
-          onChange: () => onChange(child.props.value),
+          onChange: () => _onChange(child.props.value),
           index,
           size,
           isLast: length === index

@@ -29,9 +29,9 @@ const FormItem = ({
         <label style={{
           padding: formLayout === 'vertical' && 0,
           marginBottom: formLayout === 'vertical' && 8
-        }} className={fromStyle.label}>{label}:&nbsp;</label>
+        }} className={fromStyle.label}>{label}{label && ":"}&nbsp;</label>
       </div>
-      <div style={{flex: 0.85}}>{
+      <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content'}}>{
         React.cloneElement(children, {onChange: handleChange})
       }</div>
     </div>
@@ -40,30 +40,30 @@ const FormItem = ({
 
 const Form = ({
                 name,
+                style,
                 labelCol,
                 formLayout = 'right',
                 wrapperCol,
-                style,
                 initialValues,
-                onFinish = () => {
-                },
-                submit = () => {
-                },
                 onFinishFailed,
                 autoComplete,
-                children
+                children,
+                submit = () => {
+                },
+                onFinish = () => {
+                },
+                onValuesChange = () => {
+                },
               }) => {
   const [formData, setFormData] = useState({});
   const handleFormChange = (name, value) => {
-    console.log('handleFormChange', name, value)
     setFormData({...formData, [name]: value}); // 更新表单数据对象
   };
   useEffect(() => {
-    console.log(formData)
+    onValuesChange(formData)
   }, [formData])
   const clonedChildren = React.Children.map(children, child => {
     if (React.isValidElement(child)) {
-      console.log()
       return React.cloneElement(child, {formLayout, onChange: handleFormChange});
     }
     return child;
@@ -74,16 +74,16 @@ const Form = ({
     submit(formData);
   };
 
+
   return (
     <form
       name={name}
+      style={style}
       onSubmit={handleSubmit}
-      className={fromStyle.form}
-      style={{style, display: formLayout === 'inline' && 'flex'}}
+      className={formLayout === 'inline' ? fromStyle.formFlexWrap : ''}
       autoComplete={autoComplete}
     >
       {clonedChildren}
-      <button type='submit'>tij</button>
     </form>
   );
 };
