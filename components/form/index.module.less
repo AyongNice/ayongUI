@@ -1,5 +1,5 @@
 .formFlexWrap {
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
 }
 
@@ -13,11 +13,16 @@
 
   .labelBox {
     //超出80%文字省略号
+    display: flex;
 
+    span:first-child {
+      color: var(--ayong-error);
+    }
 
   }
 
   .label {
+    flex: 1;
     max-width: 100px;
     display: inline-block;
     font-size: 14px;
@@ -27,6 +32,22 @@
     color: var(--ayong-font-dark);
     padding: 0 10px;
     box-sizing: border-box;
+
+    &::after {
+      content: ":";
+      margin-left: 5px;
+    }
+
+  }
+
+  .required {
+
+    &::before {
+      content: "*";
+      margin-right: 5px;
+      color: var(--ayong-error);
+
+    }
   }
 
 }

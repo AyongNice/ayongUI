@@ -4,11 +4,12 @@ import styles from './index.module.less';
 
 export default function Input(props) {
   const {
-    value='',
+    value = '',
     disabled,
     type = 'text',
     className = '',
     size = 'normal',
+    maxLength = null,
     onFocus = () => {
     },
     onBlur = () => {
@@ -134,7 +135,9 @@ export default function Input(props) {
       <input
         style={{paddingLeft, paddingRight, boxSizing: 'border-box', animation: 'all 0.5s '}}
         type={type}
+        disabled={disabled}
         onBlur={onBlur}
+        maxLength={maxLength}
         onKeyUp={onKeyUp}
         onFocus={onFocus}
         value={valueInner}

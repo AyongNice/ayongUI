@@ -25,7 +25,6 @@ const Radio = ({
   useEffect(() => {
     setIsChecked(checked)
   }, [checked])
-
   if (isGroup) {
     // 如果存在 Radio.Group 父组件，则渲染多个 Radio
     return (
@@ -63,7 +62,7 @@ const Button = ({
                   value,
                   isLast,
                   checked,
-                  disabled,
+                  disabled=false,
                   children,
                   className,
                   isGroup = false,
@@ -72,8 +71,9 @@ const Button = ({
                 }: ButtonProps) => {
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
-  let isUseGroup = false
   const _className = `${styleRadio.label} ${className}`
+
+  console.log('Radio.Button',disabled)
   const handleChange = (event) => {
     onChange(!isChecked)
     setIsChecked(() => !isChecked);
@@ -120,12 +120,14 @@ const RadioGroup = ({
                       size,
                       children,
                       style,
+                      disabled,
                       value,
                       onChange = () => {
                       },
                     }:RadioProps) => {
   const [setlect, setSetlect] = useState(value)
   const length = React.Children.count(children) - 1;
+
   const _onChange = (_value) => {
     onChange(_value)
     setSetlect(_value)
@@ -141,7 +143,7 @@ const RadioGroup = ({
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
           checked: setlect === child.props.value,
-          disabled: child.props.disabled,
+          disabled: child.props.disabled || disabled,
           isGroup: true,
           onChange: () => _onChange(child.props.value),
           index,
@@ -156,9 +158,7 @@ const RadioGroup = ({
 };
 
 
-// const RadioGroup = (props) => {
-//   return <Group {...props}/>
-// };
+
 
 Radio.Group = RadioGroup;
 Radio.Button = Button;
