@@ -72,8 +72,6 @@ const Button = ({
   // 判断是否有 Radio.Group 父组件
   const [isChecked, setIsChecked] = useState(checked);
   const _className = `${styleRadio.label} ${className}`
-
-  console.log('Radio.Button',disabled)
   const handleChange = (event) => {
     onChange(!isChecked)
     setIsChecked(() => !isChecked);
