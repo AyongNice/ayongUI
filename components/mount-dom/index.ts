@@ -54,10 +54,8 @@ const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPl
       props.onClose && typeof props.onClose === 'function' && props.onClose()
     };
     const length = notificationState.filter(_ => _.container.getAttribute('make') === make).length
-    console.log(length)
 
     const initialTop: number = length * baseHieght; // 设置初始top值，乘机基础高度根据需求调整
-    console.log('initialTop', [YAxisPlacement])
     const notification: DetailedReactHTMLElement<any, HTMLElement> = React.createElement(props.element, {
       onAyongClose,
       ...props,

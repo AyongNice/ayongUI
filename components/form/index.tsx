@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 
 import fromStyle from './index.module.less'
 
@@ -26,8 +26,10 @@ const Form = ({
                 onValuesChange = () => {
                 },
               }) => {
-  const [formData, setFormData] = useState(initialValues);
-  const [errorInfo, setErrorInfo] = useState({errorFields: []});
+
+
+  const _fromDate = {...initialValues}
+  const itemRef = {};
   const handleFormChange = (name, value) => {
     // 更新表单数据对象
     setFormData(prevData => ({
@@ -35,6 +37,28 @@ const Form = ({
       [name]: value
     }));
   };
+  const clonedChildren = React.Children.map(children, child => {
+//给formData 默认值
+
+    if (React.isValidElement(child)) {
+      console.log(child.props)
+      _fromDate[child.props.name] = '';
+      itemRef[child.props.name] = React.createRef();
+      return React.cloneElement(child, {
+        ref: itemRef[child.props.name],
+        formLayout,
+        disabled,
+        onChange: handleFormChange,
+        _onFinishFailed
+      });
+    }
+    return child;
+  });
+  console.log('_fromDate:', _fromDate)
+
+  const [formData, setFormData] = useState(_fromDate);
+  const [errorInfo, setErrorInfo] = useState({errorFields: []});
+
 
   // useWatch(formData, handleFormChange);
   useEffect(() => {
@@ -49,25 +73,35 @@ const Form = ({
     } else {
       onFinish()
     }
+//循环formData 判断对象里面的值是否为空 就调用 onFinishFailed
+    //
+    // if (itemRef.current) {
+    //   console.log('itemRef.current:', itemRef.current);
+    // }
+    for (let key in formData) {
+      if (!formData[key]) {
+        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
+        itemRef[key].current.onRequired()
+      }
+    }
+
+
     submit(formData);
     console.log('Form submitted with data:', formData);
   };
-  const _onFinishFailed = (field) => {
+  const _onFinishFailed = (type, field) => {
+    console.log('from==_onFinishFailed:')
     setErrorInfo((prevState) => {
-      prevState.errorFields.push(field)
+
+      if (type === 'push' && !prevState.errorFields.filter(_ => _.name === field.name).length) {
+        prevState.errorFields.push(field)
+      }
+      if (type === 'out') {
+        prevState.errorFields = prevState.errorFields.filter(_ => _.name !== field.name)
+      }
       return prevState
     })
   };
-
-  const clonedChildren = React.Children.map(children, child => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, {formLayout, disabled, onChange: handleFormChange, _onFinishFailed});
-    }
-    return child;
-  });
-  const [fromDate, setFromDate] = useState<object>()
-
-
   return (
     <form
       name={name}

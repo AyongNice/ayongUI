@@ -85,6 +85,12 @@ const Upload: React.FC<UploadProps> = ({
   const setFileList = (fileItme: UploadFile) => {
     setSelectedFile((prevState: UploadFile[]) => {
       if (maxCount === 1) return [fileItme];
+      //判断是否超出最大上传数量
+      if (maxCount && prevState.length >= maxCount) {
+        Message.warning({message: `最多上传${maxCount}个文件`})
+        return prevState;
+      }
+
       return [...prevState as UploadFile[], fileItme];
     })
   }
@@ -129,7 +135,6 @@ const Upload: React.FC<UploadProps> = ({
       let avatarImgURL: string = ''
       try {
         if (mode === 'avatar') {
-          console.log(file)
           if (!file.type.includes('image')) return messages.error({message: 'avatar模式下必须是图片类型'});
           const width = typeof _style.width === 'string' ? _style.width.replace('px', '') : _style.width;
           const height = typeof _style.height === 'string' ? _style.width.replace('px', '') : _style.height;
@@ -214,7 +219,6 @@ const Upload: React.FC<UploadProps> = ({
         handleFileChange(fileList[i]);
       } catch (e) {
       }
-      console.log('fileList[i]', fileList[i])
     }
 
   };

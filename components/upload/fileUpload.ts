@@ -48,7 +48,6 @@ export function trackUploadProgress({action, name, file, method, headers, data, 
     });
 
     reader.read().then(function processChunk({done, value}) {
-      console.log('erroeStauts', erroeStauts);
       if (done || erroeStauts) {
         return;
       }
