@@ -24,7 +24,14 @@ const Radio = ({
   };
   useEffect(() => {
     setIsChecked(checked)
+    console.log('Radio---checked:', value, checked)
   }, [checked])
+
+  useEffect(() => {
+    //解决在表单中调用onReset方法时，Radio组件的checked状态不会重置的问题 会清空value值 但是不会清空checked状态
+    if (!value) setIsChecked(value);
+  }, [value])
+
   if (isGroup) {
     // 如果存在 Radio.Group 父组件，则渲染多个 Radio
     return (
@@ -62,7 +69,7 @@ const Button = ({
                   value,
                   isLast,
                   checked,
-                  disabled=false,
+                  disabled = false,
                   children,
                   className,
                   isGroup = false,
@@ -81,16 +88,9 @@ const Button = ({
     onChange(value)
   }
   const getClassName = () => {
-    if (index && !isLast) {
-      return styleRadio.button
-    }
-    if (!index) {
-
-      return styleRadio.buttonFirst
-    }
-    if (isLast) {
-      return styleRadio.buttonLast
-    }
+    if (!index) return styleRadio.buttonFirst
+    if (isLast) return styleRadio.buttonLast
+    if (!isLast) return styleRadio.buttonRight0
   }
   if (isGroup) {
     // 如果存在 Radio.Group 父组件，则渲染多个 Radio
@@ -122,7 +122,7 @@ const RadioGroup = ({
                       value,
                       onChange = () => {
                       },
-                    }:RadioProps) => {
+                    }: RadioProps) => {
   const [setlect, setSetlect] = useState(value)
   const length = React.Children.count(children) - 1;
 
@@ -132,7 +132,7 @@ const RadioGroup = ({
 
   }
   useEffect(() => {
-    setSetlect(value)
+    // setSetlect(value)
   }, [value])
 
   return <div style={style}>
@@ -156,8 +156,8 @@ const RadioGroup = ({
 };
 
 
-
-
 Radio.Group = RadioGroup;
 Radio.Button = Button;
+
+Radio.displayName = 'Radio'
 export default Radio;

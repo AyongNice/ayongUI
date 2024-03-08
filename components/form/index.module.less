@@ -15,6 +15,7 @@
     //超出80%文字省略号
     display: flex;
     height: 40px;
+
     span:first-child {
       color: var(--ayong-error);
     }
@@ -58,11 +59,26 @@
 
 }
 
-.requiredMessage {
-  color: var(--ayong-error);
-  font-size: 12px;
-  display: inline-block;
-  text-align: left;
-  width: 100%;
+
+.requiredBox {
+  overflow: hidden;
+  animation: downFont 0.2s cubic-bezier(0.81, 0.02, 0.43, 0.99);
+
+  .requiredMessage {
+    width: 100%;
+    color: var(--ayong-error);
+    font-size: 12px;
+    display: block;
+    text-align: left;
+  }
 }
 
+//必须消息提示 下拉animation 动画
+@keyframes downFont {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 20px;
+  }
+}

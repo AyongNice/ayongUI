@@ -2,6 +2,13 @@ import React, {useState, useImperativeHandle} from "react";
 import fromStyle from '../../index.module.less'
 
 const requiredPrompt: string = '为必选字段';
+const reactCloneElement = ({child, value, disabled, onChange}) => {
+  return React.cloneElement(child, {
+    value,
+    disabled,
+    onChange,
+  });
+}
 
 const FormItem = React.forwardRef(({
                                      label,
@@ -10,7 +17,9 @@ const FormItem = React.forwardRef(({
                                      rules = [],
                                      disabled,
                                      children,
+                                     _fromDate,
                                      formLayout = 'right',
+                                     errorInfo,
                                      onChange = () => {
                                      },
                                      _onFinishFailed = () => {
@@ -29,7 +38,7 @@ const FormItem = React.forwardRef(({
     max: {},
     min: {},
   }
-  if (children.type.name === 'Button') {
+  if (!Array.isArray(children) && label && children.type.name !== 'Button') {
     rules.forEach(_ => {
       const keys = Object.keys(_)
       if (keys.includes('required')) {
@@ -48,11 +57,14 @@ const FormItem = React.forwardRef(({
 
     })
   }
+  console.log('rulesMap:', rulesMap)
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [value, setValue] = useState(_fromDate[name] || '');
+  // console.log('errorInfo', errorInfo)
   const handleChange = (value) => {
 
-    if (children.type.name !== 'Button') {
+    if (!Array.isArray(children) && children.type.name !== 'Button') {
       let message = '';
       if (children.type.name === 'Input' && value.length > rulesMap?.maxLength.value) {
         message = rulesMap?.maxLength.message || rulesMap?.required.message;
@@ -62,29 +74,63 @@ const FormItem = React.forwardRef(({
       }
       setErrorMessage(message);
     }
-    console.log(onChange)
-    // s
-
+    setValue(value);
     onChange(name, value); // 调用父组件传递过来的 onChange 方法，并传递名称和值
   };
 
+
+  /**
+   * 暴露给父组件的方法 用于校验是否为空
+   */
   const onRequired = () => {
-    if (children.type.name !== 'Button') {
+    console.log(rulesMap.required.value)
+    if (!Array.isArray(children) && children.type.name !== 'Button' && rulesMap.required.value) {
       setErrorMessage(rulesMap.required.message || label + requiredPrompt);
     }
   }
-  useImperativeHandle(ref, () => ({onRequired}))
+
+  /**
+   * 暴露给父组件的方法 重置数据
+   */
+  const onReset = () => {
+    setValue('');
+    setErrorMessage('');
+    console.log('formitem---onReset:', value)
+  }
+
+  useImperativeHandle(ref, () => ({onRequired, onReset}))
+
 
   // 处理完规则后再克隆子元素
-  const clonedChild = React.cloneElement(children, {
-    disabled,
-    onChange: handleChange,
+  let clonedChild = {}
 
-  });
+  if (Array.isArray(children)) {
+    clonedChild = React.Children.map(children, child => {
+
+      if (React.isValidElement(child)) {
+        return reactCloneElement({
+          child,
+          value,
+          disabled,
+          onChange: handleChange,
+        });
+      }
+      return child;
+    })
+  } else {
+    clonedChild = reactCloneElement({
+      value,
+      disabled,
+      child: children,
+      onChange: handleChange,
+    });
+  }
+  // console.log('clonedChild:', clonedChild)
+
   return (
-    <div className={fromStyle.item} style={{display: [_display],...style}}>
+    <div className={fromStyle.item} style={{display: [_display], ...style}}>
       <div className={fromStyle.labelBox}
-           style={{flex: 0.15,}}
+           style={{flex: 0.15}}
       >
         {label && <label style={{
           textAlign: [_textAlian],
@@ -97,7 +143,9 @@ const FormItem = React.forwardRef(({
 
       <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content'}} className={fromStyle.clonedChild}>
         <div>{clonedChild} </div>
-        <div> {errorMessage && <span className={fromStyle.requiredMessage}>{errorMessage}</span>} </div>
+        {errorMessage &&
+          <div className={fromStyle.requiredBox}><span className={fromStyle.requiredMessage}>{errorMessage}</span>
+          </div>}
       </div>
     </div>
   );

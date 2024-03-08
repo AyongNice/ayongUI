@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Wrongs} from '../icon/icon';
 import styles from './index.module.less';
 
-export default function Input(props) {
+function Input(props) {
   const {
     value = '',
     disabled,
@@ -115,6 +115,8 @@ export default function Input(props) {
   }
   useEffect(() => {
     setValue(() => value)
+
+    console.log('input----value:', value)
   }, [value])
 
   return (
@@ -168,3 +170,7 @@ export default function Input(props) {
     </div>
   );
 }
+
+Input.displayName = 'Input';
+
+export default Input;
