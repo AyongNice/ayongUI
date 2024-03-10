@@ -24,7 +24,6 @@ const Radio = ({
   };
   useEffect(() => {
     setIsChecked(checked)
-    console.log('Radio---checked:', value, checked)
   }, [checked])
 
   useEffect(() => {

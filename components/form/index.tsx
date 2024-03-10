@@ -1,150 +1,48 @@
-import React, {useEffect, useRef, useState, createRef, useImperativeHandle, useMemo} from 'react'
+import React, {useEffect, useRef, useState, createRef, useImperativeHandle, useMemo, forwardRef} from 'react'
 
 import fromStyle from './index.module.less'
 
-import {useWatch} from './form-api'
+import {FormStore, useForm} from './form-api'
 
 import FormItem from './components/form-item/index.tsx'
 
 // useForm.js
-export class FormStore {
-  constructor() {
-    this.store = {};
-    this.callbacks = Object.create(null);
-    this.initialValues = {};
-    this.fieldEntities = [];
-    this.update = () => {
-
-    }
-  }
-
-  // 通过 `useForm` 方法暴露出去的字段
-  getForm = () => ({
-    getFieldValue: this.getFieldValue,
-    getFieldsValue: this.getFieldsValue,
-    setFieldsValue: this.setFieldsValue,
-    submit: this.submit,
-    resetFields: this.resetFields,
-    getInternalHooks: this.getInternalHooks,
-  });
-  // 封装一些内部 Hooks，挂到 `getForm` 下
-  getInternalHooks = (update: Function = () => {
-  }) => {
-
-    this.updateValue = update;
-    return {
-      updateValue: this.updateValue,
-      setInitialValues: this.setInitialValues,
-      setCallbacks: this.setCallbacks,
-      initEntityValue: this.initEntityValue,
-      registerField: this.registerField,
-    };
-
-  }
-
-  // 注册回调
-  setCallbacks = callbacks => {
-  };
-  // 注册表单初始值
-  setInitialValues = initialValues => {
-    this.store = {...initialValues};
-  };
-  // 注册实例后，设置表单初始值
-  initEntityValue = entity => {
-  };
-  // 注册实例
-  registerField = entity => {
 
 
-  };
-  getFieldEntities = () => {
-  };
-  // 通知更新
-  notifyObservers = (prevStore, nameList, info) => {
-  };
-
-  updateValue = (name, newValue) => {
-  };
-
-  // form actions，提交、校验、重置等方法
-  submit = () => {
-  };
-  updateValue = (name, value) => {
-    return this.store
-  }
-  // 重置所有字段
-  resetFields = (): void => {
-    for (let key in this.store) {
-      this.store[key] = '';
-    }
-    this.updateValue(this.store)
-    console.log('FormStore----resetFields:', this.store)
-
-  };
-}
-
-const useForm = (form: any) => {
-  // 使用 ref 防止重复创建
-  const formRef = useRef();
-
-  if (!formRef.current) {
-    if (form) {
-      // 传入初始值的时候直接使用这个创建好的示例
-      formRef.current = form;
-    } else {
-      // 否则新建一个示例并挂到 formRef 下
-      const formStore = new FormStore();
-      formRef.current = formStore.getForm();
-    }
-  }
-  return [formRef.current];
-};
 const FormContext = React.createContext();
-const Form = React.forwardRef(({
-                                 name,
-                                 style,
-                                 form = {},
-                                 labelCol,
-                                 disabled = false,
-                                 formLayout = 'right',
-                                 wrapperCol,
-                                 initialValues = {},
-                                 onFinishFailed,
-                                 autoComplete,
-                                 children,
-                                 submit = () => {
-                                 },
-                                 onFinish = () => {
-                                 },
 
-                                 onValuesChange = () => {
-                                 },
-                               }, ref) => {
+const CloneElement = forwardRef(({
+                                   children,
+                                   _fromDate,
+                                   initialValues,
+                                   onChange,
+                                   formLayout,
+                                   disabled,
+                                   _onFinishFailed,
+                                   errorInfo
+                                 }, ref) => {
+  const itemRef = useRef({});
 
+  const onReset = () => {
+    for (let key in _fromDate) {
+      console.log('formUpDateValue:' + key, _fromDate[key], itemRef[key])
 
-  const _fromDate = {...initialValues}
-  const itemRef = {};
-
-
-  /**
-   * 表单项值变化时的回调
-   * @param name
-   * @param value
-   */
-  const handleFormChange = (name, value) => {
-    // 更新表单数据对象
-    setFormData(prevData => {
-        return {
-          ...prevData,
-          [name]: value
-        }
+      if (itemRef[key].current) {
+        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
+        itemRef[key].current.onReset()
       }
-    );
+    }
+  }
 
-  };
+  const onVerify = () => {
+    for (let key in _fromDate) {
+      itemRef[key].current.onVerify()
+    }
+  }
 
+  useImperativeHandle(ref, () => ({onReset, onVerify}));
 
-  const clonedChildren = React.Children.map(children, (child: React.FC, index: number) => {
+  const clone = React.Children.map(children, (child: React.FC, index: number) => {
 //给formData 默认值
     if (React.isValidElement(child)) {
       if (child.props.name) {
@@ -163,16 +61,136 @@ const Form = React.forwardRef(({
         formLayout,
         disabled,
         _fromDate,
-        onChange: handleFormChange,
+        onChange,
         _onFinishFailed,
         errorInfo,
       });
     }
     return child;
   });
+  return clone
+});
 
+const Form = React.forwardRef(({
+                                 name,
+                                 style,
+                                 form = {},
+                                 children,
+                                 wrapperCol,
+                                 initialValues = {},
+                                 autoComplete,
+                                 disabled = false,
+                                 formLayout = 'right',
+                                 submit = () => {
+                                 },
+                                 onFinish = () => {
+                                 },
+                                 onFinishFailed = () => {
+                                 },
+                                 onValuesChange = () => {
+                                 },
+                               }, ref) => {
+
+
+  const _fromDate = {...initialValues}
+
+
+  /**
+   * 表单项值变化时的回调
+   * @param name
+   * @param value
+   */
+  const handleFormChange = (name, value) => {
+    // 更新表单数据对象
+    setFormData(prevData => {
+        return {
+          ...prevData,
+          [name]: value
+        }
+      }
+    );
+
+  };
   const [errorInfo, setErrorInfo] = useState({errorFields: []});
 
+  /**
+   * 表单项校验失败的回调 传递给FormItem 组件调用触发
+   * @param type
+   * @param field
+   */
+  const _onFinishFailed = (type, field) => {
+    setErrorInfo(prevState => {
+      // 创建一个新的错误信息对象
+      const newErrorInfo = {...prevState};
+
+      if (type === 'remove') {
+        // 移除指定字段
+        newErrorInfo.errorFields = prevState.errorFields.filter(item => item.name !== field.name);
+      }
+      if (type === 'add') {
+        // 添加或替换指定字段
+        const existingFieldIndex = prevState.errorFields.findIndex(item => item.name === field.name);
+        if (existingFieldIndex === -1) {
+          // 如果字段不存在，则直接添加
+          newErrorInfo.errorFields.push(field);
+        } else {
+          // 如果字段已存在，则替换
+          newErrorInfo.errorFields[existingFieldIndex] = field;
+        }
+      }
+
+
+      return newErrorInfo;
+    });
+  };
+
+  const itemRef = useRef({});
+//   const clonedChildren = React.Children.map(children, (child: React.FC, index: number) => {
+// //给formData 默认值
+//     if (React.isValidElement(child)) {
+//       if (child.props.name) {
+//
+//         if (['Radio', 'Switch'].includes(child?.props?.children.type?.displayName)) {
+//           _fromDate[child.props.name] = initialValues[child.props.name] || false;
+//         } else {
+//           // if (child?.props?.children.type?.displayName === 'Input')
+//           _fromDate[child.props.name] = initialValues[child.props.name] || '';
+//         }
+//
+//         itemRef[child.props.name] = React.createRef();
+//       }
+//       return React.cloneElement(child, {
+//         ref: itemRef[child.props.name],
+//         formLayout,
+//         disabled,
+//         _fromDate,
+//         onChange: handleFormChange,
+//         _onFinishFailed,
+//         errorInfo,
+//       });
+//     }
+//     return child;
+//   });
+
+  /**
+   * FormStore 实例 变化的回调函数
+   * @param store
+   */
+  const formUpDateValue = (store, type) => {
+    setFormData(store);
+    if (type === 'reset') {
+      itemRef.current.onReset()
+      // for (let key in store) {
+      //   console.log('formUpDateValue:' + key, store[key], itemRef[key])
+      //
+      //   if (!store[key] && itemRef[key].current) {
+      //     // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
+      //     itemRef[key].current.onReset()
+      //   }
+      // }
+    }
+
+  }
 
   const [formInstance] = useForm(form);
 
@@ -180,19 +198,6 @@ const Form = React.forwardRef(({
   // console.log('formInstance:', formInstance)
 
 
-  // // 使用 ref 确保只执行一次
-  // const mounted = useRef(false);
-  // // 初次渲染时注册表单初始值
-  // if (!mounted.current) {
-  //   initialValues && setInitialValues && setInitialValues(initialValues);
-  //   mounted.current = true;
-  // }
-
-  // 使用 useMemo 防止重复创建
-  const fieldContextValue = useMemo(
-    () => ({...formInstance}),
-    [formInstance]
-  );
   const [formData, setFormData] = useState();
 
 
@@ -206,86 +211,65 @@ const Form = React.forwardRef(({
     console.log('form===resetFields')
     for (let key in formData) {
 
-      if (formData[key]) {
-        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
-        itemRef[key].current.onReset()
-      }
+      // itemRef[key].current.onVerify()
     }
     // formRef.current && formRef.current.resetFields();
   };
 
 
   /**
-   * FormStore 实例 变化的回调函数
-   * @param store
+   * 初始化表单数据
    */
-  const formUpDateValue = (store) => {
-    console.log('formUpDateValue:--form', store)
-
-    setFormData(store);
-
-    for (let key in store) {
-      if (!store[key]) {
-        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
-        itemRef[key].current.onReset()
-      }
-    }
-  }
-
   useEffect(() => {
-
-    console.log('formUpDateValue:-[] ,useEffect', _fromDate)
     setFormData(_fromDate);
   }, [])
-  useEffect(() => {
 
+  /**
+   *
+   */
+  useEffect(() => {
     formData && onValuesChange(formData)
     if (formInstance.getInternalHooks) {
-      const {setCallbacks, setInitialValues, updateValue} = formInstance.getInternalHooks(formUpDateValue);
-
+      const {setCallbacks, setInitialValues, updateValue} = formInstance.getInternalHooks(formUpDateValue, submit);
       setInitialValues(formData)
     }
-
   }, [formData])
+
+
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    itemRef.current.onVerify()
 
-    if (errorInfo.errorFields.length) {
-      return onFinishFailed(errorInfo)
+    setIsSubmiting(true);
+
+  };
+
+  useEffect(() => {
+
+    setIsSubmiting(false);
+    if (errorInfo.errorFields.length && isSubmiting) {
+      onFinishFailed(errorInfo)
+
     } else {
-      onFinish()
-    }
-//循环formData 判断对象里面的值是否为空 就调用 onFinishFailed
-    //
-    // if (itemRef.current) {
-    //   console.log('itemRef.current:', itemRef.current);
-    // }
-    for (let key in formData) {
 
-      console.log(formData[key])
-      if (!formData[key]) {
-        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
-        itemRef[key].current.onRequired()
+      if (isSubmiting) {
+        onFinish()
+        submit(formData);
       }
+
     }
 
+  }, [errorInfo.errorFields, isSubmiting])
 
-    submit(formData);
-  };
-  const _onFinishFailed = (type, field) => {
-    setErrorInfo((prevState) => {
+  // 使用 useMemo 防止重复创建
+  const fieldContextValue = useMemo(
+    () => ({...formInstance}),
+    [formInstance]
+  );
 
-      if (type === 'push' && !prevState.errorFields.filter(_ => _.name === field.name).length) {
-        prevState.errorFields.push(field)
-      }
-      if (type === 'out') {
-        prevState.errorFields = prevState.errorFields.filter(_ => _.name !== field.name)
-      }
-      return prevState
-    })
-  };
   return (
 
     <form
@@ -296,12 +280,21 @@ const Form = React.forwardRef(({
       autoComplete={autoComplete}
       onReset={e => {
         e.preventDefault();
-        formInstance.resetFields();
-        onReset && onReset(e);
+        // formInstance.resetFields();
+        // onReset && onReset(e);
       }}
     >
       <FormContext.Provider value={fieldContextValue}>
-        {clonedChildren}
+        <CloneElement
+          ref={itemRef}
+          onChange={handleFormChange}
+          children={children}
+          _fromDate={_fromDate}
+          formLayout={formLayout}
+          disabled={disabled}
+          _onFinishFailed={_onFinishFailed}
+          initialValues={initialValues}
+        />
       </FormContext.Provider>
     </form>
 
@@ -311,7 +304,6 @@ const Form = React.forwardRef(({
 
 Form.Item = FormItem;
 Form.useForm = useForm;
-Form.useWatch = useWatch;
 
 export default Form;
 

@@ -1,61 +1,98 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 
-export const useWatch = (formData, onChange = () => {
-}) => {
-  useEffect(() => {
-    const handleChange = (name, value) => {
-      onChange(name, value);
+export class FormStore {
+  store: { [key: string]: any };
+  callbacks: { [key: string]: Function };
+  initialValues: { [key: string]: any };
+  fieldEntities: any[];
+  update: Function;
+  updateValue: Function;
+
+  constructor() {
+    this.store = {};
+    this.callbacks = Object.create(null);
+    this.initialValues = {};
+    this.fieldEntities = [];
+    this.update = () => {
     };
-    // 监听 formData 的变化
-    for (const name in formData) {
-      if (formData.hasOwnProperty(name)) {
-        // 在这里做出对 formLayout 的判断
-        const value = formData[name];
-        handleChange(name, value);
-      }
+    this.updateValue = () => {
+    };
+  }
+
+  getForm = () => ({
+    getFieldValue: this.getFieldValue,
+    getFieldsValue: this.getFieldsValue,
+    setFieldsValue: this.setFieldsValue,
+    submit: this.submit,
+    resetFields: this.resetFields,
+    getInternalHooks: this.getInternalHooks,
+  });
+
+  getInternalHooks = (update: Function = () => {
+  }, submit) => {
+    this.updateValue = update;
+    this.submit = submit;
+    return {
+      updateValue: this.updateValue,
+      setInitialValues: this.setInitialValues,
+      setCallbacks: this.setCallbacks,
+      initEntityValue: this.initEntityValue,
+      registerField: this.registerField,
+    };
+  };
+
+  setCallbacks = (callbacks: { [key: string]: Function }) => {
+  };
+
+  setInitialValues = (initialValues: { [key: string]: any }) => {
+    this.store = {...initialValues};
+  };
+
+  initEntityValue = (entity: any) => {
+  };
+
+  registerField = (entity: any) => {
+  };
+
+  getFieldEntities = () => {
+  };
+
+  notifyObservers = (
+    prevStore: { [key: string]: any },
+    nameList: string[],
+    info: any
+  ) => {
+  };
+
+  submit = () => {
+  };
+
+  resetFields = (): void => {
+    for (let key in this.store) {
+      this.store[key] = '';
     }
-  }, [formData, onChange]);
-};
-export const useForm = ({
-
-                          // onFinishFailed = () => {
-                          // },
-                          // autoComplete = () => {
-                          // },
-                          // onFinish = () => {
-                          // },
-                          submit = () => {
-                          },
-                          onValuesChange = () => {
-                          },
-                        }) => {
-  const [formData, setFormData] = useState({});
-
-  const handleFormChange = (name, value) => {
-    // 更新表单数据对象
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    this.updateValue(this.store,'reset');
+    console.log('FormStore----resetFields:', this.store);
   };
+}
 
+/**
+ * useForm
+ * @param form
+ */
+export const useForm = (form: any) => {
+  // 使用 ref 防止重复创建
+  const formRef = useRef();
 
-
-  useEffect(() => {
-    onValuesChange(formData)
-  }, [formData])
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    submit(formData);
-    console.log('Form submitted with data:', formData);
-  };
-  // 使用 useWatch 监听表单数据变化
-  useWatch(formData, handleFormChange);
-  return {
-    handleSubmit,
-    formData,
-    handleFormChange,
-    setFormData
-  };
+  if (!formRef.current) {
+    if (form) {
+      // 传入初始值的时候直接使用这个创建好的示例
+      formRef.current = form;
+    } else {
+      // 否则新建一个示例并挂到 formRef 下
+      const formStore = new FormStore();
+      formRef.current = formStore.getForm();
+    }
+  }
+  return [formRef.current];
 };

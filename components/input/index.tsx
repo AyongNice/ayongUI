@@ -115,8 +115,6 @@ function Input(props) {
   }
   useEffect(() => {
     setValue(() => value)
-
-    console.log('input----value:', value)
   }, [value])
 
   return (
