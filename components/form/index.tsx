@@ -12,6 +12,7 @@ import FormItem from './components/form-item/index.tsx'
 const FormContext = React.createContext();
 
 const CloneElement = forwardRef(({
+                                   form,
                                    children,
                                    _fromDate,
                                    initialValues,
@@ -34,13 +35,37 @@ const CloneElement = forwardRef(({
     }
   }
 
+  const [formInstance] = useForm(form);
+
+  console.log('CloneElement---:', formInstance)
+
+  const formUpDateValue = (store, type) => {
+    console.log('formUpDateValue:---', store, type)
+  }
+
+  useEffect(() => {
+    if (formInstance.getInternalHooks) {
+      formInstance.getInternalHooks(formUpDateValue);
+    }
+  }, [])
+
+  const onSet = (fromDate) => {
+    for (let key in fromDate) {
+      if (itemRef[key].current) {
+        console.log('onSet---:', fromDate)
+        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
+        itemRef[key].current.onSet(fromDate[key])
+      }
+    }
+  }
+
   const onVerify = () => {
     for (let key in _fromDate) {
       itemRef[key].current.onVerify()
     }
   }
 
-  useImperativeHandle(ref, () => ({onReset, onVerify}));
+  useImperativeHandle(ref, () => ({onReset, onVerify, onSet}));
 
   const clone = React.Children.map(children, (child: React.FC, index: number) => {
 //给formData 默认值
@@ -145,32 +170,6 @@ const Form = React.forwardRef(({
   };
 
   const itemRef = useRef({});
-//   const clonedChildren = React.Children.map(children, (child: React.FC, index: number) => {
-// //给formData 默认值
-//     if (React.isValidElement(child)) {
-//       if (child.props.name) {
-//
-//         if (['Radio', 'Switch'].includes(child?.props?.children.type?.displayName)) {
-//           _fromDate[child.props.name] = initialValues[child.props.name] || false;
-//         } else {
-//           // if (child?.props?.children.type?.displayName === 'Input')
-//           _fromDate[child.props.name] = initialValues[child.props.name] || '';
-//         }
-//
-//         itemRef[child.props.name] = React.createRef();
-//       }
-//       return React.cloneElement(child, {
-//         ref: itemRef[child.props.name],
-//         formLayout,
-//         disabled,
-//         _fromDate,
-//         onChange: handleFormChange,
-//         _onFinishFailed,
-//         errorInfo,
-//       });
-//     }
-//     return child;
-//   });
 
   /**
    * FormStore 实例 变化的回调函数
@@ -178,24 +177,19 @@ const Form = React.forwardRef(({
    */
   const formUpDateValue = (store, type) => {
     setFormData(store);
+
+    console.log('formUpDateValue:', store, type)
     if (type === 'reset') {
       itemRef.current.onReset()
-      // for (let key in store) {
-      //   console.log('formUpDateValue:' + key, store[key], itemRef[key])
-      //
-      //   if (!store[key] && itemRef[key].current) {
-      //     // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
-      //     itemRef[key].current.onReset()
-      //   }
-      // }
+
+    }
+    if (type === 'set') {
+      itemRef.current.onSet(store)
     }
 
   }
 
   const [formInstance] = useForm(form);
-
-
-  // console.log('formInstance:', formInstance)
 
 
   const [formData, setFormData] = useState();
@@ -228,6 +222,8 @@ const Form = React.forwardRef(({
    *
    */
   useEffect(() => {
+    console.log('useEffect---:', formData)
+
     formData && onValuesChange(formData)
     if (formInstance.getInternalHooks) {
       const {setCallbacks, setInitialValues, updateValue} = formInstance.getInternalHooks(formUpDateValue, submit);
@@ -280,16 +276,16 @@ const Form = React.forwardRef(({
       autoComplete={autoComplete}
       onReset={e => {
         e.preventDefault();
-        // formInstance.resetFields();
-        // onReset && onReset(e);
       }}
     >
       <FormContext.Provider value={fieldContextValue}>
         <CloneElement
           ref={itemRef}
+          form={form}
           onChange={handleFormChange}
           children={children}
           _fromDate={_fromDate}
+          fromData={formData}
           formLayout={formLayout}
           disabled={disabled}
           _onFinishFailed={_onFinishFailed}

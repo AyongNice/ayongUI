@@ -28,7 +28,7 @@ const Radio = ({
 
   useEffect(() => {
     //解决在表单中调用onReset方法时，Radio组件的checked状态不会重置的问题 会清空value值 但是不会清空checked状态
-    if (!value) setIsChecked(value);
+    setIsChecked(value);
   }, [value])
 
   if (isGroup) {

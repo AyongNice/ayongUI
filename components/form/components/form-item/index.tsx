@@ -15,6 +15,7 @@ const FormItem = React.forwardRef(({
                                      label,
                                      name,
                                      style,
+                                     labelWidth = '100px',
                                      rules = [],
                                      disabled,
                                      children,
@@ -41,22 +42,15 @@ const FormItem = React.forwardRef(({
   }
   if (!Array.isArray(children) && label && children.type.name !== 'Button') {
 
-    console.log('rules:', rules)
     rules.forEach(_ => {
 
       const keys = Object.keys(_);
-      console.log('keys:', keys)
-
       if (keys.includes('validator')) {
         rulesMap.validator = _.validator;
-        console.log('validator:', _)
-
         //如果是自定义校验 则不需要其他校验
         return;
       }
-
       if (keys.includes('required')) {
-        console.log('required:', _)
         rulesMap.required.value = _.required;
         rulesMap.required.message = _.message;
       }
@@ -103,9 +97,11 @@ const FormItem = React.forwardRef(({
   }
 
   //必选项校验
-  const onVerifyRequired = (value: string | boolean) => {
+  const onVerifyRequired = async (value: string | boolean) => {
+    console.log('onVerifyRequired:', rulesMap.validator)
+    let errors: string | Object = '';
     if (rulesMap.required.value) {
-      let errors = '';
+
       if (value) {
         errors = onVerifyMaxLength(value)
         console.log('onVerifyRequired---message:', name, errors)
@@ -119,8 +115,19 @@ const FormItem = React.forwardRef(({
         _onFinishFailed('add', {name, errors})
       }
       // console.log('onVerifyRequired---message:', name, message)
-      setErrorMessage(errors);
+
     }
+    if (typeof rulesMap.validator === 'function') {
+      try {
+        errors = await rulesMap.validator(name, value);
+        _onFinishFailed('remove', {name, errors})
+      } catch (error) {
+        errors = error;
+        console.log('onVerifyRequired---message:', error)
+        _onFinishFailed('add', {name, errors})
+      }
+    }
+    setErrorMessage(errors);
   }
 
 
@@ -141,9 +148,7 @@ const FormItem = React.forwardRef(({
     //button  多个children 不需要校验
     if (!Array.isArray(children) && children.type.name !== 'Button') {
 
-      if(rulesMap.validator){
-        return rulesMap.validator(name,value)
-      }
+
       //required 校验
       onVerifyRequired(value)
 
@@ -161,7 +166,11 @@ const FormItem = React.forwardRef(({
     console.log('onReset:', name)
   }
 
-  useImperativeHandle(ref, () => ({onVerify, onReset}))
+  const onSet = (value) => {
+    setValue(value);
+  }
+
+  useImperativeHandle(ref, () => ({onVerify, onReset, onSet}))
 
   // 创建一个 ref 以跟踪首次渲染
   const isFirstRender = useRef(true);
@@ -196,6 +205,7 @@ const FormItem = React.forwardRef(({
           child,
           value,
           disabled,
+          checked: value,
           onChange: handleChange,
         });
       }
@@ -205,6 +215,7 @@ const FormItem = React.forwardRef(({
     clonedChild = reactCloneElement({
       value,
       disabled,
+      checked: value,
       child: children,
       onChange: handleChange,
     });
@@ -219,7 +230,8 @@ const FormItem = React.forwardRef(({
         {label && <label style={{
           textAlign: [_textAlian],
           padding: formLayout === 'vertical' && 0,
-          marginBottom: formLayout === 'vertical' && 8
+          marginBottom: formLayout === 'vertical' && 8,
+          maxWidth: labelWidth,
         }} className={`${fromStyle.label} ${rulesMap.required.value ? fromStyle.required : ''}`}>
           {label}</label>
         }

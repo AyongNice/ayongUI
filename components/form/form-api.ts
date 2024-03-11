@@ -40,7 +40,10 @@ export class FormStore {
       registerField: this.registerField,
     };
   };
-
+  setFieldsValue = (values: { [key: string]: any }) => {
+    this.store = {...values};
+    this.updateValue(this.store, 'set');
+  }
   setCallbacks = (callbacks: { [key: string]: Function }) => {
   };
 
