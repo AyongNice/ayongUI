@@ -23,7 +23,6 @@ const Option = ({options, mode, optionRender, search, searchTerm, onClick, selec
     const onSelectClick = (event: React.DragEvent<HTMLDivElement>, option: Options) => {
       event.stopPropagation();
       if (option.disabled) return;
-      console.log('onSelectClick', option)
       onClick(option);
     }
     const filteredOptions = search ? options.filter(option =>

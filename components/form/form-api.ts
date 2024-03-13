@@ -19,18 +19,21 @@ export class FormStore {
     };
   }
 
-  getForm = () => ({
-    getFieldValue: this.getFieldValue,
-    setFieldsValue: this.setFieldsValue,
-    submit: this.submit,
-    resetFields: this.resetFields,
-    getInternalHooks: this.getInternalHooks,
-  });
+  getForm = (update: Function = () => {
+  }) => {
+    this.updateValue = update;
+    return {
+      getFieldValue: this.getFieldValue,
+      setFieldsValue: this.setFieldsValue,
+      submit: this.submit,
+      resetFields: this.resetFields,
+      getInternalHooks: this.getInternalHooks,
+    }
+  };
 
   getInternalHooks = (update: Function = () => {
-  }, submit) => {
+  }) => {
     this.updateValue = update;
-    this.submit = submit;
     return {
       updateValue: this.updateValue,
       setInitialValues: this.setInitialValues,
@@ -51,6 +54,7 @@ export class FormStore {
 
   setFieldsValue = (values: { [key: string]: any }) => {
     this.store = {...values};
+    console.log('FormStore----setFieldsValue:', this.store)
     this.updateValue(this.store, 'set');
   }
   setCallbacks = (callbacks: { [key: string]: Function }) => {

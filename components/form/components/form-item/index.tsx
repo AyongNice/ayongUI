@@ -1,11 +1,13 @@
 import React, {useState, useImperativeHandle, useEffect, useRef, useContext, useLayoutEffect} from "react";
 import fromStyle from '../../index.module.less'
 import {FormStore, useForm} from '../../form-api'
-import {formContext} from '../../index.tsx'
+
+import {FormItemProps} from '../../index.d'
+import {CloneElementProps} from "ayongUI/components/form";
 
 const requiredPrompt: string = '为必选字段';
 const maxLengthPrompt: string = '长度不能超过';
-const reactCloneElement = ({childSource, child, value, disabled, onChange, labelWidth}) => {
+const reactCloneElement = ({childSource, child, value, disabled, onChange}: CloneElementProps) => {
 
 
   if (Array.isArray(childSource)) {
@@ -14,7 +16,6 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange, label
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
           value,
-          labelWidth,
           disabled,
           onChange,
         });
@@ -24,7 +25,6 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange, label
   } else {
     return React.cloneElement(child, {
       value,
-      labelWidth,
       disabled,
       onChange,
     });
@@ -34,24 +34,26 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange, label
 }
 
 
-const FormItem = React.forwardRef(({
-                                     label,
-                                     name,
-                                     style,
-                                     form,
-                                     isWarp,
-                                     labelWidth,
-                                     rules = [],
-                                     disabled,
-                                     children,
-                                     _fromDate,
-                                     formLayout = 'right',
-                                     errorInfo,
-                                     onChange = () => {
-                                     },
-                                     _onFinishFailed = () => {
-                                     },
-                                   }, ref) => {
+const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) => {
+
+  const {
+    label,
+    name,
+    style,
+    form,
+    isWarp,
+    labelWidth,
+    rules = [],
+    disabled,
+    children,
+    _fromDate,
+    formLayout = 'right',
+    errorInfo,
+    onChange = () => {
+    },
+    _onFinishFailed = () => {
+    }
+  }: FormItemProps = props;
 
   let _textAlian = formLayout;
   let _display = 'flex';
@@ -97,7 +99,6 @@ const FormItem = React.forwardRef(({
   const [errorMessage, setErrorMessage] = useState('');
   const [value, setValue] = useState(_fromDate && _fromDate[name] || '');
 
-
   /**
    * MaxLength 校验
    * @param value 输入值
@@ -120,12 +121,17 @@ const FormItem = React.forwardRef(({
 
   }
 
-  //必选项校验
+  /**
+   * required 校验
+   * @param value
+   */
   const onVerifyRequired = async (value: string | boolean) => {
+
     let errors: string | Object = '';
     if (rulesMap.required.value) {
 
-      if (value) {
+      if (value && value !== '') {
+        console.log(name, value, rulesMap)
         errors = onVerifyMaxLength(value)
         if (errors) {
           _onFinishFailed('add', {name, errors})
@@ -133,6 +139,8 @@ const FormItem = React.forwardRef(({
           _onFinishFailed('remove', {name, errors: rulesMap.required.message || name + requiredPrompt})
         }
       } else {
+
+        console.log('kong')
         errors = rulesMap?.required.message || label + requiredPrompt;
         _onFinishFailed('add', {name, errors})
 
@@ -184,6 +192,11 @@ const FormItem = React.forwardRef(({
     setErrorMessage('');
   }
 
+
+  /**
+   * 暴露给父组件的方法 设置数据
+   * @param value
+   */
   const onSet = (value) => {
     setValue(value);
   }
@@ -195,14 +208,22 @@ const FormItem = React.forwardRef(({
 
   const [formInstance] = useForm(form);
 
+
+  /**
+   * 获取表单项的值 用户自定义函数渲染暴露给父组件使用
+   */
   let _getFieldValue = () => {
   };
-  // 在首次渲染时将 isFirstRender.current 设置为 false
+  // 在首次渲染时将 isFirstRender.current 设置为 false 防止重置方法 后续逻辑执行
   useEffect(() => {
     isResetting.current = true;
-
   }, [])
 
+
+  /**
+   * 获取表单项的值
+   * 将 获取的FormStore的方法 getFieldValue 回掉方法 引用赋值给 _getFieldValue
+   */
   if (formInstance.getInternalHooks) {
     const {getFieldValue} = formInstance.getInternalHooks();
     _getFieldValue = getFieldValue;
@@ -223,35 +244,25 @@ const FormItem = React.forwardRef(({
 
   // 处理完规则后再克隆子元素
   let clonedChild = {};
-  let _labelWidth = labelWidth;
 
 
   if (typeof children === 'function') {
 
-    _labelWidth = labelWidth || 'auto';
-    // const child = children({
-    //   getFieldValue: _getFieldValue,
-    // })
-
     clonedChild = children({
       getFieldValue: _getFieldValue,
-      labelWidth
+      props: {...props, isWarp: false}
     })
 
   } else {
     clonedChild = reactCloneElement({
-      childSource: children,
-      child: children,
-      labelWidth,
       value,
       disabled,
+      child: children,
+      childSource: children,
       onChange: handleChange,
     });
   }
-  useEffect(() => {
-    console.log('useEffect:', name, label, rules, labelWidth)
 
-  },)
 
   return (
     <div className={fromStyle.item} style={{display: [_display], ...style}}>
@@ -268,7 +279,6 @@ const FormItem = React.forwardRef(({
           {label}</label>
         }
       </div>}
-
 
       <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content'}} className={fromStyle.clonedChild}>
         <div>{clonedChild} </div>

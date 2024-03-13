@@ -7,9 +7,9 @@ import {FormStore, useForm} from './form-api'
 import FormItem from './components/form-item/index.tsx'
 
 // useForm.js
+import {FormProps, CloneFormElementProps} from './index.d'
 
-
-  const FormContext = React.createContext();
+const FormContext = React.createContext();
 
 const CloneElement = forwardRef(({
                                    form,
@@ -22,39 +22,31 @@ const CloneElement = forwardRef(({
                                    disabled,
                                    _onFinishFailed,
                                    errorInfo
-                                 }, ref) => {
+                                 }: CloneFormElementProps, ref) => {
   const itemRef = useRef({});
 
-const [flushed, setFlushed] = useState(false);
+  /**
+   * 表单项值变化时的回调
+   */
+  const [formInstance] = useForm(form);
 
-  const onFlushed = () => {
-    setFlushed((prev) => !prev)
-  }
+  /**
+   * 重置表单
+   */
   const onReset = () => {
     for (let key in _fromDate) {
-      console.log('formUpDateValue:' + key, _fromDate[key], itemRef[key])
-
       if (itemRef[key].current) {
-        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
         itemRef[key].current.onReset()
       }
     }
   }
 
-  const [formInstance] = useForm(form);
 
-
-  const formUpDateValue = (store, type) => {
-    console.log('formUpDateValue:---', store, type)
-  }
-
-  useEffect(() => {
-    if (formInstance.getInternalHooks) {
-      formInstance.getInternalHooks(formUpDateValue);
-    }
-  }, [])
-
-  const onSet = (fromDate):void => {
+  /**
+   * 设置表单数据
+   * @param fromDate
+   */
+  const onSet = (fromDate): void => {
     for (let key in fromDate) {
       if (itemRef[key] && itemRef[key].current) {
         itemRef[key].current.onSet(fromDate[key])
@@ -62,15 +54,19 @@ const [flushed, setFlushed] = useState(false);
     }
   }
 
+
+  /**
+   * 表单项校验
+   */
   const onVerify = () => {
     for (let key in _fromDate) {
       itemRef[key].current.onVerify()
     }
   }
 
-  useImperativeHandle(ref, () => ({onReset, onVerify, onSet,onFlushed}));
+  useImperativeHandle(ref, () => ({onReset, onVerify, onSet}));
 
-  const clone = React.Children.map(children, (child: React.FC, index: number) => {
+  const clone: React.FC = React.Children.map(children, (child: React.FC, index: number) => {
 //给formData 默认值
     if (React.isValidElement(child)) {
       if (child.props.name) {
@@ -120,9 +116,9 @@ const Form = React.forwardRef(({
                                  },
                                  onValuesChange = () => {
                                  },
-                               }, ref) => {
+                               }: FormProps, ref: React.Ref<any>) => {
 
-
+//  初始化表单数据内部数据
   const _fromDate = {...initialValues}
 
 
@@ -142,6 +138,8 @@ const Form = React.forwardRef(({
     );
 
   };
+
+  // 错误信息
   const [errorInfo, setErrorInfo] = useState({errorFields: []});
 
   /**
@@ -175,6 +173,7 @@ const Form = React.forwardRef(({
     });
   };
 
+//组件ref
   const itemRef = useRef({});
 
   /**
@@ -183,19 +182,22 @@ const Form = React.forwardRef(({
    */
   const formUpDateValue = (store, type) => {
     setFormData(store);
-
+    console.log('form===UpDateValue:---', store, type)
     if (type === 'reset') {
       itemRef.current.onReset()
 
     }
     if (type === 'set') {
+
+
       itemRef.current.onSet(store)
     }
 
   }
-
+//  store 实例
   const [formInstance] = useForm(form);
 
+  // 表单数据
   const [formData, setFormData] = useState();
 
   /**
@@ -205,32 +207,51 @@ const Form = React.forwardRef(({
     setFormData(_fromDate);
   }, [])
 
+
   /**
    *
    */
   useEffect(() => {
     formData && onValuesChange(formData)
     if (formInstance.getInternalHooks) {
-      const {setCallbacks, setInitialValues, updateValue} = formInstance.getInternalHooks(formUpDateValue, submit);
+
+      const {setInitialValues} = formInstance.getInternalHooks();
       setInitialValues(formData)
     }
   }, [formData])
 
 
+  //每次运行 effect 时，都会创建新的 formInstance.getInternalHooks 将formUpDateValue数据监听回掉方式传递给formStore
+  useEffect(() => {
+    formInstance.getInternalHooks(formUpDateValue)
+  })
+
+  /**
+   * 是否点击了提交按钮
+   * 因为要在useEffect监听errorInfo.errorFields 和value的变化
+   * 所以要用useState维持一个全局状态
+   */
+    // 是否点击了提交按钮  因为要监听errorInfo.errorFields的变化  所以要用useState维持一个状态
   const [isSubmiting, setIsSubmiting] = useState(false);
 
+
+  /**
+   * 提交表单
+   * @param e
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-
     itemRef.current.onVerify()
-
     setIsSubmiting(true);
-
   };
 
+  /**
+   * 监听错误信息和表单数据的变化 用于触发 onFinishFailed 和 onFinish
+   */
   useEffect(() => {
 
     setIsSubmiting(false);
+
     if (errorInfo.errorFields.length && isSubmiting) {
       onFinishFailed(errorInfo)
 
@@ -245,7 +266,9 @@ const Form = React.forwardRef(({
 
   }, [errorInfo.errorFields, isSubmiting])
 
-  // 使用 useMemo 防止重复创建
+  /**
+   * 表单上下文
+   */
   const fieldContextValue = useMemo(
     () => ({...formInstance}),
     [formInstance]
