@@ -21,7 +21,6 @@ export class FormStore {
 
   getForm = () => ({
     getFieldValue: this.getFieldValue,
-    getFieldsValue: this.getFieldsValue,
     setFieldsValue: this.setFieldsValue,
     submit: this.submit,
     resetFields: this.resetFields,
@@ -38,8 +37,18 @@ export class FormStore {
       setCallbacks: this.setCallbacks,
       initEntityValue: this.initEntityValue,
       registerField: this.registerField,
+      getFieldValue: this.getFieldValue,
     };
   };
+
+
+  // 获取单个字段的值
+  getFieldValue = (name: string) => {
+    return this.store[name];
+  }
+
+  // 设置单个字段的值
+
   setFieldsValue = (values: { [key: string]: any }) => {
     this.store = {...values};
     this.updateValue(this.store, 'set');
@@ -47,6 +56,8 @@ export class FormStore {
   setCallbacks = (callbacks: { [key: string]: Function }) => {
   };
 
+
+  // 设置初始值
   setInitialValues = (initialValues: { [key: string]: any }) => {
     this.store = {...initialValues};
   };
@@ -70,11 +81,13 @@ export class FormStore {
   submit = () => {
   };
 
+
+  // 刷新所有字段的值
   resetFields = (): void => {
     for (let key in this.store) {
       this.store[key] = '';
     }
-    this.updateValue(this.store,'reset');
+    this.updateValue(this.store, 'reset');
     console.log('FormStore----resetFields:', this.store);
   };
 }

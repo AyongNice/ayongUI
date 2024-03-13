@@ -9,12 +9,13 @@ import FormItem from './components/form-item/index.tsx'
 // useForm.js
 
 
-const FormContext = React.createContext();
+  const FormContext = React.createContext();
 
 const CloneElement = forwardRef(({
                                    form,
                                    children,
                                    _fromDate,
+                                   labelWidth,
                                    initialValues,
                                    onChange,
                                    formLayout,
@@ -24,6 +25,12 @@ const CloneElement = forwardRef(({
                                  }, ref) => {
   const itemRef = useRef({});
 
+  console.log('CloneElement:---', labelWidth)
+const [flushed, setFlushed] = useState(false);
+
+  const onFlushed = () => {
+    setFlushed((prev) => !prev)
+  }
   const onReset = () => {
     for (let key in _fromDate) {
       console.log('formUpDateValue:' + key, _fromDate[key], itemRef[key])
@@ -37,7 +44,6 @@ const CloneElement = forwardRef(({
 
   const [formInstance] = useForm(form);
 
-  console.log('CloneElement---:', formInstance)
 
   const formUpDateValue = (store, type) => {
     console.log('formUpDateValue:---', store, type)
@@ -49,11 +55,9 @@ const CloneElement = forwardRef(({
     }
   }, [])
 
-  const onSet = (fromDate) => {
+  const onSet = (fromDate):void => {
     for (let key in fromDate) {
-      if (itemRef[key].current) {
-        console.log('onSet---:', fromDate)
-        // onFinishFailed({errorFields: [{name: key, errors: '不能为空'}]})
+      if (itemRef[key] && itemRef[key].current) {
         itemRef[key].current.onSet(fromDate[key])
       }
     }
@@ -65,7 +69,7 @@ const CloneElement = forwardRef(({
     }
   }
 
-  useImperativeHandle(ref, () => ({onReset, onVerify, onSet}));
+  useImperativeHandle(ref, () => ({onReset, onVerify, onSet,onFlushed}));
 
   const clone = React.Children.map(children, (child: React.FC, index: number) => {
 //给formData 默认值
@@ -83,6 +87,8 @@ const CloneElement = forwardRef(({
       }
       return React.cloneElement(child, {
         ref: itemRef[child.props.name],
+        form,
+        labelWidth,
         formLayout,
         disabled,
         _fromDate,
@@ -99,6 +105,7 @@ const CloneElement = forwardRef(({
 const Form = React.forwardRef(({
                                  name,
                                  style,
+                                 labelWidth = '100px',
                                  form = {},
                                  children,
                                  wrapperCol,
@@ -178,7 +185,6 @@ const Form = React.forwardRef(({
   const formUpDateValue = (store, type) => {
     setFormData(store);
 
-    console.log('formUpDateValue:', store, type)
     if (type === 'reset') {
       itemRef.current.onReset()
 
@@ -191,25 +197,7 @@ const Form = React.forwardRef(({
 
   const [formInstance] = useForm(form);
 
-
   const [formData, setFormData] = useState();
-
-
-  let formRef = useRef(null);
-  // 将回调函数注册到 `FormStore` 实例上
-
-
-  const resetFields = () => {
-    setFormData(_fromDate);
-    setErrorInfo({errorFields: []});
-    console.log('form===resetFields')
-    for (let key in formData) {
-
-      // itemRef[key].current.onVerify()
-    }
-    // formRef.current && formRef.current.resetFields();
-  };
-
 
   /**
    * 初始化表单数据
@@ -222,8 +210,6 @@ const Form = React.forwardRef(({
    *
    */
   useEffect(() => {
-    console.log('useEffect---:', formData)
-
     formData && onValuesChange(formData)
     if (formInstance.getInternalHooks) {
       const {setCallbacks, setInitialValues, updateValue} = formInstance.getInternalHooks(formUpDateValue, submit);
@@ -282,6 +268,7 @@ const Form = React.forwardRef(({
         <CloneElement
           ref={itemRef}
           form={form}
+          labelWidth={labelWidth}
           onChange={handleFormChange}
           children={children}
           _fromDate={_fromDate}
@@ -296,7 +283,6 @@ const Form = React.forwardRef(({
 
   );
 });
-
 
 Form.Item = FormItem;
 Form.useForm = useForm;

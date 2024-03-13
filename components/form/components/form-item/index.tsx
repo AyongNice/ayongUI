@@ -1,21 +1,44 @@
-import React, {useState, useImperativeHandle, useEffect, useRef} from "react";
+import React, {useState, useImperativeHandle, useEffect, useRef, useContext, useLayoutEffect} from "react";
 import fromStyle from '../../index.module.less'
+import {FormStore, useForm} from '../../form-api'
+import {formContext} from '../../index.tsx'
 
 const requiredPrompt: string = '为必选字段';
 const maxLengthPrompt: string = '长度不能超过';
-const reactCloneElement = ({child, value, disabled, onChange}) => {
-  return React.cloneElement(child, {
-    value,
-    disabled,
-    onChange,
-  });
+const reactCloneElement = ({childSource, child, value, disabled, onChange}) => {
+
+
+  if (Array.isArray(childSource)) {
+    return React.Children.map(childSource, child => {
+
+      if (React.isValidElement(child)) {
+        return React.cloneElement(child, {
+          value,
+          disabled,
+          onChange,
+        });
+      }
+      return child;
+    })
+  } else {
+    return React.cloneElement(child, {
+      value,
+      disabled,
+      onChange,
+    });
+  }
+
+
 }
+
 
 const FormItem = React.forwardRef(({
                                      label,
                                      name,
                                      style,
-                                     labelWidth = '100px',
+                                     form,
+                                     isWarp,
+                                     labelWidth,
                                      rules = [],
                                      disabled,
                                      children,
@@ -27,6 +50,7 @@ const FormItem = React.forwardRef(({
                                      _onFinishFailed = () => {
                                      },
                                    }, ref) => {
+
   let _textAlian = formLayout;
   let _display = 'flex';
   if (formLayout === 'vertical') {
@@ -69,8 +93,7 @@ const FormItem = React.forwardRef(({
   }
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [value, setValue] = useState(_fromDate[name] || '');
-  // console.log('errorInfo', errorInfo)
+  const [value, setValue] = useState(_fromDate && _fromDate[name] || '');
 
 
   /**
@@ -81,7 +104,6 @@ const FormItem = React.forwardRef(({
     let message = '';
     //maxLength 校验
     if (rulesMap.maxLength.value) {
-      // console.log('maxLength', rulesMap.maxLength.value, value.length)
       if (children.type.name === 'Input' && value.length > rulesMap?.maxLength.value) {
         message = rulesMap?.maxLength.message || maxLengthPrompt + rulesMap?.maxLength.value;
         _onFinishFailed('add', {name, errors: message})
@@ -98,13 +120,11 @@ const FormItem = React.forwardRef(({
 
   //必选项校验
   const onVerifyRequired = async (value: string | boolean) => {
-    console.log('onVerifyRequired:', rulesMap.validator)
     let errors: string | Object = '';
     if (rulesMap.required.value) {
 
       if (value) {
         errors = onVerifyMaxLength(value)
-        console.log('onVerifyRequired---message:', name, errors)
         if (errors) {
           _onFinishFailed('add', {name, errors})
         } else {
@@ -113,8 +133,8 @@ const FormItem = React.forwardRef(({
       } else {
         errors = rulesMap?.required.message || label + requiredPrompt;
         _onFinishFailed('add', {name, errors})
+
       }
-      // console.log('onVerifyRequired---message:', name, message)
 
     }
     if (typeof rulesMap.validator === 'function') {
@@ -123,7 +143,6 @@ const FormItem = React.forwardRef(({
         _onFinishFailed('remove', {name, errors})
       } catch (error) {
         errors = error;
-        console.log('onVerifyRequired---message:', error)
         _onFinishFailed('add', {name, errors})
       }
     }
@@ -148,7 +167,6 @@ const FormItem = React.forwardRef(({
     //button  多个children 不需要校验
     if (!Array.isArray(children) && children.type.name !== 'Button') {
 
-
       //required 校验
       onVerifyRequired(value)
 
@@ -160,10 +178,8 @@ const FormItem = React.forwardRef(({
    */
   const onReset = () => {
     isResetting.current = true;
-
     setValue('');
     setErrorMessage('');
-    console.log('onReset:', name)
   }
 
   const onSet = (value) => {
@@ -175,10 +191,20 @@ const FormItem = React.forwardRef(({
   // 创建一个 ref 以跟踪首次渲染
   const isFirstRender = useRef(true);
 
+  const [formInstance] = useForm(form);
+
+  let _getFieldValue = () => {
+  };
+  // 在首次渲染时将 isFirstRender.current 设置为 false
   useEffect(() => {
     isResetting.current = true;
 
   }, [])
+
+  if (formInstance.getInternalHooks) {
+    const {getFieldValue} = formInstance.getInternalHooks();
+    _getFieldValue = getFieldValue;
+  }
 
   useEffect(() => {
     // 如果是首次渲染，则将 isFirstRender.current 设置为 false，并且不执行后续逻辑
@@ -187,7 +213,6 @@ const FormItem = React.forwardRef(({
       return;
     }
     // 在后续渲染中执行逻辑
-    console.log('useEffect:value', value, isFirstRender.current, isResetting.current)
 
     if (!Array.isArray(children) && children.type.name !== 'Button' && (!isResetting.current || value)) {
       onVerifyRequired(value);
@@ -195,47 +220,53 @@ const FormItem = React.forwardRef(({
   }, [value]); // 此处假设 value 是 useEffect 依赖的状态变量
 
   // 处理完规则后再克隆子元素
-  let clonedChild = {}
+  let clonedChild = {};
+  let _labelWidth = labelWidth;
 
-  if (Array.isArray(children)) {
-    clonedChild = React.Children.map(children, child => {
+  useEffect(() => {
+    _labelWidth = labelWidth
 
-      if (React.isValidElement(child)) {
-        return reactCloneElement({
-          child,
-          value,
-          disabled,
-          checked: value,
-          onChange: handleChange,
-        });
-      }
-      return child;
+  }, [])
+
+  if (typeof children === 'function') {
+
+    _labelWidth = labelWidth || 'auto';
+    // const child = children({
+    //   getFieldValue: _getFieldValue,
+    // })
+
+    clonedChild = children({
+      getFieldValue: _getFieldValue,
     })
+
   } else {
+    console.log('clonedChild:', children)
     clonedChild = reactCloneElement({
+      childSource: children,
+      child: children,
       value,
       disabled,
-      checked: value,
-      child: children,
       onChange: handleChange,
     });
   }
-  // console.log('clonedChild:', clonedChild)
+
 
   return (
     <div className={fromStyle.item} style={{display: [_display], ...style}}>
-      <div className={fromStyle.labelBox}
-           style={{flex: 0.15}}
+
+      {!isWarp && <div className={fromStyle.labelBox}
+                       style={{flex: 0.15}}
       >
         {label && <label style={{
           textAlign: [_textAlian],
           padding: formLayout === 'vertical' && 0,
           marginBottom: formLayout === 'vertical' && 8,
-          maxWidth: labelWidth,
+          width: _labelWidth,
         }} className={`${fromStyle.label} ${rulesMap.required.value ? fromStyle.required : ''}`}>
           {label}</label>
         }
-      </div>
+      </div>}
+
 
       <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content'}} className={fromStyle.clonedChild}>
         <div>{clonedChild} </div>
