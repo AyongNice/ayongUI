@@ -25,7 +25,6 @@ const CloneElement = forwardRef(({
                                  }, ref) => {
   const itemRef = useRef({});
 
-  console.log('CloneElement:---', labelWidth)
 const [flushed, setFlushed] = useState(false);
 
   const onFlushed = () => {

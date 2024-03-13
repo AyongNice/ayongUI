@@ -5,7 +5,7 @@ import {formContext} from '../../index.tsx'
 
 const requiredPrompt: string = '为必选字段';
 const maxLengthPrompt: string = '长度不能超过';
-const reactCloneElement = ({childSource, child, value, disabled, onChange}) => {
+const reactCloneElement = ({childSource, child, value, disabled, onChange, labelWidth}) => {
 
 
   if (Array.isArray(childSource)) {
@@ -14,6 +14,7 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange}) => {
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
           value,
+          labelWidth,
           disabled,
           onChange,
         });
@@ -23,6 +24,7 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange}) => {
   } else {
     return React.cloneElement(child, {
       value,
+      labelWidth,
       disabled,
       onChange,
     });
@@ -223,10 +225,6 @@ const FormItem = React.forwardRef(({
   let clonedChild = {};
   let _labelWidth = labelWidth;
 
-  useEffect(() => {
-    _labelWidth = labelWidth
-
-  }, [])
 
   if (typeof children === 'function') {
 
@@ -237,19 +235,23 @@ const FormItem = React.forwardRef(({
 
     clonedChild = children({
       getFieldValue: _getFieldValue,
+      labelWidth
     })
 
   } else {
-    console.log('clonedChild:', children)
     clonedChild = reactCloneElement({
       childSource: children,
       child: children,
+      labelWidth,
       value,
       disabled,
       onChange: handleChange,
     });
   }
+  useEffect(() => {
+    console.log('useEffect:', name, label, rules, labelWidth)
 
+  },)
 
   return (
     <div className={fromStyle.item} style={{display: [_display], ...style}}>
@@ -261,7 +263,7 @@ const FormItem = React.forwardRef(({
           textAlign: [_textAlian],
           padding: formLayout === 'vertical' && 0,
           marginBottom: formLayout === 'vertical' && 8,
-          width: _labelWidth,
+          width: labelWidth,
         }} className={`${fromStyle.label} ${rulesMap.required.value ? fromStyle.required : ''}`}>
           {label}</label>
         }
