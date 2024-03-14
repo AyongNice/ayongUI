@@ -2,12 +2,12 @@ import React, {useState, useImperativeHandle, useEffect, useRef, useContext, use
 import fromStyle from '../../index.module.less'
 import {FormStore, useForm} from '../../form-api'
 
-import {FormItemProps} from '../../index.d'
-import {CloneElementProps} from "ayongUI/components/form";
+import {FormItemProps, CloneElementProps, TriggerType, FormProps, ItmeValue} from '../../index.d'
+import {RulesValue} from "ayongUI/components/form";
 
 const requiredPrompt: string = '为必选字段';
 const maxLengthPrompt: string = '长度不能超过';
-const reactCloneElement = ({childSource, child, value, disabled, onChange}: CloneElementProps) => {
+const reactCloneElement = ({childSource, child, size, value, onBlur, disabled, onChange}: CloneElementProps) => {
 
 
   if (Array.isArray(childSource)) {
@@ -16,6 +16,8 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange}: Clon
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
           value,
+          size,
+          onBlur,
           disabled,
           onChange,
         });
@@ -24,7 +26,9 @@ const reactCloneElement = ({childSource, child, value, disabled, onChange}: Clon
     })
   } else {
     return React.cloneElement(child, {
+      size,
       value,
+      onBlur,
       disabled,
       onChange,
     });
@@ -39,6 +43,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
   const {
     label,
     name,
+    size,
     style,
     form,
     isWarp,
@@ -61,12 +66,13 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     _textAlian = 'left';
     _display = 'inline';
   }
-  const rulesMap = {
+  const rulesMap: { [key: string]: RulesValue } = {
     required: {},
     maxLength: {},
     minLength: {},
     max: {},
     min: {},
+    validator: {}
   }
   if (!Array.isArray(children) && label && children.type.name !== 'Button') {
 
@@ -74,7 +80,8 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
       const keys = Object.keys(_);
       if (keys.includes('validator')) {
-        rulesMap.validator = _.validator;
+        rulesMap.validator.value = _.validator;
+        rulesMap.validator.trigger = _.trigger || 'change';
         //如果是自定义校验 则不需要其他校验
         return;
       }
@@ -86,28 +93,32 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
       if (keys.includes('max')) {
         rulesMap.max.value = _.max;
         rulesMap.max.message = _.message;
+        rulesMap.max.trigger = _.trigger || 'change';
+
       }
 
       if (keys.includes('maxLength')) {
         rulesMap.maxLength.value = _.maxLength;
         rulesMap.maxLength.message = _.message;
+        rulesMap.maxLength.trigger = _.trigger || 'change';
       }
 
     })
   }
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [value, setValue] = useState(_fromDate && _fromDate[name] || '');
+  const [errorMessage, setErrorMessage] = useState<FormProps.errorInfo>('');
+  const [value, setValue] = useState<ItmeValue>(_fromDate && _fromDate[name] || '');
 
   /**
    * MaxLength 校验
    * @param value 输入值
    */
-  const onVerifyMaxLength = (value: string | boolean): string => {
+  const onVerifyMaxLength = (value: string | boolean, trigger: TriggerType): string => {
     let message = '';
     //maxLength 校验
     if (rulesMap.maxLength.value) {
-      if (children.type.name === 'Input' && value.length > rulesMap?.maxLength.value) {
+      console.log(trigger, rulesMap.maxLength.trigger)
+      if (children.type.name === 'Input' && [rulesMap.maxLength.trigger, 'submit'].includes(trigger) && value.length > rulesMap?.maxLength.value) {
         message = rulesMap?.maxLength.message || maxLengthPrompt + rulesMap?.maxLength.value;
         _onFinishFailed('add', {name, errors: message})
       } else {
@@ -121,18 +132,14 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
   }
 
-  /**
-   * required 校验
-   * @param value
-   */
-  const onVerifyRequired = async (value: string | boolean) => {
+
+  const onVerifyRequired = async (value: string | boolean, trigger: TriggerType) => {
 
     let errors: string | Object = '';
     if (rulesMap.required.value) {
 
       if (value && value !== '') {
-        console.log(name, value, rulesMap)
-        errors = onVerifyMaxLength(value)
+        errors = onVerifyMaxLength(value, trigger)
         if (errors) {
           _onFinishFailed('add', {name, errors})
         } else {
@@ -140,19 +147,23 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
         }
       } else {
 
-        console.log('kong')
+        if (![rulesMap.required.trigger, 'submit'].includes(trigger)) return;
+
         errors = rulesMap?.required.message || label + requiredPrompt;
         _onFinishFailed('add', {name, errors})
 
       }
 
     }
-    if (typeof rulesMap.validator === 'function') {
+    if (typeof rulesMap.validator.value === 'function') {
       try {
-        errors = await rulesMap.validator(name, value);
+        errors = await rulesMap.validator.value(name, value);
         _onFinishFailed('remove', {name, errors})
       } catch (error) {
-        errors = error;
+        console.log(rulesMap.validator.trigger, trigger)
+
+        if (![rulesMap.validator.trigger, 'submit'].includes(trigger)) return;
+        errors = error as string;
         _onFinishFailed('add', {name, errors})
       }
     }
@@ -164,21 +175,23 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
    * 组件value改变触发
    * @param value  子组件值
    */
-  const handleChange = (value) => {
+  const handleChange = (value: ItmeValue) => {
     setValue(value);
     onChange(name, value); // 调用父组件传递过来的 onChange 方法，并传递名称和值
   };
 
-
+  const onBlur = () => {
+    onVerify('blur');
+  }
   /**
    * 暴露给父组件的方法 用于 总体校验
    */
-  const onVerify = () => {
+  const onVerify = (trigger: TriggerType) => {
     //button  多个children 不需要校验
     if (!Array.isArray(children) && children.type.name !== 'Button') {
 
       //required 校验
-      onVerifyRequired(value)
+      onVerifyRequired(value, trigger);
 
     }
   }
@@ -197,7 +210,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
    * 暴露给父组件的方法 设置数据
    * @param value
    */
-  const onSet = (value) => {
+  const onSet = (value: ItmeValue): void => {
     setValue(value);
   }
 
@@ -238,7 +251,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     // 在后续渲染中执行逻辑
 
     if (!Array.isArray(children) && children.type.name !== 'Button' && (!isResetting.current || value)) {
-      onVerifyRequired(value);
+      onVerifyRequired(value, 'change');
     }
   }, [value]); // 此处假设 value 是 useEffect 依赖的状态变量
 
@@ -250,16 +263,18 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
     clonedChild = children({
       getFieldValue: _getFieldValue,
-      props: {...props, isWarp: false}
+      props: {...props, ref, isWarp: false}
     })
 
   } else {
     clonedChild = reactCloneElement({
       value,
+      size,
       disabled,
       child: children,
       childSource: children,
       onChange: handleChange,
+      onBlur,
     });
   }
 

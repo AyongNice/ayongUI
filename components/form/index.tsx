@@ -13,6 +13,7 @@ const FormContext = React.createContext();
 
 const CloneElement = forwardRef(({
                                    form,
+                                   size,
                                    children,
                                    _fromDate,
                                    labelWidth,
@@ -24,7 +25,7 @@ const CloneElement = forwardRef(({
                                    errorInfo
                                  }: CloneFormElementProps, ref) => {
   const itemRef = useRef({});
-
+  let cloneElement: React.FC = {}
   /**
    * 表单项值变化时的回调
    */
@@ -34,6 +35,8 @@ const CloneElement = forwardRef(({
    * 重置表单
    */
   const onReset = () => {
+
+    console.log('onReset:---', _fromDate, itemRef)
     for (let key in _fromDate) {
       if (itemRef[key].current) {
         itemRef[key].current.onReset()
@@ -59,14 +62,21 @@ const CloneElement = forwardRef(({
    * 表单项校验
    */
   const onVerify = () => {
+    console.log('onVerify:---', _fromDate, itemRef)
     for (let key in _fromDate) {
-      itemRef[key].current.onVerify()
+      itemRef[key]?.current?.onVerify('submit')
     }
   }
+  const [updateComponent, setUpdateComponent] = useState(false)
 
-  useImperativeHandle(ref, () => ({onReset, onVerify, onSet}));
+  const formUpDateValue = (store, type) => {
 
-  const clone: React.FC = React.Children.map(children, (child: React.FC, index: number) => {
+    console.log('formUpDateValue===itemRef:---', itemRef)
+  }
+
+  useImperativeHandle(ref, () => ({onReset, onVerify, onSet, formUpDateValue}));
+
+  cloneElement = React.Children.map(children, (child: React.FC, index: number) => {
 //给formData 默认值
     if (React.isValidElement(child)) {
       if (child.props.name) {
@@ -83,6 +93,7 @@ const CloneElement = forwardRef(({
       return React.cloneElement(child, {
         ref: itemRef[child.props.name],
         form,
+        size,
         labelWidth,
         formLayout,
         disabled,
@@ -94,12 +105,13 @@ const CloneElement = forwardRef(({
     }
     return child;
   });
-  return clone
+  return cloneElement
 });
 
 const Form = React.forwardRef(({
                                  name,
                                  style,
+                                 size,
                                  labelWidth = '100px',
                                  form = {},
                                  children,
@@ -181,17 +193,18 @@ const Form = React.forwardRef(({
    * @param store
    */
   const formUpDateValue = (store, type) => {
-    setFormData(store);
-    console.log('form===UpDateValue:---', store, type)
     if (type === 'reset') {
+      store = _fromDate;
       itemRef.current.onReset()
 
     }
     if (type === 'set') {
 
-
       itemRef.current.onSet(store)
     }
+    setFormData(store);
+
+    itemRef.current.formUpDateValue(store, type)
 
   }
 //  store 实例
@@ -213,7 +226,7 @@ const Form = React.forwardRef(({
    */
   useEffect(() => {
     formData && onValuesChange(formData)
-    if (formInstance.getInternalHooks) {
+    if (formInstance?.getInternalHooks) {
 
       const {setInitialValues} = formInstance.getInternalHooks();
       setInitialValues(formData)
@@ -223,7 +236,8 @@ const Form = React.forwardRef(({
 
   //每次运行 effect 时，都会创建新的 formInstance.getInternalHooks 将formUpDateValue数据监听回掉方式传递给formStore
   useEffect(() => {
-    formInstance.getInternalHooks(formUpDateValue)
+    if (!formInstance?.getInternalHooks) return;
+    formInstance?.getInternalHooks(formUpDateValue)
   })
 
   /**
@@ -290,6 +304,7 @@ const Form = React.forwardRef(({
         <CloneElement
           ref={itemRef}
           form={form}
+          size={size}
           labelWidth={labelWidth}
           onChange={handleFormChange}
           children={children}

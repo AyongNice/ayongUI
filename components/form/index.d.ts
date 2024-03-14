@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface FormProps {
   name?: string; // 表单名称
+  size?: 'small' | 'middle' | 'large'; // 表单尺寸，默认为 'middle'
   style?: React.CSSProperties; // 表单的样式
   labelWidth?: string; // 标签的宽度，默认为 '100px'
   form?: any; // 表单实例对象，默认为空对象
@@ -25,8 +26,27 @@ export interface CloneFormElementProps extends FormProps {
   _onFinishFailed?: (type: string, field: { name: string; errors: string | any }) => void; // 内部函数(方式命名冲突) 表单项校验失败回调函数
 }
 
+/**
+ * required 校验
+ * @param TriggerType 触发类型 'change' | 'blur' | 'submit' 默认为 'change'
+ */
+export type TriggerType = 'change' | 'blur' | 'submit';
+/**
+ * 表单项值类型
+ * string | number | File | boolean | string[] | number[] | File[] | boolean[]
+ */
+export type ItmeValue = string | number | File | boolean | string[] | number[] | File[] | boolean[];
+
+
+
+export interface RulesValue {
+  value: any; // 规则值
+  message?: string; // 规则提示信息
+  trigger?: TriggerType; // 触发类型
+}
 
 export interface FormItemProps {
+  size?: 'small' | 'middle' | 'large'; // 表单尺寸，默认为 'middle'
   label: string; // 标签文本
   name: string; // 表单项名称
   style?: React.CSSProperties; // 自定义样式
@@ -42,7 +62,8 @@ export interface FormItemProps {
   onChange?: (name: string, value: any) => void; // 表单项值改变回调函数
   _onFinishFailed?: (type: string, field: { name: string; errors: string | any }) => void; // 表单项校验失败回调函数
 }
-export interface CloneElementProps {
+export interface CloneElementProps  {
+  size?: 'small' | 'middle' | 'large'; // 表单尺寸，默认为 'middle'
   childSource: React.ReactNode; // 子元素源
   child: React.ReactNode; // 子元素
   value: any; // 表单项的值
