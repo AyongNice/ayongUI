@@ -1,9 +1,8 @@
 import React, {useState, useImperativeHandle, useEffect, useRef, useContext, useLayoutEffect} from "react";
 import fromStyle from '../../index.module.less'
 import {FormStore, useForm} from '../../form-api'
-
-import {FormItemProps, CloneElementProps, TriggerType, FormProps, ItmeValue} from '../../index.d'
-import {RulesValue} from "ayongUI/components/form";
+import {isPromise} from '../../../../utils/index.ts'
+import {FormItemProps,RulesValue, CloneElementProps, TriggerType, FormProps, ItmeValue} from '../../index.d'
 
 const requiredPrompt: string = '为必选字段';
 const maxLengthPrompt: string = '长度不能超过';
@@ -157,10 +156,9 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     }
     if (typeof rulesMap.validator.value === 'function') {
       try {
-        errors = await rulesMap.validator.value(name, value);
+        errors = await isPromise(rulesMap.validator.value, name, value);
         _onFinishFailed('remove', {name, errors})
       } catch (error) {
-        console.log(rulesMap.validator.trigger, trigger)
 
         if (![rulesMap.validator.trigger, 'submit'].includes(trigger)) return;
         errors = error as string;

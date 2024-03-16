@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 
+import {isObject} from '../../utils/index.ts'
+
 export class FormStore {
   store: { [key: string]: any };
   callbacks: { [key: string]: Function };
@@ -64,6 +66,7 @@ export class FormStore {
   // 设置初始值
   setInitialValues = (initialValues: { [key: string]: any }) => {
     this.store = {...initialValues};
+
   };
 
   initEntityValue = (entity: any) => {
@@ -88,11 +91,21 @@ export class FormStore {
 
   // 刷新所有字段的值
   resetFields = (): void => {
+
     for (let key in this.store) {
-      this.store[key] = '';
+
+      if (isObject(this.store[key])) {
+        for (let key2 in this.store[key]) {
+          this.store[key][key2] = '';
+        }
+
+      } else {
+        this.store[key] = '';
+
+      }
+
     }
     this.updateValue(this.store, 'reset');
-    console.log('FormStore----resetFields:', this.store);
   };
 }
 

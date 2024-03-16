@@ -76,7 +76,6 @@ export interface GroupTbodyProps {
 // 定义数据项的类型
 export interface DataItem {
   key: string;
-
   [propName: string]: any;
 }
 

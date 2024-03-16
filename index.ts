@@ -199,12 +199,15 @@ export {
   Downloads,
 } from './components/icon/icon.ts';
 export type {IconProps} from './components/icon';
+
 export {default as Table} from './components/table/index.tsx';
-export type {TableProps} from './components/table/index.d';
+export type {TableProps,DataItem} from './components/table/index.d';
 
 export {default as Input} from './components/input/index.tsx';
 export type {InputProps} from './components/input/index.d';
+
 export {setThemeVariables} from './utils/index.ts';
+
 export {default as Message} from './components/message/index.tsx';
 export type {MessageProps} from './components/message/index.d';
 

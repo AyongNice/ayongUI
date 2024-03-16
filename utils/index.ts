@@ -2,6 +2,12 @@ import {useRef} from "react";
 
 // import type {ThemeConfig} from './index.d.ts'
 
+
+/**
+ * @description: 防抖函数
+ * @param fn
+ * @param delay
+ */
 export function useDebounce(fn: Function, delay: number) {
   const refTimer = useRef<number>();
 
@@ -25,12 +31,18 @@ export const log = (test: boolean, ...arg: any[]) => {
   console.log(arg)
 }
 // @ts-ignore
-export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) = () => false, arg) => {
+export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) = () => false, ...args: any[]) => {
   //return 函数结果 并且判断是否是promise
   //判断 是否Promise类型
   return new Promise(async (resolve, reject) => {
-    let res = await Fun(arg)
-    resolve(res)
+    try {
+      const res = await Fun(...args)
+      resolve(res)
+    } catch (e) {
+
+      reject(e)
+    }
+
   })
 
 }
@@ -82,6 +94,9 @@ export const readAsDataURLImg = (file: File, maxWidth: number, maxHeight: number
 
 //判断字符是否符合 链接格式
 export const isURL = (str: string): boolean => /^(ftp|http|https):\/\/[^ "]+$/.test(str);
+export const isObject = (data) => {
+  return Object.prototype.toString.call(data) === '[object Object]';
+}
 
 interface ThemeConfig {
   'ayong-primary-color': string;                   // 全局主题色

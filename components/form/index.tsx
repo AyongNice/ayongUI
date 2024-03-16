@@ -4,6 +4,8 @@ import fromStyle from './index.module.less'
 
 import {FormStore, useForm} from './form-api'
 
+import {isObject} from '../../utils/index.ts'
+
 import FormItem from './components/form-item/index.tsx'
 
 // useForm.js
@@ -22,7 +24,9 @@ const CloneElement = forwardRef(({
                                    formLayout,
                                    disabled,
                                    _onFinishFailed,
-                                   errorInfo
+                                   errorInfo,
+                                   defaultValueUpDate = () => {
+                                   },
                                  }: CloneFormElementProps, ref) => {
   const itemRef = useRef({});
   let cloneElement: React.FC = {}
@@ -36,11 +40,16 @@ const CloneElement = forwardRef(({
    */
   const onReset = () => {
 
-    console.log('onReset:---', _fromDate, itemRef)
     for (let key in _fromDate) {
-      if (itemRef[key].current) {
+
+      if (isObject(_fromDate[key]) && Object.keys(itemRef[key]).length > 1) {
+        for (let key2 in itemRef[key]) {
+          itemRef[key][key2]?.current.onReset()
+        }
+      } else {
         itemRef[key].current.onReset()
       }
+
     }
   }
 
@@ -51,7 +60,12 @@ const CloneElement = forwardRef(({
    */
   const onSet = (fromDate): void => {
     for (let key in fromDate) {
-      if (itemRef[key] && itemRef[key].current) {
+
+      if (isObject(fromDate[key]) && Object.keys(itemRef[key]).length > 1) {
+        for (let key2 in itemRef[key]) {
+          itemRef[key][key2]?.current.onSet(fromDate[key][key2])
+        }
+      } else {
         itemRef[key].current.onSet(fromDate[key])
       }
     }
@@ -62,36 +76,69 @@ const CloneElement = forwardRef(({
    * 表单项校验
    */
   const onVerify = () => {
-    console.log('onVerify:---', _fromDate, itemRef)
     for (let key in _fromDate) {
-      itemRef[key]?.current?.onVerify('submit')
+
+      if (isObject(_fromDate[key]) && Object.keys(itemRef[key]).length > 1) {
+        for (let key2 in itemRef[key]) {
+          itemRef[key][key2]?.current.onVerify('submit')
+        }
+      } else {
+        itemRef[key]?.current?.onVerify('submit')
+
+      }
     }
   }
   const [updateComponent, setUpdateComponent] = useState(false)
 
   const formUpDateValue = (store, type) => {
 
-    console.log('formUpDateValue===itemRef:---', itemRef)
   }
 
   useImperativeHandle(ref, () => ({onReset, onVerify, onSet, formUpDateValue}));
 
+
+  const setPropotypeValue = (child, value = false): React.Ref<any> => {
+
+    if (Array.isArray(child.props.name)) {
+
+      const [FatherName, childName] = child.props.name;
+
+      //设置每个FormItem的属性key
+      if (!_fromDate[FatherName]) _fromDate[FatherName] = {};
+
+      _fromDate[FatherName][childName] = initialValues[FatherName] && initialValues[FatherName][childName] || value;
+
+      //设置每个FormItem的ref
+      if (!itemRef[FatherName]) itemRef[FatherName] = {};
+      itemRef[FatherName][childName] = React.createRef();
+      return [FatherName, childName];
+    } else {
+      itemRef[child.props.name] = React.createRef();
+      _fromDate[child.props.name] = initialValues[child.props.name] || value;
+
+    }
+  }
+  defaultValueUpDate(_fromDate)
+
+
   cloneElement = React.Children.map(children, (child: React.FC, index: number) => {
 //给formData 默认值
     if (React.isValidElement(child)) {
+
+      let nameList = []
       if (child.props.name) {
 
         if (['Radio', 'Switch'].includes(child?.props?.children.type?.displayName)) {
-          _fromDate[child.props.name] = initialValues[child.props.name] || false;
+          nameList = setPropotypeValue(child)
         } else {
-          // if (child?.props?.children.type?.displayName === 'Input')
-          _fromDate[child.props.name] = initialValues[child.props.name] || '';
+          nameList = setPropotypeValue(child, '')
         }
 
-        itemRef[child.props.name] = React.createRef();
+
       }
+      const [FatherName, childName] = nameList || ['', ''];
       return React.cloneElement(child, {
-        ref: itemRef[child.props.name],
+        ref: Array.isArray(child.props.name) ? itemRef[FatherName][childName] : itemRef[child.props.name],
         form,
         size,
         labelWidth,
@@ -140,6 +187,23 @@ const Form = React.forwardRef(({
    * @param value
    */
   const handleFormChange = (name, value) => {
+
+    //多层级数据结结构更新
+    if (Array.isArray(name)) {
+      const [FatherName, childName] = name;
+      setFormData(prevData => {
+        return {
+          ...prevData,
+          [FatherName]: {
+            ...prevData[FatherName],
+            [childName]: value
+          }
+        }
+      });
+      return;
+    }
+
+    //单层级数据结构更新
     // 更新表单数据对象
     setFormData(prevData => {
         return {
@@ -188,6 +252,9 @@ const Form = React.forwardRef(({
 //组件ref
   const itemRef = useRef({});
 
+  // 表单数据
+  const [formData, setFormData] = useState();
+
   /**
    * FormStore 实例 变化的回调函数
    * @param store
@@ -195,6 +262,7 @@ const Form = React.forwardRef(({
   const formUpDateValue = (store, type) => {
     if (type === 'reset') {
       store = _fromDate;
+
       itemRef.current.onReset()
 
     }
@@ -210,8 +278,6 @@ const Form = React.forwardRef(({
 //  store 实例
   const [formInstance] = useForm(form);
 
-  // 表单数据
-  const [formData, setFormData] = useState();
 
   /**
    * 初始化表单数据
@@ -219,7 +285,15 @@ const Form = React.forwardRef(({
   useEffect(() => {
     setFormData(_fromDate);
   }, [])
+  /**
+   * 初始化表单数据
+   * fomrData默认值 初始化更新
+   */
+  const defaultValueUpDate = (data) => {
 
+    // console.log('defaultValueUpDate', data)
+    // setFormData(data);
+  }
 
   /**
    *
@@ -312,6 +386,7 @@ const Form = React.forwardRef(({
           fromData={formData}
           formLayout={formLayout}
           disabled={disabled}
+          defaultValueUpDate={defaultValueUpDate}
           _onFinishFailed={_onFinishFailed}
           initialValues={initialValues}
         />
