@@ -39,9 +39,14 @@ export class FormStore {
 
   getInternalHooks = (porps) => {
     const {update, submit, errorInfo} = porps;
-    this.formSubmit = submit;
-    this.errorInfo = errorInfo;
-    this.updateValue = update;
+    if(update && submit && errorInfo){
+      this.formSubmit = submit;
+      this.errorInfo = errorInfo;
+      this.updateValue = update;
+    }
+
+
+
     return {
       updateValue: this.updateValue,
       setInitialValues: this.setInitialValues,
@@ -53,11 +58,11 @@ export class FormStore {
   };
 
   submit = () => {
+
     if (this.formSubmit) {
+
       this.formSubmit()
 
-
-      console.log(this.errorInfo?.errorFields)
       if (this.errorInfo?.errorFields?.length) {
 
         throw new Error(JSON.stringify(this.errorInfo.errorFields));
@@ -79,7 +84,7 @@ export class FormStore {
     this.store = {...this.store, ...values};
     if (this.updateValue) this.updateValue(this.store, 'set');
 
-    console.log('setFieldsValue', this.store)
+    console.log('setFieldsValue', this.store,values)
   }
   setCallbacks = (callbacks: { [key: string]: Function }) => {
   };

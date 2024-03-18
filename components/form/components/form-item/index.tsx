@@ -138,8 +138,6 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     let errors: string | Object = '';
     if (rulesMap.required.value) {
 
-
-      console.log('required', rulesMap.required.value)
       if (value && value !== '') {
         errors = onVerifyMaxLength(value, trigger)
         if (errors) {
