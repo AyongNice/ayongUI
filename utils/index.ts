@@ -39,7 +39,6 @@ export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) 
       const res = await Fun(...args)
       resolve(res)
     } catch (e) {
-
       reject(e)
     }
 

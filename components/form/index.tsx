@@ -167,7 +167,7 @@ const Form = React.forwardRef(({
                                  autoComplete,
                                  disabled = false,
                                  formLayout = 'right',
-                                 submit = () => {
+                                 onSubmit = () => {
                                  },
                                  onFinish = () => {
                                  },
@@ -260,6 +260,7 @@ const Form = React.forwardRef(({
    * @param store
    */
   const formUpDateValue = (store, type) => {
+    console.log('formUpDateValue', store, type)
     if (type === 'reset') {
       store = _fromDate;
 
@@ -302,17 +303,11 @@ const Form = React.forwardRef(({
     formData && onValuesChange(formData)
     if (formInstance?.getInternalHooks) {
 
-      const {setInitialValues} = formInstance.getInternalHooks();
+      const {setInitialValues} = formInstance.getInternalHooks({});
       setInitialValues(formData)
     }
   }, [formData])
 
-
-  //每次运行 effect 时，都会创建新的 formInstance.getInternalHooks 将formUpDateValue数据监听回掉方式传递给formStore
-  useEffect(() => {
-    if (!formInstance?.getInternalHooks) return;
-    formInstance?.getInternalHooks(formUpDateValue)
-  })
 
   /**
    * 是否点击了提交按钮
@@ -328,10 +323,20 @@ const Form = React.forwardRef(({
    * @param e
    */
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
+
+    console.log('handleSubmit', e)
     itemRef.current.onVerify()
     setIsSubmiting(true);
   };
+
+  // 每次运行 effect 时，都会创建新的 formInstance.getInternalHooks 将formUpDateValue数据监听回掉方式传递给formStore
+  useEffect(() => {
+    console.log('useEffect---()', errorInfo)
+    if (!formInstance?.getInternalHooks) return;
+    formInstance?.getInternalHooks({update: formUpDateValue, submit: handleSubmit, errorInfo})
+  })
+
 
   /**
    * 监听错误信息和表单数据的变化 用于触发 onFinishFailed 和 onFinish
@@ -340,20 +345,23 @@ const Form = React.forwardRef(({
 
     setIsSubmiting(false);
 
-    if (errorInfo.errorFields.length && isSubmiting) {
+    if (errorInfo.errorFields.length || isSubmiting) {
       onFinishFailed(errorInfo)
 
     } else {
 
       if (isSubmiting) {
+
         onFinish()
-        submit(formData);
+        onSubmit(formData);
       }
 
     }
 
+    console.log('useEffect---errorInfo', errorInfo)
+    if (!formInstance?.getInternalHooks) return;
+    formInstance?.getInternalHooks({update: formUpDateValue, submit: handleSubmit, errorInfo})
   }, [errorInfo.errorFields, isSubmiting])
-
   /**
    * 表单上下文
    */

@@ -2,7 +2,7 @@ import React, {useState, useImperativeHandle, useEffect, useRef, useContext, use
 import fromStyle from '../../index.module.less'
 import {FormStore, useForm} from '../../form-api'
 import {isPromise} from '../../../../utils/index.ts'
-import {FormItemProps,RulesValue, CloneElementProps, TriggerType, FormProps, ItmeValue} from '../../index.d'
+import {FormItemProps, RulesValue, CloneElementProps, TriggerType, FormProps, ItmeValue} from '../../index.d'
 
 const requiredPrompt: string = '为必选字段';
 const maxLengthPrompt: string = '长度不能超过';
@@ -73,7 +73,8 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     min: {},
     validator: {}
   }
-  if (!Array.isArray(children) && label && children.type.name !== 'Button') {
+
+  if (!Array.isArray(children) && label && children?.type?.name !== 'Button') {
 
     rules.forEach(_ => {
 
@@ -116,8 +117,8 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     let message = '';
     //maxLength 校验
     if (rulesMap.maxLength.value) {
-      console.log(trigger, rulesMap.maxLength.trigger)
-      if (children.type.name === 'Input' && [rulesMap.maxLength.trigger, 'submit'].includes(trigger) && value.length > rulesMap?.maxLength.value) {
+
+      if (children?.type?.name === 'Input' && [rulesMap.maxLength.trigger, 'submit'].includes(trigger) && value.length > rulesMap?.maxLength.value) {
         message = rulesMap?.maxLength.message || maxLengthPrompt + rulesMap?.maxLength.value;
         _onFinishFailed('add', {name, errors: message})
       } else {
@@ -137,11 +138,26 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     let errors: string | Object = '';
     if (rulesMap.required.value) {
 
+
+      console.log('required', rulesMap.required.value)
       if (value && value !== '') {
         errors = onVerifyMaxLength(value, trigger)
         if (errors) {
           _onFinishFailed('add', {name, errors})
-        } else {
+        }
+        if (!errors && typeof rulesMap.validator.value === 'function') {
+          try {
+
+            errors = await isPromise(rulesMap.validator.value, name, value);
+            _onFinishFailed('remove', {name, errors})
+          } catch (error) {
+            if (![rulesMap.validator.trigger, 'submit'].includes(trigger)) return;
+            errors = error as string;
+            _onFinishFailed('add', {name, errors})
+          }
+        }
+
+        if (errors === '') {
           _onFinishFailed('remove', {name, errors: rulesMap.required.message || name + requiredPrompt})
         }
       } else {
@@ -154,17 +170,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
       }
 
     }
-    if (typeof rulesMap.validator.value === 'function') {
-      try {
-        errors = await isPromise(rulesMap.validator.value, name, value);
-        _onFinishFailed('remove', {name, errors})
-      } catch (error) {
 
-        if (![rulesMap.validator.trigger, 'submit'].includes(trigger)) return;
-        errors = error as string;
-        _onFinishFailed('add', {name, errors})
-      }
-    }
     setErrorMessage(errors);
   }
 
@@ -186,7 +192,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
    */
   const onVerify = (trigger: TriggerType) => {
     //button  多个children 不需要校验
-    if (!Array.isArray(children) && children.type.name !== 'Button') {
+    if (!Array.isArray(children) && children?.type?.name !== 'Button') {
 
       //required 校验
       onVerifyRequired(value, trigger);
@@ -236,7 +242,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
    * 将 获取的FormStore的方法 getFieldValue 回掉方法 引用赋值给 _getFieldValue
    */
   if (formInstance.getInternalHooks) {
-    const {getFieldValue} = formInstance.getInternalHooks();
+    const {getFieldValue} = formInstance.getInternalHooks({});
     _getFieldValue = getFieldValue;
   }
 
@@ -248,7 +254,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     }
     // 在后续渲染中执行逻辑
 
-    if (!Array.isArray(children) && children.type.name !== 'Button' && (!isResetting.current || value)) {
+    if (!Array.isArray(children) && children?.type?.name !== 'Button' && (!isResetting.current || value)) {
       onVerifyRequired(value, 'change');
     }
   }, [value]); // 此处假设 value 是 useEffect 依赖的状态变量

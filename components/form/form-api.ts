@@ -9,6 +9,8 @@ export class FormStore {
   fieldEntities: any[];
   update: Function;
   updateValue: Function;
+  formSubmit: Function;
+  errorInfo: { errorFields: { name: string; errors: string }[] };
 
   constructor() {
     this.store = {};
@@ -19,11 +21,13 @@ export class FormStore {
     };
     this.updateValue = () => {
     };
+    this.formSubmit = () => {
+
+    }
+
   }
 
-  getForm = (update: Function = () => {
-  }) => {
-    this.updateValue = update;
+  getForm = () => {
     return {
       getFieldValue: this.getFieldValue,
       setFieldsValue: this.setFieldsValue,
@@ -33,8 +37,10 @@ export class FormStore {
     }
   };
 
-  getInternalHooks = (update: Function = () => {
-  }) => {
+  getInternalHooks = (porps) => {
+    const {update, submit, errorInfo} = porps;
+    this.formSubmit = submit;
+    this.errorInfo = errorInfo;
     this.updateValue = update;
     return {
       updateValue: this.updateValue,
@@ -46,6 +52,20 @@ export class FormStore {
     };
   };
 
+  submit = () => {
+    if (this.formSubmit) {
+      this.formSubmit()
+
+
+      console.log(this.errorInfo?.errorFields)
+      if (this.errorInfo?.errorFields?.length) {
+
+        throw new Error(JSON.stringify(this.errorInfo.errorFields));
+      }
+      return this.store;
+    }
+
+  }
 
   // 获取单个字段的值
   getFieldValue = (name: string) => {
@@ -55,9 +75,11 @@ export class FormStore {
   // 设置单个字段的值
 
   setFieldsValue = (values: { [key: string]: any }) => {
-    this.store = {...values};
-    console.log('FormStore----setFieldsValue:', this.store)
-    this.updateValue(this.store, 'set');
+
+    this.store = {...this.store, ...values};
+    if (this.updateValue) this.updateValue(this.store, 'set');
+
+    console.log('setFieldsValue', this.store)
   }
   setCallbacks = (callbacks: { [key: string]: Function }) => {
   };
@@ -83,9 +105,6 @@ export class FormStore {
     nameList: string[],
     info: any
   ) => {
-  };
-
-  submit = () => {
   };
 
 
