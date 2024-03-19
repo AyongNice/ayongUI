@@ -8,6 +8,7 @@ function Input(props) {
     disabled,
     type = 'text',
     className = '',
+    style={},
     size = 'normal',
     maxLength = null,
     onFocus = () => {
@@ -135,6 +136,7 @@ function Input(props) {
       <input
         style={{paddingLeft, paddingRight, boxSizing: 'border-box', animation: 'all 0.5s '}}
         type={type}
+        style={style}
         disabled={disabled}
         onBlur={onBlur}
         maxLength={maxLength}

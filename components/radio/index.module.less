@@ -1,0 +1,84 @@
+@import "../../config/style.module.less";
+
+.label {
+  font-size: 14px;
+  color: var(--ayong-font-dark);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all .5s;
+
+  &:hover {
+    input {
+      border-color: var(--ayong-info) !important;
+    }
+
+  }
+}
+
+.customRadio {
+  /* 隐藏默认的 radio 按钮 */
+  appearance: none;
+  margin: 0 5px 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* 自定义 radio 按钮样式 */
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid var(--ayong-primary);
+  outline: none;
+  cursor: pointer;
+  transition: all .5s;
+  /* 未选中状态 */
+  //background-color: #fff;
+}
+
+/* 选中状态 */
+.customRadio:checked {
+  border: 4px solid var(--ayong-primary);
+  background-color: var(--ayong-light);
+}
+
+/* 禁用状态 */
+.customRadio:disabled {
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  background-color: var(--ayong-grey-crescent);
+  border: 1px solid var(--ayong-grey);
+  cursor: not-allowed;
+}
+
+.group {
+  margin-right: 10px;
+}
+
+.button {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+.buttonFirst {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.buttonLast {
+  border-top-left-radius: 0; /* 左上圆角 */
+  border-bottom-left-radius: 0; /* 左下圆角 */
+}
+
+//右边框都是0
+.buttonRight {
+  border-radius: 0;
+  border-right: 0;
+}
+
+//左边框都是0
+.buttonRight0 {
+  border-radius: 0;
+  border-right: 0;
+}
