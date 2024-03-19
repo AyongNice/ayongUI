@@ -1,10 +1,10 @@
 import {RadioProps} from "./index.d";
 
 import React, {useEffect, useState} from 'react';
-import styleRadio from './index.module.less';
+// import styleRadio from './index.module.less';
 import _Button from '../button/index.tsx'
 import {ButtonProps} from "ayongUI/components/radio";
-
+const styleRadio={}
 const Radio = ({
                  value = '',
                  className,

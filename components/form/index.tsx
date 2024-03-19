@@ -10,6 +10,7 @@ import FormItem from './components/form-item/index.tsx'
 
 // useForm.js
 import {FormProps, CloneFormElementProps} from './index.d'
+import FormList from './components/form-list/index.tsx'
 
 const FormContext = React.createContext();
 
@@ -128,7 +129,7 @@ const CloneElement = forwardRef(({
             let nameList = []
             if (child.props.name) {
 
-                if (['Radio', 'Switch'].includes(child?.props?.children.type?.displayName)) {
+                if (['Radio', 'Switch'].includes(child?.props?.children?.type?.displayName)) {
                     nameList = setPropotypeValue(child)
                 } else {
                     nameList = setPropotypeValue(child, '')
@@ -409,6 +410,7 @@ const Form = React.forwardRef(({
 
 Form.Item = FormItem;
 Form.useForm = useForm;
+Form.List= FormList;
 
 export default Form;
 
