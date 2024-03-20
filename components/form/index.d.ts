@@ -69,6 +69,7 @@ export interface CloneElementProps  {
   value: any; // 表单项的值
   disabled?: boolean; // 是否禁用
   onChange: (value: any) => void; // 表单项值改变回调函数
+  onBlur: () => void; // 表单项失焦回调函数
 }
 
 declare const Form: React.FC<FormProps>;

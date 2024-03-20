@@ -108,7 +108,6 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
   const [errorMessage, setErrorMessage] = useState<FormProps.errorInfo>('');
   const [value, setValue] = useState<ItmeValue>(_fromDate && _fromDate[name] || '');
-
   /**
    * MaxLength 校验
    * @param value 输入值
@@ -307,5 +306,5 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     </div>
   );
 })
-
+FormItem.displayName= 'FormItem'
 export default FormItem;
