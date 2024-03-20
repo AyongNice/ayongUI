@@ -53,6 +53,8 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     _fromDate,
     formLayout = 'right',
     errorInfo,
+    parentName,
+    index,
     onChange = () => {
     },
     _onFinishFailed = () => {
@@ -178,7 +180,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
    */
   const handleChange = (value: ItmeValue) => {
     setValue(value);
-    onChange(name, value); // 调用父组件传递过来的 onChange 方法，并传递名称和值
+    onChange({name, value,parentName,index}); // 调用父组件传递过来的 onChange 方法，并传递名称和值
   };
 
   const onBlur = () => {

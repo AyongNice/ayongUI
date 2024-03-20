@@ -55,6 +55,7 @@ export interface FormItemProps {
   labelWidth?: string; // 标签宽度
   rules?: { [key: string]: any }[]; // 表单校验规则数组
   disabled?: boolean; // 是否禁用
+  parentName:string;//该item的父级字段名
   children: React.ReactNode; // 子元素
   _fromDate?: { [key: string]: any }; // 表单数据对象
   formLayout?: 'left' | 'right' | 'vertical'; // 表单布局方式，默认为右对齐

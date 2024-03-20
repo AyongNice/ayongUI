@@ -8,6 +8,7 @@ import FormItem from './components/form-item/index.tsx'
 const FormList = forwardRef((props, ref) => {
   const [fields, setFields] = useState([{restField: {}, key: generateUUID()}]);
   const {
+    name,
     onChange = () => {
 
     },
@@ -23,16 +24,16 @@ const FormList = forwardRef((props, ref) => {
 
 
   }
-  useEffect(() => {
-    console.log(fields)
-  }, [fields])
+  // useEffect(() => {
+  //   console.log(fields)
+  // }, [fields])
 
   const remove = key => {
     console.log('remove', key)
     setFields(pre => pre.filter(_ => key !== _.key))
   }
   return <>
-    {children(fields, {remove, add, props: {...props, ref}})}
+    {children(fields, {remove, add, props: {...props,parentName:name, ref}})}
   </>
 })
 
