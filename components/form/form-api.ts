@@ -34,9 +34,12 @@ export class FormStore {
       submit: this.submit,
       resetFields: this.resetFields,
       getInternalHooks: this.getInternalHooks,
+      verify: this.verify,
     }
   };
+  verify = (name: string, value: any, rules: { [key: string]: any }[]) => {
 
+  }
   getInternalHooks = (porps) => {
     const {update, submit, errorInfo} = porps;
     if(update && submit && errorInfo){

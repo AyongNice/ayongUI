@@ -13,7 +13,7 @@ export interface FormProps {
   errorInfo?: { errorFields: { name: string; errors: string }[] }; // 表单校验错误信息
   disabled?: boolean; // 是否禁用，默认为 false
   formLayout?: 'left' | 'right' | 'vertical'; // 表单布局方式，默认为 'right'
-  submit?: () => void; // 表单提交时的回调函数，默认为空函数
+  onSubmit?: () => void; // 表单提交时的回调函数，默认为空函数
   onFinish?: () => void; // 表单完成时的回调函数，默认为空函数
   onFinishFailed?: () => void; // 表单完成失败时的回调函数，默认为空函数
   onValuesChange?: () => void; // 表单值变化时的回调函数，默认为空函数

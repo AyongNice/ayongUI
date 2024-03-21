@@ -57,6 +57,9 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     index,
     onChange = () => {
     },
+    _remove = () => {
+
+    },
     _onFinishFailed = () => {
     }
   }: FormItemProps = props;
@@ -298,7 +301,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
         }
       </div>}
 
-      <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content'}} className={fromStyle.clonedChild}>
+      <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content',marginBottom:_display === 'inline' && '10px'}} className={fromStyle.clonedChild}>
         <div>{clonedChild} </div>
 
         {errorMessage &&

@@ -9,10 +9,14 @@ const FormList = forwardRef((props, ref) => {
   const [fields, setFields] = useState([{restField: {}, key: generateUUID()}]);
   const {
     name,
+    value,
     onChange = () => {
 
     },
     children = () => {
+    },
+    _remove = () => {
+
     }
   } = props
 
@@ -29,13 +33,14 @@ const FormList = forwardRef((props, ref) => {
   // }, [fields])
 
   const remove = key => {
-    console.log('remove', key)
+
+    onChange({operationType:'remove', parentName: name, index: fields.findIndex(_ => key === _.key)});
     setFields(pre => pre.filter(_ => key !== _.key))
   }
   return <>
-    {children(fields, {remove, add, props: {...props,parentName:name, ref}})}
+    {children(fields, {remove, add, props: {...props, parentName: name, ref}})}
   </>
 })
 
-FormList.displayName= 'FormList'
+FormList.displayName = 'FormList'
 export default FormList;
