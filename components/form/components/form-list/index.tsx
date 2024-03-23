@@ -28,9 +28,6 @@ const FormList = forwardRef((props, ref) => {
 
 
   }
-  // useEffect(() => {
-  //   console.log(fields)
-  // }, [fields])
 
   const remove = key => {
 

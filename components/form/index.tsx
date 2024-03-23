@@ -15,8 +15,7 @@ import FormList from './components/form-list/index.tsx'
 const FormContext = React.createContext();
 
 
-let isList = false;
-let listName = '';
+
 const CloneElement = forwardRef(({
                                    form,
                                    size,
@@ -70,7 +69,7 @@ const CloneElement = forwardRef(({
           itemRef[key][key2]?.current.onSet(fromDate[key][key2])
         }
       } else {
-        itemRef[key].current.onSet(fromDate[key])
+        itemRef[key] && itemRef[key].current.onSet(fromDate[key])
       }
     }
   }
@@ -109,31 +108,6 @@ const CloneElement = forwardRef(({
 
   const setPropotypeValue = ({child, value = false, listName, type = ''}): React.Ref<any> => {
 
-    if (type === 'FormList') {
-      isList = true;
-      // _fromDate[child.props.name] =[];
-      // itemRef[listName] = [];
-      // return
-
-
-    }
-    // {
-    //     users:[{name:'',value:''}]
-    // }
-    if (isList) {
-
-      // _fromDate[listName].push({[child.props.name]: ''})
-      // itemRef[listName] = React.createRef()})
-
-
-      // if (!itemRef[listName]) itemRef[listName] = [];
-      // itemRef[listName].forEach(_ => {
-      //
-      // })
-
-      // return
-    }
-
     if (Array.isArray(child.props.name)) {
 
       const [FatherName, childName] = child.props.name;
@@ -153,17 +127,7 @@ const CloneElement = forwardRef(({
       _fromDate[child.props.name] = initialValues[child.props.name] || value;
 
     }
-    // if (_fromDate[child.props.name]) {
-    //     _fromDate[child.props.name].forEach(_=>{
-    //         itemRef[child.props.name] = React.createRef();
-    //         _.push({[child.props.name]:''})
-    //     })
-    // } else {
-    //     _fromDate[child.props.name]=[];
-    // }
 
-
-    // console.log(child.props.name)
   }
 
 
@@ -268,7 +232,7 @@ const Form = React.forwardRef(({
     if (operationType === 'remove') {
       // 更新表单数据对象
       return setFormData(prevData => {
-                                  if (parentName) {
+        if (parentName) {
           prevData[parentName].splice(index, 1)
           return prevData
         }
@@ -367,12 +331,6 @@ const Form = React.forwardRef(({
   }
 
   useEffect(() => {
-    // setFormData(_fromDate);
-    defaultValueUpDate = (data) => {
-
-      console.log('[]=====defaultValueUpDate', data)
-      // setFormData(data);
-    }
     setFormData(_fromDate);
   }, [])
 
@@ -470,6 +428,7 @@ const Form = React.forwardRef(({
           ref={itemRef}
           form={form}
           size={size}
+
           labelWidth={labelWidth}
           onChange={handleFormChange}
           children={children}

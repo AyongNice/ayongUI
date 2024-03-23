@@ -248,8 +248,11 @@ export type {CheckboxProps} from './components/checkbox/index.d';
 
 export {default as Form} from './components/form/index.tsx';
 export type {FormProps} from './components/form/index.d';
-// export {default as Select} from './components/select/select';
-// export {default as Switch} from './components/switch/switch';
+
+
+export {default as Switch} from './components/switch/index.tsx';
+export type {SwitchProps} from './components/switch/index.d';
+
 // export {default as Slider} from './components/slider/slider';
 // export {default as DatePicker} from './components/date-picker/date-picker';
 // export {default as TimePicker} from './components/time-picker/time-picker';

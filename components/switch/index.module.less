@@ -1,40 +1,52 @@
 @import "../../config/style.module.less";
 
-.ayongSwitch{
-  background: rgba(0, 0, 0, 0.25);
+.ayongSwitch {
+  background: var(--ayong-stone-gray);
   height: 22px;
   line-height: 22px;
   min-width: 44px;
   vertical-align: middle;
   border-radius: 100px;
   position: relative;
-  .handle{
+
+  .handle {
     position: absolute;
     top: 2px;
     inset-inline-start: 2px;
-    width: 18px;
-    height: 18px;
+    width: 43%;
+    height: 82%;
     transition: all 0.2s ease-in-out;
-    &::before{
+
+    &::before {
       position: absolute;
       top: 0;
       inset-inline-end: 0;
       bottom: 0;
       inset-inline-start: 0;
-      background-color: #fff;
+      background-color: var(--ayong-light);
       border-radius: 9px;
-      box-shadow: 0 2px 4px 0 rgba(0, 35, 11, 0.2);
+      box-shadow: 0 2px 4px 0 var(--ayong-premium-grey);
       transition: all 0.2s ease-in-out;
       content: "";
     }
   }
-  .inner{
+
+  .inner {
 
   }
+
   &.checked {
-    background-color:@theme;
+    background-color: var(--ayong-primary);
+
     .handle {
       inset-inline-start: calc(100% - 20px);
     }
   }
 }
+
+.title {
+  margin-left: 10px;
+  font-size: 14px;
+  color: var(--ayong-font-dark);
+}
+

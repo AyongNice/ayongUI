@@ -1,122 +1,120 @@
-:local {
-  .make {
+.make {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--ayong-zindex0);
+}
+
+.main {
+  background: var(--ayong-light);
+  border-radius: var(--ayong-radius);
+  z-index: 999;
+  transition: all .2s ease-in-out;
+  box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), -3px 0 6px -4px rgba(0, 0, 0, 0.12), -9px 0 28px 8px rgba(0, 0, 0, 0.05);
+
+  header {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px;
+    //阴影
+
+    position: relative;
+
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--ayong-grey);
+
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--ayong-font-dark);
+      //超出部分隐藏省略号
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    svg {
+      margin-right: 20px;
+      font-size: 15px;
+      //触摸效果
+      &:hover {
+        cursor: pointer;
+        fill: var(--ayong-primary);
+      }
+    }
+  }
+
+  main {
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: var(--ayong-zindex0);
+    padding: 15px;
+    box-sizing: border-box;
   }
-
-  .main {
-    background: var(--ayong-light);
-    border-radius: var(--ayong-radius);
-    z-index: 999;
-    transition: all .2s ease-in-out;
-    box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), -3px 0 6px -4px rgba(0, 0, 0, 0.12), -9px 0 28px 8px rgba(0, 0, 0, 0.05);
-
-    header {
-      display: flex;
-      align-items: center;
-      box-sizing: border-box;
-      padding: 15px;
-      //阴影
-
-      position: relative;
-
-      &:after {
-        content: '';
-        display: block;
-        clear: both;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: var(--ayong-grey);
-
-      }
-
-      h3 {
-        margin: 0;
-        color: var(--ayong-font-dark);
-        //超出部分隐藏省略号
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        flex: 1;
-      }
-
-      svg {
-        margin-right: 20px;
-        font-size: 15px;
-        //触摸效果
-        &:hover {
-          cursor: pointer;
-          fill: var(--ayong-primary);
-        }
-      }
-    }
-
-    main {
-      width: 100%;
-      height: 100%;
-      padding: 15px;
-      box-sizing: border-box;
-    }
-
-  }
-
-  .left {
-    left: 0;
-    top: 0;
-    position: absolute;
-    transform: translateX(-100%);
-  }
-
-  .right {
-    right: 0;
-    top: 0;
-    position: absolute;
-    transform: translateX(100%);
-  }
-
-  .top {
-    top: 0;
-    left: 0;
-    position: absolute;
-    transform: translateY(-100%);
-  }
-
-  .bottom {
-    left: 0;
-    bottom: 0;
-    position: absolute;
-    transform: translateY(100%);
-  }
-
-  .warpclose {
-    display: none;
-  }
-
-  .openmian {
-    transform: translate(0, 0);
-  }
-
-
-  .makeTram {
-    animation: enter .3s;
-  }
-
-  @keyframes enter {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
 
 }
+
+.left {
+  left: 0;
+  top: 0;
+  position: absolute;
+  transform: translateX(-100%);
+}
+
+.right {
+  right: 0;
+  top: 0;
+  position: absolute;
+  transform: translateX(100%);
+}
+
+.top {
+  top: 0;
+  left: 0;
+  position: absolute;
+  transform: translateY(-100%);
+}
+
+.bottom {
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  transform: translateY(100%);
+}
+
+.warpclose {
+  display: none;
+}
+
+.openmian {
+  transform: translate(0, 0);
+}
+
+
+.makeTram {
+  animation: enter .3s;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+

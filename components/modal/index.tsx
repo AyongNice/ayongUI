@@ -101,15 +101,16 @@ const Component: React.FC<ModalProps> = ({
          className={`${ModalStyle.main}  ${enter ? `${ModalStyle.openmian} ${ModalStyle[placement]}` : ModalStyle[placement]}`}>
       {typeof mainRender === 'function' ? mainRender() :
         <React.Fragment>
-          {typeof headerRender === 'function' ? headerRender(toggleDrawer) : <header className={headerClassName}>
+          {typeof headerRender === 'function' ? headerRender(toggleDrawer) :
+            <header className={`${ModalStyle.header} ${headerClassName}`}>
 
-            {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) :
-              leftIcon[type] || <Wrongs onClick={toggleDrawer}/>
-            }
-            <h3>{title}</h3>
-          </header>}
+              {closeIcon ? React.createElement(closeIcon.type, {onClick: toggleDrawer}) :
+                leftIcon[type] || <Wrongs onClick={toggleDrawer}/>
+              }
+              <h3>{title}</h3>
+            </header>}
 
-          <main className={bodyClassName}>
+          <main className={`${ModalStyle.mainbody} ${bodyClassName}`}>
             {content || children}
           </main>
 

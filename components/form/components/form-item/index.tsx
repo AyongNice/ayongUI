@@ -63,13 +63,13 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     _onFinishFailed = () => {
     }
   }: FormItemProps = props;
-
   let _textAlian = formLayout;
   let _display = 'flex';
   if (formLayout === 'vertical') {
-    _textAlian = 'left';
+    // _textAlian = 'left';
     _display = 'inline';
   }
+
   const rulesMap: { [key: string]: RulesValue } = {
     required: {},
     maxLength: {},
@@ -138,7 +138,6 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
 
   const onVerifyRequired = async (value: string | boolean, trigger: TriggerType) => {
-
     let errors: string | Object = '';
     if (rulesMap.required.value) {
 
@@ -147,6 +146,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
         if (errors) {
           _onFinishFailed('add', {name, errors})
         }
+
         if (!errors && typeof rulesMap.validator.value === 'function') {
           try {
 
@@ -171,6 +171,20 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
       }
 
+    } else {
+
+      //自定义验证
+      if (typeof rulesMap.validator.value === 'function') {
+
+        try {
+          errors = await isPromise(rulesMap.validator.value, name, value);
+          _onFinishFailed('remove', {name, errors})
+        } catch (error) {
+          if (![rulesMap.validator.trigger, 'submit'].includes(trigger)) return;
+          errors = error as string;
+          _onFinishFailed('add', {name, errors})
+        }
+      }
     }
 
     setErrorMessage(errors);
@@ -183,7 +197,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
    */
   const handleChange = (value: ItmeValue) => {
     setValue(value);
-    onChange({name, value,parentName,index}); // 调用父组件传递过来的 onChange 方法，并传递名称和值
+    onChange({name, value, parentName, index}); // 调用父组件传递过来的 onChange 方法，并传递名称和值
   };
 
   const onBlur = () => {
@@ -248,6 +262,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     _getFieldValue = getFieldValue;
   }
 
+
   useEffect(() => {
     // 如果是首次渲染，则将 isFirstRender.current 设置为 false，并且不执行后续逻辑
     if (isFirstRender.current) {
@@ -274,13 +289,13 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
 
   } else {
     clonedChild = reactCloneElement({
-      value,
       size,
+      value,
+      onBlur,
       disabled,
       child: children,
       childSource: children,
       onChange: handleChange,
-      onBlur,
     });
   }
 
@@ -292,7 +307,7 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
                        style={{flex: 0.15}}
       >
         {label && <label style={{
-          textAlign: [_textAlian],
+          textAlign: formLayout ? formLayout === 'vertical' ? 'left' : formLayout : 'right',
           padding: formLayout === 'vertical' && 0,
           marginBottom: formLayout === 'vertical' && 8,
           width: labelWidth,
@@ -301,7 +316,11 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
         }
       </div>}
 
-      <div style={{flex: 0.85, width: formLayout !== 'vertical' && 'max-content',marginBottom:_display === 'inline' && '10px'}} className={fromStyle.clonedChild}>
+      <div style={{
+        flex: 0.85,
+        width: formLayout !== 'vertical' && 'max-content',
+        marginBottom: _display === 'inline' && '10px'
+      }} className={fromStyle.clonedChild}>
         <div>{clonedChild} </div>
 
         {errorMessage &&
@@ -311,5 +330,5 @@ const FormItem = React.forwardRef((props: FormItemProps, ref: React.Ref<any>) =>
     </div>
   );
 })
-FormItem.displayName= 'FormItem'
+FormItem.displayName = 'FormItem'
 export default FormItem;

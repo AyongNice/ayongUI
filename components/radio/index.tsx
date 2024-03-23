@@ -4,10 +4,10 @@ import React, {useEffect, useState} from 'react';
 import styleRadio from './index.module.less';
 import _Button from '../button/index.tsx'
 import {ButtonProps} from "ayongUI/components/radio";
+
 const Radio = ({
-                 value = '',
+                 value = false,
                  className,
-                 checked = false,
                  disabled,
                  children,
                  isGroup = false,
@@ -15,15 +15,12 @@ const Radio = ({
                  },
                }: RadioProps) => {
   // 判断是否有 Radio.Group 父组件
-  const [isChecked, setIsChecked] = useState(checked);
+  const [isChecked, setIsChecked] = useState(value);
   const _className = `${styleRadio.label} ${className}`
   const handleChange = (event) => {
     onChange(!isChecked)
     setIsChecked(() => !isChecked);
   };
-  useEffect(() => {
-    setIsChecked(checked)
-  }, [checked])
 
   useEffect(() => {
     //解决在表单中调用onReset方法时，Radio组件的checked状态不会重置的问题 会清空value值 但是不会清空checked状态
@@ -37,7 +34,7 @@ const Radio = ({
         <input type="radio"
                className={styleRadio.customRadio}
                value={value}
-               checked={checked}
+               checked={value}
                onChange={onChange}
                disabled={disabled}/>
         {children}
@@ -66,7 +63,6 @@ const Button = ({
                   index,
                   value,
                   isLast,
-                  checked,
                   disabled = false,
                   children,
                   className,
@@ -75,7 +71,7 @@ const Button = ({
                   },
                 }: ButtonProps) => {
   // 判断是否有 Radio.Group 父组件
-  const [isChecked, setIsChecked] = useState(checked);
+  const [isChecked, setIsChecked] = useState(value);
   const _className = `${styleRadio.label} ${className}`
   const handleChange = (event) => {
     onChange(!isChecked)
@@ -95,7 +91,7 @@ const Button = ({
     return (
       <label className={_className}>
         <_Button disabled={disabled} className={getClassName()}
-                 type={checked ? 'primary' : 'default'} value={value}
+                 type={value ? 'primary' : 'default'} value={value}
                  size={size}
                  onClick={onButton}> {children}</_Button>
       </label>
@@ -138,7 +134,7 @@ const RadioGroup = ({
       // 确保子元素是 Radio 组件
       if (React.isValidElement(child)) {
         return React.cloneElement(child, {
-          checked: setlect === child.props.value,
+          value: setlect === child.props.value,
           disabled: child.props.disabled || disabled,
           isGroup: true,
           onChange: () => _onChange(child.props.value),
