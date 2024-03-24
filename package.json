@@ -1,10 +1,11 @@
 {
   "name": "ayongUI",
   "version": "1.0.0",
-  "main": "./dist/AyongUI.cjs.js",
-  "module": "./dist/AyongUI.es.js",
-  "browser": "./dist/AyongUI.umd.js",
+  "main": "./cjs/index.js",
+  "module": "./es/index.js",
+  "browser": "./umd/index.js",
   "typings": "./index.d.ts",
+  "style": "./style.css",
   "scripts": {
     "build": "vite build",
     "prepublishOnly": "npm run build"
