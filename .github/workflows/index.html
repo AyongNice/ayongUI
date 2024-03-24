@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tree Dropdown with Collapse</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        ul, li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .collapsed {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="treeDropdown"></div>
+
+<script>
+    const data = [
+        {
+            "id": "1",
+            "label": "国家电网",
+            "pid": null,
+            "children": [
+                {
+                    "id": "2",
+                    "label": "河南省电力公司",
+                    "pid": "1",
+                    "children": [
+                        {
+                            "id": "2",
+                            "label": "濮阳省电力公司",
+                            "pid": "1",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "label": "河南省电力公司",
+                    "pid": "1",
+                    "children": [
+                        {
+                            "id": "2",
+                            "label": "濮阳省电力公司",
+                            "pid": "1",
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+
+    function buildTree(items, level, parentUl) {
+        items.forEach(item => {
+            const li = $('<li>', {
+                'data-id': item.id
+            }).text(item.label);
+
+            if (item.children && item.children.length > 0) {
+                const toggleBtn = $('<button>', {
+                    text: '▶'
+                });
+
+                toggleBtn.click(function () {
+                    const childrenUl = li.find('ul');
+                    if (childrenUl.hasClass('collapsed')) {
+                        childrenUl.removeClass('collapsed');
+                        toggleBtn.text('▼');
+                    } else {
+                        childrenUl.addClass('collapsed');
+                        toggleBtn.text('▶');
+                    }
+                });
+
+                li.prepend(toggleBtn);
+                const childUl = $('<ul>', {
+                    class: 'collapsed'
+                });
+                li.append(childUl);
+                buildTree(item.children, level + 1, childUl);
+            }
+
+            parentUl.append(li);
+        });
+    }
+
+    $(document).ready(function () {
+        const ul = $('<ul>');
+        $('#treeDropdown').append(ul);
+        buildTree(data, 0, ul);
+    });
+</script>
+
+</body>
+</html>
