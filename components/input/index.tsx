@@ -1,14 +1,14 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useImperativeHandle} from 'react';
 import {Wrongs} from '../icon/icon';
 import styles from './index.module.less';
 
-function Input(props) {
+const Input = React.forwardRef((props, ref) => {
   const {
     value = '',
     disabled,
     type = 'text',
     className = '',
-    style={},
+    style = {},
     size = 'normal',
     maxLength = null,
     onFocus = () => {
@@ -18,6 +18,8 @@ function Input(props) {
     onKeyUp = () => {
     },
     onChange = (e) => {
+    },
+    onChangeBefore = (e) => {
     },
     placeholder = '请输入值',
     prefix = null,
@@ -48,6 +50,12 @@ function Input(props) {
       setPdl(prefix ? prefixRef.current?.offsetWidth + compensate + 'px' : '5px');
     }
   }, [prefixRef.current]);
+
+  const onRest = () => {
+    setValue('')
+  }
+
+  useImperativeHandle(ref, () => ({onRest}))
 
   useEffect(() => {
     if (suffixRef.current && !clearRef.current) {
@@ -111,8 +119,13 @@ function Input(props) {
    }, [clearRef.current]); */
 
   const _onChange = (e) => {
+    const res = onChangeBefore(e.target.value);
+    if (!res) return;
     setValue(e.target.value)
     onChange(e.target.value)
+  }
+  const _onBlur = (e) => {
+    onBlur(e.target.value)
   }
   useEffect(() => {
     setValue(() => value)
@@ -138,7 +151,7 @@ function Input(props) {
         type={type}
         style={style}
         disabled={disabled}
-        onBlur={onBlur}
+        onBlur={_onBlur}
         maxLength={maxLength}
         onKeyUp={onKeyUp}
         onFocus={onFocus}
@@ -169,7 +182,7 @@ function Input(props) {
       }}>{suffix}</span>}
     </div>
   );
-}
+})
 
 Input.displayName = 'Input';
 

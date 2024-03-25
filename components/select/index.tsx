@@ -38,7 +38,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
 
   const dropdownRef = useRef(null);
   const [clcikTarget, setClcikTarget] = useState<boolean>(true);
-
+  console.log(selectedValues, defaultValue)
   // useEffect(() => {
   //   const handleScroll = () => {
   //     const options = dropdownRef.current.querySelectorAll('option');
@@ -81,10 +81,13 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
     };
   }, [clcikTarget]);
 
-
+  const isFrist = useRef(true);
   useEffect(() => {
       //判断value 数组是否等于defaultValue
-
+      if (isFrist.current) {
+        isFrist.current = false;
+        return;
+      }
       if (['multiple', 'tag'].includes(mode)) {
         defaultValue.forEach((_) => {
           if (!options.find((item) => item.value === _).disabled) {
@@ -97,7 +100,9 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
         }
         setIsDropdownVisible(false)
       }
+
       if (mode === 'single') {
+        console.log('single', value)
         setSelectedValues(value)
         setSearchTerm('')
       }

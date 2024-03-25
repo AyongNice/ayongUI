@@ -253,13 +253,16 @@ export type {FormProps} from './components/form/index.d';
 export {default as Switch} from './components/switch/index.tsx';
 export type {SwitchProps} from './components/switch/index.d';
 
+export {default as Pagination} from './components/pagination/index.tsx';
+export {default as PaginationProps} from './components/pagination/index.d';
+
 // export {default as Slider} from './components/slider/slider';
 // export {default as DatePicker} from './components/date-picker/date-picker';
 // export {default as TimePicker} from './components/time-picker/time-picker';
 // export {default as DateTimePicker} from './components/date-time-picker/date-time-picker';
 // export {default as Upload} from './components/upload/upload';
 // export {default as Form} from './components/form/form';
-// export {default as Pagination} from './components/pagination/pagination';
+
 // export {default as Tree} from './components/tree/tree';
 // export {default as TreeSelect} from './components/tree-select/tree-select';
 // export {default as Cascader} from './components/cascader/cascader';
