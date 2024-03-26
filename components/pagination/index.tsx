@@ -6,16 +6,22 @@ import {Advance, PreviousStep} from '../icon/icon'
 
 import {PaginationProps, PageList} from './index.d'
 import PaginationCss from './index.module.less'
-import style from '../../config/style.module.less'
+import style from '../../config/style.module.less';
+import List from './list/index.tsx'
+
+let isSet = false;
+
 const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   const {
     pageSize,
     current,
-    total = 20,
+    total = 10,
+    size = 'default',
     disabled = false,
     pageSizeOptions = [10, 20, 50, 100],
-    showQuickJumper=false,
-    showSizeChanger=false,
+    showQuickJumper = false,
+    showSizeChanger = false,
+    hideOnSinglePage = false,
     onSizeChange = () => {
 
     },
@@ -25,7 +31,7 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   } = props
 
   const [defaultCurrent, setDefaultCurrent] = useState(current || 1)
-  const [defaultPageSize, setDefaultPageSize] = useState(pageSize || 10)
+  const [defaultPageSize, setDefaultPageSize] = useState(pageSize || pageSizeOptions[0])
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedIndex, setSelectedIndex] = useState(1)
 
@@ -34,42 +40,49 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   const handlerPageArr = () => {
     const arr: PageList = []
     if (total <= 0) return
+    let set = true;
     const max = Math.ceil(total / defaultPageSize)
     for (let i = 1; i <= max; i++) {
-      arr.push(i)
+
+      if (max > 10) {
+
+        if (i > 2 && i < max - 1) {
+          if (set) {
+            arr.push({lable: '...', index: i})
+            set = false;
+          } else {
+            arr.push({lable: "", index: i})
+          }
+
+        } else {
+          arr.push({lable: i, index: i})
+        }
+
+      } else {
+        arr.push({lable: i, index: i})
+      }
+
     }
     return arr;
   }
 
-  const pageArr = useMemo(() => {
+  const pageArr: number[] = useMemo(() => {
     return handlerPageArr();
   }, [total, defaultPageSize])
-
-  const onBlurRef = useRef(false)
-  const inputRef = useRef(null)
-  useEffect(() => {
-    onBlurRef.current = selectedIndex;
-  }, [])
 
 
   const showJumpIndex = useMemo(() => {
 
-    if (onBlurRef.current) {
-      return
-    }
     if (!selectedIndex || isNaN(selectedIndex)) {
-      onBlurRef.current = true;
-      console.log('inputRef.current',inputRef.current)
-      setSelectedIndex(inputRef.current)
+
       return ''
     }
     return selectedIndex
   }, [selectedIndex])
 
   // 设置当前页码
-  const handlerCurrentPage = (cur: any) => {
-    if(disabled)return;
-    console.log('跳转页码 ###', cur)
+  const handleCurrentPage = (cur: any) => {
+    if (disabled) return;
     setDefaultCurrent(Number(cur))
     setSelectedIndex(Number(cur))
     setCurrentPage(cur)
@@ -77,7 +90,6 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   // 设置当前每页条数
   const handlerPageSize = (size: any) => {
     if (!size) return
-    // console.log('每页条数####', size)
     setDefaultPageSize(Number(size))
 
   }
@@ -97,12 +109,12 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     }, [])
   }
 
-  const pageNumItemName = (i: number = 0) => {
+  const pageNumItemName = (item) => {
     let name = `${PaginationCss.pageNumItem} `
     if (disabled) {
       name += ` ${style.disabled} `
     }
-    if (selectedIndex == i) {
+    if (selectedIndex == item.index) {
       name += `  ${PaginationCss.selected}`
     }
     return name
@@ -125,13 +137,8 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     handlerCurrentPage(value)
 
   }
-  const onChangeBefore = (value) => {
-    if (!value || isNaN(value) ||value<1 || value > pageArr.length) {
-      console.log(value)
-      return false
-    }
-    return true
-  }
+  const onChangeBefore = (value) => !value || isNaN(value) || value < 1 || value > pageArr.length;
+
   useEffect(() => {
     onCurrentChange(selectedIndex)
   }, [selectedIndex])
@@ -140,50 +147,53 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     onSizeChange(defaultPageSize)
   }, [defaultPageSize])
 
+  const [abbreviationList, setAbbreviationList] = useState([])
 
-  return (
-    <div className={`${PaginationCss.pageMain}` }>
-      <div className={PaginationCss.total}></div>
-      <div className={`${PaginationCss.prevBtn} ${disabled ? style.disabled:""}`} onClick={onPrev}>
-        <PreviousStep/>
-      </div>
-      <div className={PaginationCss.pageNumList}>
-        {pageArr.map((item, index) => (
-          <div
-            key={index}
-            className={pageNumItemName(item)}
-            onClick={() => handlerCurrentPage(item)}
-          >
-            <span>{item}</span>
-          </div>
-        ))}
-      </div>
-      <div className={`${PaginationCss.nextBtn} ${disabled ? style.disabled:""}`} onClick={onNext}>
-        <Advance/>
-      </div>
-      {showSizeChanger && <Select
-          disabled={disabled}
-          onChange={handlerPageSize}
-          className={PaginationCss.selectPageSize}
-          options={handlerPageSizeSelectOptions()}
-          defaultValue={10}
-      />}
 
-      {showQuickJumper &&  <div className={PaginationCss.jumpBox}>
-        跳至
-        <Input
-            ref={inputRef}
-            disabled={disabled}
-            onChangeBefore={onChangeBefore}
-            value={selectedIndex}
-            className={PaginationCss.pageSizeInput}
-            onBlur={onBlur}
-        />
-        页
-      </div>}
-
+  return hideOnSinglePage && pageArr.length <= 1 ? '' : <div className={`${PaginationCss.pageMain}`}>
+    <div className={PaginationCss.total}></div>
+    <div className={`${PaginationCss.prevBtn} ${disabled ? style.disabled : ""}`} onClick={onPrev}>
+      <PreviousStep/>
     </div>
-  )
+    <List total={total}
+          defaultPageSize={defaultPageSize}
+          handleCurrentPage={handleCurrentPage}
+          selectedIndex={selectedIndex}
+          disabled={disabled}/>
+    {/*<div className={PaginationCss.pageNumList}>*/}
+
+    {/*{pageArr.map((item: number, index: number) => item.lable ? <div*/}
+    {/*    key={index}*/}
+    {/*    className={pageNumItemName(item)}*/}
+    {/*    onClick={() => handlerCurrentPage(item)}*/}
+    {/*  >*/}
+    {/*    <span>{item.lable}</span>*/}
+    {/*  </div> : null*/}
+    {/*)}*/}
+    {/*</div>*/}
+    <div className={`${PaginationCss.nextBtn} ${disabled ? style.disabled : ""}`} onClick={onNext}>
+      <Advance/>
+    </div>
+    {showSizeChanger && <Select
+      disabled={disabled}
+      onChange={handlerPageSize}
+      className={PaginationCss.selectPageSize}
+      options={handlerPageSizeSelectOptions()}
+      defaultValue={defaultPageSize}
+    />}
+
+    {showQuickJumper && <div className={PaginationCss.jumpBox}>
+      跳至
+      <Input
+        disabled={disabled}
+        onChangeBefore={onChangeBefore}
+        value={selectedIndex}
+        className={PaginationCss.pageSizeInput}
+        onBlur={onBlur}
+      />
+      页
+    </div>}
+  </div>
 })
 
 export default Pagination

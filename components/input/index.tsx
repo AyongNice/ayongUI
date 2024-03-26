@@ -120,7 +120,7 @@ const Input = React.forwardRef((props, ref) => {
 
   const _onChange = (e) => {
     const res = onChangeBefore(e.target.value);
-    if (!res) return;
+    if (res) return;
     setValue(e.target.value)
     onChange(e.target.value)
   }

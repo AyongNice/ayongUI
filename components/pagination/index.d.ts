@@ -14,5 +14,8 @@ export interface PaginationProps {
   showSizeChanger?: boolean
   hideOnSinglePage?: boolean
   pageSizeOptions?: string[]|number[]
-  onChange?: () => number
+  onChange?: (pageNo:number) => void
+  size:string;//大小
+  showQuickJumper?: boolean//是否显示跳转
+  onSizeChange:(pageSize:number) => void//大小变化回调
 }
