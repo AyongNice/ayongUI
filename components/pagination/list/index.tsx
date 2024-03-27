@@ -5,7 +5,7 @@ import style from '../../../config/style.module.less';
 import {Doubleleft, Doubleright} from '../../icon/icon.ts';
 
 const List = React.forwardRef(({total, pageArr, defaultPageSize, disabled, selectedIndex, handleCurrentPage}, ref) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(10);
 
 
   const pageNumItemName = (page) => {
@@ -19,17 +19,18 @@ const List = React.forwardRef(({total, pageArr, defaultPageSize, disabled, selec
     return name;
   };
 
-  const handleSkipForward = (num: number = 3) => {
-    if (currentPage < pageArr.length - 5) {
-      console.log(num)
-      setCurrentPage(currentPage + num);
+  const handleSkipForward = () => {
+    const newCurrentPage = currentPage + 1;
+    const maxPage = Math.ceil(total / defaultPageSize);
+    if (newCurrentPage + 2 <= maxPage) {
+      setCurrentPage(newCurrentPage);
     }
   };
 
-  const handleSkipBackward = (num: number = 3) => {
-    if (currentPage > 6) {
-      console.log(num)
-      setCurrentPage(currentPage - num);
+  const handleSkipBackward = () => {
+    const newCurrentPage = currentPage - 1;
+    if (newCurrentPage >= 1) {
+      setCurrentPage(newCurrentPage);
     }
   };
 
@@ -50,11 +51,19 @@ const List = React.forwardRef(({total, pageArr, defaultPageSize, disabled, selec
         </div>
       ));
     } else {
-      console.log('currentPage', currentPage)
-      const visiblePages = pageArr.slice(
-        currentPage <= 6 ? 0 : currentPage - 3,
-        currentPage === pageArr.length - 5 ? pageArr.length : currentPage + 2
-      );
+
+      // 计算页面范围
+      let startPage = Math.max(1, currentPage - 3);
+      let endPage = Math.min(pageArr.length, currentPage + 2);
+
+      // 如果当前选中的页码不在当前范围内，则调整范围
+      if (selectedIndex < startPage || selectedIndex > endPage) {
+        startPage = Math.max(1, selectedIndex - 2);
+        endPage = Math.min(pageArr.length, selectedIndex + 3);
+      }
+
+      const visiblePages = pageArr.slice(startPage - 1, endPage);
+
 
       return (
         <>
@@ -81,7 +90,8 @@ const List = React.forwardRef(({total, pageArr, defaultPageSize, disabled, selec
 
           {visiblePages[visiblePages.length - 1]?.label !== pageArr.length && (
             <>
-              {currentPage < pageArr.length - 5 && <div className={PaginationCss.rightNext}>
+              {currentPage}
+              {currentPage <= pageArr.length - 3 && <div className={PaginationCss.rightNext}>
                 <span className={PaginationCss.booth}> ...</span>
                 <span className={PaginationCss.arrowhead}>  <Doubleright onClick={() => handleSkipForward(3)}/></span>
               </div>}

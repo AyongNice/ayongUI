@@ -75,7 +75,7 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   const handlerPageSizeSelectOptions = () => {
     return pageSizeOptions.reduce((prev: Options[], item) => {
       prev.push({
-        label: `${item.toString()}条/页`,
+        label: `${item}条/页`,
         value: item,
       })
       return prev
