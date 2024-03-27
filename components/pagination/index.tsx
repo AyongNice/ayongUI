@@ -35,53 +35,26 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedIndex, setSelectedIndex] = useState(1)
 
-
+  const listRef = useRef(null)
   // 处理页标集
   const handlerPageArr = () => {
-    const arr: PageList = []
-    if (total <= 0) return
-    let set = true;
-    const max = Math.ceil(total / defaultPageSize)
+    const arr = [];
+    const max = Math.ceil(total / defaultPageSize);
     for (let i = 1; i <= max; i++) {
-
-      if (max > 10) {
-
-        if (i > 2 && i < max - 1) {
-          if (set) {
-            arr.push({lable: '...', index: i})
-            set = false;
-          } else {
-            arr.push({lable: "", index: i})
-          }
-
-        } else {
-          arr.push({lable: i, index: i})
-        }
-
-      } else {
-        arr.push({lable: i, index: i})
-      }
-
+      arr.push({label: i, index: i});
     }
     return arr;
-  }
+  };
 
-  const pageArr: number[] = useMemo(() => {
+  const pageArr: { label: number; index: number }[] = useMemo(() => {
     return handlerPageArr();
   }, [total, defaultPageSize])
 
 
-  const showJumpIndex = useMemo(() => {
-
-    if (!selectedIndex || isNaN(selectedIndex)) {
-
-      return ''
-    }
-    return selectedIndex
-  }, [selectedIndex])
-
   // 设置当前页码
   const handleCurrentPage = (cur: any) => {
+
+    console.log('handleCurrentPage', cur)
     if (disabled) return;
     setDefaultCurrent(Number(cur))
     setSelectedIndex(Number(cur))
@@ -126,11 +99,13 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
    */
   const onPrev = () => {
     if (disabled || selectedIndex === 1) return;
-    setSelectedIndex(prevState => --prevState)
+    setSelectedIndex(prevState => --prevState);
+    listRef.current.handleSkipBackward(1)
   }
   const onNext = () => {
     if (disabled || selectedIndex === pageArr.length) return;
-    setSelectedIndex(prevState => ++prevState)
+    setSelectedIndex(prevState => ++prevState);
+    listRef.current.handleSkipForward(1)
   }
   const onBlur = (value) => {
 
@@ -141,6 +116,7 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
 
   useEffect(() => {
     onCurrentChange(selectedIndex)
+    console.log('selectedIndex', selectedIndex)
   }, [selectedIndex])
 
   useEffect(() => {
@@ -155,22 +131,15 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     <div className={`${PaginationCss.prevBtn} ${disabled ? style.disabled : ""}`} onClick={onPrev}>
       <PreviousStep/>
     </div>
-    <List total={total}
-          defaultPageSize={defaultPageSize}
-          handleCurrentPage={handleCurrentPage}
-          selectedIndex={selectedIndex}
-          disabled={disabled}/>
-    {/*<div className={PaginationCss.pageNumList}>*/}
+    <List
+      ref={listRef}
+      total={total}
+      pageArr={pageArr}
+      defaultPageSize={defaultPageSize}
+      handleCurrentPage={handleCurrentPage}
+      selectedIndex={selectedIndex}
+      disabled={disabled}/>
 
-    {/*{pageArr.map((item: number, index: number) => item.lable ? <div*/}
-    {/*    key={index}*/}
-    {/*    className={pageNumItemName(item)}*/}
-    {/*    onClick={() => handlerCurrentPage(item)}*/}
-    {/*  >*/}
-    {/*    <span>{item.lable}</span>*/}
-    {/*  </div> : null*/}
-    {/*)}*/}
-    {/*</div>*/}
     <div className={`${PaginationCss.nextBtn} ${disabled ? style.disabled : ""}`} onClick={onNext}>
       <Advance/>
     </div>
