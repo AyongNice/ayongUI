@@ -22,18 +22,26 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     showQuickJumper = false,
     showSizeChanger = false,
     hideOnSinglePage = false,
-    onSizeChange = () => {
+    onSizeChange = (pageSize: number) => {
 
     },
-    onCurrentChange = () => {
+    onCurrentChange = (pageNo: number) => {
 
     },
   } = props
 
-  const [defaultCurrent, setDefaultCurrent] = useState(current || 1)
-  const [defaultPageSize, setDefaultPageSize] = useState(pageSize || pageSizeOptions[0])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [selectedIndex, setSelectedIndex] = useState(1)
+  const paddingMode: { default: string; small: string } = {
+    'default': {padding: '6px 13px', fontSize: '14px'},
+    'small': {padding: '2px 8px', fontSize: '14px'},
+  }
+  const paddingArrowheadMode: { default: string; small: string } = {
+    'default': {padding: '8px 9px', fontSize: '12px'},
+    'small': {padding: '4px 5px', fontSize: '12px'},
+  }
+  const [defaultCurrent, setDefaultCurrent] = useState<number>(current || 1)
+  const [defaultPageSize, setDefaultPageSize] = useState<number>(pageSize || pageSizeOptions[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [selectedIndex, setSelectedIndex] = useState<number>(1)
 
   const listRef = useRef(null)
   // 处理页标集
@@ -53,8 +61,6 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
 
   // 设置当前页码
   const handleCurrentPage = (cur: any) => {
-
-    console.log('handleCurrentPage', cur)
     if (disabled) return;
     setDefaultCurrent(Number(cur))
     setSelectedIndex(Number(cur))
@@ -82,6 +88,11 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     }, [])
   }
 
+
+  /**
+   *
+   * @param item
+   */
   const pageNumItemName = (item) => {
     let name = `${PaginationCss.pageNumItem} `
     if (disabled) {
@@ -100,23 +111,18 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
   const onPrev = () => {
     if (disabled || selectedIndex === 1) return;
     setSelectedIndex(prevState => --prevState);
-    listRef.current.handleSkipBackward(1)
   }
   const onNext = () => {
     if (disabled || selectedIndex === pageArr.length) return;
     setSelectedIndex(prevState => ++prevState);
-    listRef.current.handleSkipForward(1)
   }
-  const onBlur = (value) => {
-
-    handlerCurrentPage(value)
-
+  const onBlur = (value: number) => {
+    handleCurrentPage(value)
   }
   const onChangeBefore = (value) => !value || isNaN(value) || value < 1 || value > pageArr.length;
 
   useEffect(() => {
     onCurrentChange(selectedIndex)
-    console.log('selectedIndex', selectedIndex)
   }, [selectedIndex])
 
   useEffect(() => {
@@ -128,23 +134,31 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
 
   return hideOnSinglePage && pageArr.length <= 1 ? '' : <div className={`${PaginationCss.pageMain}`}>
     <div className={PaginationCss.total}></div>
-    <div className={`${PaginationCss.prevBtn} ${disabled ? style.disabled : ""}`} onClick={onPrev}>
+    <div style={paddingArrowheadMode[size]}
+         className={`${PaginationCss.prevBtn} ${disabled ? style.disabled : ""}`}
+         onClick={onPrev}>
       <PreviousStep/>
     </div>
     <List
       ref={listRef}
       total={total}
+      styleSzie={paddingMode[size]}
+      onPrev={onPrev}
+      onNext={onNext}
       pageArr={pageArr}
       defaultPageSize={defaultPageSize}
       handleCurrentPage={handleCurrentPage}
       selectedIndex={selectedIndex}
       disabled={disabled}/>
 
-    <div className={`${PaginationCss.nextBtn} ${disabled ? style.disabled : ""}`} onClick={onNext}>
+    <div style={paddingArrowheadMode[size]}
+         className={`${PaginationCss.nextBtn} ${disabled ? style.disabled : ""}`}
+         onClick={onNext}>
       <Advance/>
     </div>
     {showSizeChanger && <Select
       disabled={disabled}
+      style={{padding: paddingMode[size]}}
       onChange={handlerPageSize}
       className={PaginationCss.selectPageSize}
       options={handlerPageSizeSelectOptions()}
@@ -154,6 +168,7 @@ const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
     {showQuickJumper && <div className={PaginationCss.jumpBox}>
       跳至
       <Input
+        style={{padding: paddingMode[size]}}
         disabled={disabled}
         onChangeBefore={onChangeBefore}
         value={selectedIndex}
