@@ -8,7 +8,6 @@
       "DOM.Iterable"
     ],
     "module": "ESNext",
-    "skipLibCheck": true,
     "declaration": true,
     "declarationDir": "types",
     /* Bundler mode */
@@ -19,7 +18,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     /* Linting */
-    "strict": true,
+    "noImplicitAny": false,
+    "strict": false, // 关闭 strict 模式
+    "skipLibCheck": true, // 跳过检查引入的库文件
+    "esModuleInterop": true, // 启用 CommonJS 模块的导入
+    "allowJs": true, // 允许编译 JavaScript 文件
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,

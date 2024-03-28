@@ -1,8 +1,5 @@
 // 页标数据
 import React from "react";
-
-export type PageList = number[]
-
 /**
  * 页码组件数据集
  */
