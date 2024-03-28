@@ -21,18 +21,15 @@ export default function Switch(props: SwitchProps) {
 
   const handleButtonClick = (): void => {
     setIsChecked(!isChecked);
-  }
-
-  const _onChange = (value: boolean): void => {
     onChange(value)
   }
+
 
   const wrapClassName = `${styles.ayongSwitch} ${isChecked ? styles.checked : ''} ${disabled ? 'disabled' : ''} $`
 
   return <div style={{display: 'flex'}} className={className}>
     <button disabled={disabled}
             type="button"
-            onClick={_onChange}
             style={{background: isChecked ? activeColor : inactiveColor, cursor: disabled && 'not-allowed', ...style}}
             className={wrapClassName}
             onClick={handleButtonClick}>

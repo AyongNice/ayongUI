@@ -4,14 +4,13 @@ import Input from '../input/index.tsx'
 import {Options} from '../select/index.d'
 import {Advance, PreviousStep} from '../icon/icon'
 
-import {PaginationProps, PageList} from './index.d'
+import {PaginationProps} from './index.d'
 import PaginationCss from './index.module.less'
 import style from '../../config/style.module.less';
 import List from './list/index.tsx'
 
-let isSet = false;
 
-const Pagination: FC<PaginationProps> = memo((props: PaginationProps) => {
+const Pagination: FC<PaginationProps> = memo((props) => {
   const {
     pageSize,
     current,

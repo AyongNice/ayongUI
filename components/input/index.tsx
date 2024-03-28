@@ -147,9 +147,8 @@ const Input = React.forwardRef((props, ref) => {
         </span>
       )}
       <input
-        style={{paddingLeft, paddingRight, boxSizing: 'border-box', animation: 'all 0.5s '}}
+        style={{paddingLeft, paddingRight, boxSizing: 'border-box', animation: 'all 0.5s ', ...style}}
         type={type}
-        style={style}
         disabled={disabled}
         onBlur={_onBlur}
         maxLength={maxLength}
@@ -160,20 +159,6 @@ const Input = React.forwardRef((props, ref) => {
         placeholder={placeholder}
         className={styleClassName}
       />
-      {/*{clerabled && valueInner && (*/}
-      {/*  <span*/}
-      {/*    ref={clearRef}*/}
-      {/*    style={{*/}
-      {/*      position: 'absolute',*/}
-      {/*      right: rightPlace,*/}
-      {/*      top: '50%',*/}
-      {/*      transform: 'translateY(-50%)',*/}
-      {/*    }}*/}
-      {/*    onClick={handleClear}*/}
-      {/*  >*/}
-      {/*    <Wrongs/>*/}
-      {/*  </span>*/}
-      {/*)}*/}
       {suffix && <span ref={suffixRef} style={{
         position: 'absolute',
         right: '5px',
