@@ -8,7 +8,7 @@
   box-sizing: border-box;
   animation: all 0.5s;
   border-radius: var(--ayong-border-radius);
-  padding: 0 10px;
+  padding: 0 3px;
   border: 1px solid var(--ayong-primary);
 }
 
@@ -17,19 +17,21 @@
 
 .ayongInput {
   width: 100%;
-  height: var(--ayong-normal-height);
+  padding: var(--ayong-default-input-size);
+  color: var(--ayong-font-dark);
   //去除input原生样式
   border: 0;
   outline: none;
   background: none;
-  box-sizing: border-box;
 
   &.large {
-    height: var(--ayong-large-height);
+    font-size: var(--ayong-large-input-size);
+    padding: var(--ayong-large-size);
   }
 
   &.small {
-    height: var(--ayong-small-height);
+    font-size: var(--ayong-font-small-size);
+    padding: var(--ayong-small-input-size);
   }
 
   &:active { //按压颜色变浅色
