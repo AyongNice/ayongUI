@@ -132,22 +132,16 @@ const Input = React.forwardRef((props, ref) => {
   }, [value])
 
   return (
-    <div style={{position: 'relative', boxSizing: 'border-box', animation: 'all 0.5s '}}>
+
+    <div className={styles.warp} style={style}>
       {prefix && (
         <span
           ref={prefixRef}
-          style={{
-            position: 'absolute',
-            left: '5px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-          }}
         >
           {prefix}
         </span>
       )}
       <input
-        style={{paddingLeft, paddingRight, boxSizing: 'border-box', animation: 'all 0.5s ', ...style}}
         type={type}
         disabled={disabled}
         onBlur={_onBlur}
@@ -159,12 +153,7 @@ const Input = React.forwardRef((props, ref) => {
         placeholder={placeholder}
         className={styleClassName}
       />
-      {suffix && <span ref={suffixRef} style={{
-        position: 'absolute',
-        right: '5px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-      }}>{suffix}</span>}
+      {suffix && <span ref={suffixRef}>{suffix}</span>}
     </div>
   );
 })

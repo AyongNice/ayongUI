@@ -1,11 +1,26 @@
 @import "../../config/style.module.less";
 
+
+.warp {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  animation: all 0.5s;
+  border-radius: var(--ayong-border-radius);
+  padding: 0 10px;
+  border: 1px solid var(--ayong-primary);
+}
+
+//去除input原生样式
+
+
 .ayongInput {
   width: 100%;
   height: var(--ayong-normal-height);
-  border-radius: var(--ayong-border-radius);
-  padding: var(--ayong-default-size);
-  border: 1px solid var(--ayong-primary);
+  //去除input原生样式
+  border: 0;
+  outline: none;
   background: none;
   box-sizing: border-box;
 

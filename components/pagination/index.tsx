@@ -58,7 +58,6 @@ const Pagination: FC<PaginationProps> = (props) => {
     // 设置当前页码
     const handleCurrentPage = (cur: any) => {
         if (disabled) return;
-        setDefaultCurrent(Number(cur))
         setSelectedIndex(Number(cur))
 
     }

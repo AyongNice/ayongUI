@@ -16,7 +16,6 @@ const List = React.forwardRef(({
                                  onNext
                                }, ref) => {
   const [currentPage, setCurrentPage] = useState(10);
-  console.log(styleSzie)
 
   const pageNumItemName = (page) => {
     let name = PaginationCss.pageNumItem;
@@ -97,7 +96,7 @@ const List = React.forwardRef(({
               className={pageNumItemName(page)}
               onClick={() => handleCurrentPage(page.index)}
             >
-              <span>{page.label}1</span>
+              <span>{page.label}</span>
             </div>
           ))}
 
