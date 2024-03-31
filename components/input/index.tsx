@@ -1,9 +1,10 @@
 import React, {useState, useRef, useEffect, useImperativeHandle, useMemo} from 'react';
 import {Wrongs} from '../icon/icon';
 import styles from './index.module.less';
+import {InputProps} from './index.d'
 import {EyesOpen, EyesClosed} from '../icon/icon.ts';
 
-const Input = (props) => {
+const Input = (props: InputProps) => {
   const {
     value = '',
     disabled,
@@ -13,6 +14,10 @@ const Input = (props) => {
     defaultValue = '',
     addonBefore = null,
     addonAfter = null,
+    placeholder = '请输入值',
+    prefix = null,
+    suffix = null,
+    clerabled = false,
     size = 'normal',
     maxLength = null,
     visibilityToggle = {
@@ -31,14 +36,11 @@ const Input = (props) => {
     },
     onChangeBefore = (e) => {
     },
-    placeholder = '请输入值',
-    prefix = null,
-    suffix = null,
-    clerabled = true,
+
   } = props;
 
   const [valueInner, setValue] = useState(value || defaultValue);
-
+  const [chanies, setChanies] = useState('')
 
   const styleClassName = `${styles.ayongInput} ${className} ${styles[size]}
     ${styles[type]} ${disabled && styles.notAllowed} ${(addonBefore || addonAfter) && styles.addonBeforeAfter}`;
@@ -76,14 +78,12 @@ const Input = (props) => {
 
   const handleClear = () => {
     setValue('');
-    setReset(!reset);
-    setTimeout(() => {
-      setReset(!reset);
-    }, 0);
   };
 
 
   const _onChange = (e) => {
+    if (maxLength && e.target.value.length > maxLength) return;
+
     const res = onChangeBefore(e.target.value);
     if (res) return;
     setValue(e.target.value)
@@ -92,6 +92,27 @@ const Input = (props) => {
   const _onBlur = (e) => {
     onBlur(e.target.value)
   }
+  const [isComposing, setIsComposing] = useState(false);
+
+  const handleCompositionStart = () => {
+    console.log('start', isComposing)
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+    console.log('end', isComposing)
+    // 延迟一段时间后再触发 onChange 方法
+
+  };
+
+  useEffect(() => {
+
+    if (!isComposing) {
+      // _onChange({target: {value: chanies}})
+    }
+
+  }, [isComposing])
 
 
   useEffect(() => {
@@ -100,10 +121,10 @@ const Input = (props) => {
 
   return (
 
-    <div className={styles.warp} style={{...style, padding: (prefix || suffix) && '0 5px'}}>
+    <div className={styles.warp}
+         style={{...style, padding: (prefix || suffix || type === 'Password' || clerabled) && '0 5px'}}>
 
       {['string', 'number'].includes(typeof addonBefore) && <span className={styles.lable}> {addonBefore} </span>}
-
       {typeof addonBefore === 'function' &&
         <span className={styles.lableFunction}> {addonBefore()}  </span>}
 
@@ -119,11 +140,13 @@ const Input = (props) => {
         onChange={_onChange}
         placeholder={placeholder}
         className={styleClassName}
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={handleCompositionEnd}
       />
 
-      {suffix && <span>{suffix}</span>}
-
-      {type === 'Password' && <span onClick={handleEyesOpen}>
+      {suffix && <span className={styles.iconBox}>{suffix}</span>}
+      {clerabled && valueInner && <span onClick={handleClear} className={styles.iconBox}><Wrongs/></span>}
+      {type === 'Password' && <span className={styles.iconBox} onClick={handleEyesOpen}>
         {typeof visibilityToggle.iconRender === 'function' ? visibilityToggle.iconRender(showEyesOpen) : showEyesOpen ?
           <EyesOpen/> : <EyesClosed/>}
       </span>}

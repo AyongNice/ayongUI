@@ -37,7 +37,7 @@
   border: 0;
   outline: none;
   background: none;
-  padding-left: 10px;
+  padding-left: 5px;
 
   &.large {
     font-size: var(--ayong-large-input-size);
@@ -49,13 +49,6 @@
     padding: var(--ayong-small-input-size);
   }
 
-  &:active { //按压颜色变浅色
-    opacity: 0.5;
-  }
-
-  &:hover { //触摸颜色变浅色
-    opacity: 0.8;
-  }
 
 }
 
@@ -86,13 +79,20 @@
   padding: var(--ayong-mini-size);
 }
 
+.iconBox {
+  display: flex;
+}
+
 .addonBeforeAfter {
+
   color: var(--ayong-stone-gray);
   border-left: 1px solid var(--ayong-grey);
   border-right: 1px solid var(--ayong-grey);
 }
 
 .lableFunction {
+  display: flex;
+
   padding: 2px 0;
   font-size: 14px;
   color: var(--ayong-stone-gray);
@@ -100,6 +100,8 @@
 }
 
 .lable {
+  display: flex;
+
   padding: 2px 8px;
   font-size: 14px;
   color: var(--ayong-stone-gray);
