@@ -5,14 +5,19 @@ import {Wrongs, Under, Search} from '../../../icon/icon.ts'
 const LeftIcon = ({
                     search,
                     showClearable,
-                    clearValue,
+                    onClearValue,
                     isDropdownVisible,
                   }) => {
+
+
   return (
     <React.Fragment>
 
       {showClearable ? (
-        <Wrongs onClick={clearValue} className={selectStyle.icon}/>
+        <Wrongs onClick={(e) => {
+          e.stopPropagation();
+          onClearValue()
+        }} className={selectStyle.icon}/>
       ) : search && isDropdownVisible ? (
         <Search className={selectStyle.icon}/>
       ) : (

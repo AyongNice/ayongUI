@@ -1,50 +1,82 @@
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: inherit;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  //margin-right: 10px;
+  //background-color: var(--ayong-grey-crescent);
+  cursor: pointer;
+}
+
 .pageMain {
   display: flex;
   align-items: center;
   font-size: var(--ayong-font-size);
+
   .pageNumList {
     display: flex;
     align-items: center;
+
     .pageNumItem {
-      color: #000000;
+      color: var(--ayong-font-dark);
       font-size: inherit;
       margin-right: 10px;
+
       &:last-child {
         margin: 0;
       }
+
       &.selected {
         color: var(--ayong-selected-font-color);
         background-color: var(--ayong-selected-bg-color);
       }
     }
   }
+
   .pageNumItem,
   .prevBtn,
   .nextBtn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    padding: 6px 13px;
     border: none;
     font-size: inherit;
     border-radius: 8px;
-    background-color: #ffffff;
+    background-color: var(--ayong-grey-crescent);
+    cursor: pointer;
   }
+
+  .prevBtn,
+  .nextBtn {
+    padding: 9px;
+  }
+
   .prevBtn {
     margin-right: 10px;
   }
+
   .nextBtn {
     margin-left: 10px;
   }
+
   .jumpBox {
     margin-left: 10px;
+    display: flex;
+    align-items: center;
   }
+
   .selectPageSize {
     display: inline-block;
     min-width: 90px;
     margin-left: 10px;
   }
+
   .pageSizeInput {
     width: 60px;
     margin: 0 10px;
@@ -55,4 +87,27 @@
   cursor: not-allowed;
   color: var(--ayong-disabled-font-color);
   background-color: var(--ayong-disabled-bg-color);
+}
+
+.booth {
+  &:extend(.item);
+  //padding: 6px 13px;
+  display: block;
+}
+
+.arrowhead {
+  &:extend(.item);
+  //padding: 6px 13px;
+  display: none;
+}
+
+.rightNext:hover {
+  .booth {
+    display: none;
+  }
+
+  .arrowhead {
+    display: block;
+  }
+
 }

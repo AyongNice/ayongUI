@@ -1,20 +1,52 @@
 @import "../../config/style.module.less";
 
+
+.warp {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  animation: all 0.5s;
+  border-radius: var(--ayong-border-radius);
+  border: 1px solid var(--ayong-grey);
+  outline: none;
+  //鼠标点击效果
+  &:active {
+    border: 1px solid var(--ayong-primary);
+  }
+
+  &:hover {
+    border: 1px solid var(--ayong-primary);
+  }
+
+  textarea {
+    color: var(--ayong-font-dark);
+
+  }
+}
+
+//去除input原生样式
+
+
 .ayongInput {
   width: 100%;
-  height: var(--ayong-normal-height);
-  border-radius: var(--ayong-border-radius);
-  padding: var(--ayong-default-size);
-  border: 1px solid var(--ayong-primary);
+  padding: var(--ayong-default-input-size);
+  color: var(--ayong-font-dark);
+  //去除input原生样式
+  border: 0;
+  outline: none;
   background: none;
-  box-sizing: border-box;
+  padding-left: 10px;
 
   &.large {
-    height: var(--ayong-large-height);
+    font-size: var(--ayong-large-input-size);
+    padding: var(--ayong-large-size);
   }
 
   &.small {
-    height: var(--ayong-small-height);
+    font-size: var(--ayong-font-small-size);
+    padding: var(--ayong-small-input-size);
   }
 
   &:active { //按压颜色变浅色
@@ -52,4 +84,25 @@
 
 .mini {
   padding: var(--ayong-mini-size);
+}
+
+.addonBeforeAfter {
+  color: var(--ayong-stone-gray);
+  border-left: 1px solid var(--ayong-grey);
+  border-right: 1px solid var(--ayong-grey);
+}
+
+.lableFunction {
+  padding: 2px 0;
+  font-size: 14px;
+  color: var(--ayong-stone-gray);
+  background: var(--ayong-grey-crescent);
+}
+
+.lable {
+  padding: 2px 8px;
+  font-size: 14px;
+  color: var(--ayong-stone-gray);
+
+  background: var(--ayong-grey-crescent);
 }

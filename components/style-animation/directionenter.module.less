@@ -1,0 +1,59 @@
+.top {
+  animation: enterTop 0.5s ease-in-out;
+}
+
+.bottom {
+  animation: enterBottom 0.5s ease-in-out;
+}
+
+.left {
+  animation: enterLeft 0.5s ease-in-out;
+}
+
+.right {
+  animation: enterRight 0.5s ease-in-out;
+}
+
+@keyframes enterTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 向下偏移一些距离 */
+  }
+}
+
+@keyframes enterBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 向下偏移一些距离 */
+  }
+}
+
+@keyframes enterLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); /* 向下偏移一些距离 */
+  }
+}
+
+@keyframes enterRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); /* 向下偏移一些距离 */
+  }
+}
