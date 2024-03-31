@@ -30,7 +30,11 @@ export default function Switch(props: SwitchProps) {
   return <div style={{display: 'flex'}} className={className}>
     <button disabled={disabled}
             type="button"
-            style={{background: isChecked ? activeColor : inactiveColor, cursor: disabled && 'not-allowed', ...style}}
+            style={{
+              border: 'none',
+              background: isChecked ? activeColor : inactiveColor,
+              cursor: disabled && 'not-allowed', ...style
+            }}
             className={wrapClassName}
             onClick={handleButtonClick}>
       <div className={styles.handle}></div>

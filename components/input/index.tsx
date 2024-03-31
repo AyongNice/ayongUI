@@ -1,16 +1,26 @@
-import React, {useState, useRef, useEffect, useImperativeHandle} from 'react';
+import React, {useState, useRef, useEffect, useImperativeHandle, useMemo} from 'react';
 import {Wrongs} from '../icon/icon';
 import styles from './index.module.less';
+import {EyesOpen, EyesClosed} from '../icon/icon.ts';
 
-const Input = React.forwardRef((props, ref) => {
+const Input = (props) => {
   const {
     value = '',
     disabled,
     type = 'text',
     className = '',
     style = {},
+    defaultValue = '',
+    addonBefore = null,
+    addonAfter = null,
     size = 'normal',
     maxLength = null,
+    visibilityToggle = {
+      visible: false,
+      iconRender: null,
+      onVisibleChange: () => {
+      }
+    },
     onFocus = () => {
     },
     onBlur = () => {
@@ -27,75 +37,42 @@ const Input = React.forwardRef((props, ref) => {
     clerabled = true,
   } = props;
 
-  const [valueInner, setValue] = useState(value);
+  const [valueInner, setValue] = useState(value || defaultValue);
+
 
   const styleClassName = `${styles.ayongInput} ${className} ${styles[size]}
-    ${styles[type]} ${disabled && styles.notAllowed}`;
-
-  const prefixRef = useRef(null);
-  const suffixRef = useRef(null);
-  const clearRef = useRef(null);
-
-  const compensate = 5;
-  const [paddingLeft, setPdl] = useState('5px');
-  const [paddingRight, setPdr] = useState('5px');
+    ${styles[type]} ${disabled && styles.notAllowed} ${(addonBefore || addonAfter) && styles.addonBeforeAfter}`;
 
 
   const [rightPlace, setRightPlace] = useState('5px');
 
   const [reset, setReset] = useState(false);
+  const [showEyesOpen, setShowEyesOpen] = useState(false);
+  const frist = useRef(true)
 
-  useEffect(() => {
-    if (prefixRef.current) {
-      setPdl(prefix ? prefixRef.current?.offsetWidth + compensate + 'px' : '5px');
+  const _type = useMemo(() => {
+
+    visibilityToggle.onVisibleChange && visibilityToggle.onVisibleChange(showEyesOpen)
+    if (type == 'Password' && showEyesOpen) {
+      return 'text'
     }
-  }, [prefixRef.current]);
 
-  const onRest = () => {
-    setValue('')
+    if (type === 'Password') {
+      return 'password'
+    }
+    return type
+  }, [showEyesOpen])
+  /**
+   * 点击眼睛 密码模式切换
+   */
+  const handleEyesOpen = () => {
+    setShowEyesOpen(!showEyesOpen)
   }
 
-  useImperativeHandle(ref, () => ({onRest}))
-
   useEffect(() => {
-    if (suffixRef.current && !clearRef.current) {
-      if (type == 'number') {
-        const res = suffixRef.current?.offsetWidth + 4 + 'px';
-        setPdr(res);
-      } else {
-        setPdr('5px');
-      }
-    } else if (suffixRef.current && clearRef.current) {
-      if (type == 'number') {
-        const clearWidth = clearRef.current?.offsetWidth + 4;
-        const suffixWidth = suffixRef.current?.offsetWidth + 4;
-        const res1 = clearWidth + suffixWidth + 'px';
-        setPdr(res1);
-        const res2 = suffixWidth + 'px';
-        setRightPlace(res2);
-      } else {
-        setPdr('5px');
-      }
-    } else {
-      //有删除,没有后插槽
-      if (type == 'number') {
-        const res = 20 + 'px';
-        setPdr(res);
-      } else {
-        setPdr('5px');
-      }
-      /* if (clerabled) {
-          if (type=='number') {
-              const res =  20 + 'px';
-              setPdr(res);
-          }else{
-              setPdr('5px');
-          }
-      }else{
-          setPdr('5px');
-      } */
-    }
-  }, [suffixRef.current, clearRef.current, reset]);
+
+    setShowEyesOpen(visibilityToggle?.visible)
+  }, [visibilityToggle?.visible])
 
   const handleClear = () => {
     setValue('');
@@ -103,20 +80,8 @@ const Input = React.forwardRef((props, ref) => {
     setTimeout(() => {
       setReset(!reset);
     }, 0);
-    // setPdr('5px');
   };
 
-
-  /*  useEffect(() => {
-       if (clearRef.current) {
-         if (type=='number') {
-             const res = clearRef.current?.offsetWidth + 8 + 'px';
-             setRightPlace(res);
-         }else{
-             setRightPlace('5px');
-         }
-     }
-   }, [clearRef.current]); */
 
   const _onChange = (e) => {
     const res = onChangeBefore(e.target.value);
@@ -127,22 +92,24 @@ const Input = React.forwardRef((props, ref) => {
   const _onBlur = (e) => {
     onBlur(e.target.value)
   }
+
+
   useEffect(() => {
     setValue(() => value)
   }, [value])
 
   return (
 
-    <div className={styles.warp} style={style}>
-      {prefix && (
-        <span
-          ref={prefixRef}
-        >
-          {prefix}
-        </span>
-      )}
+    <div className={styles.warp} style={{...style, padding: (prefix || suffix) && '0 5px'}}>
+
+      {['string', 'number'].includes(typeof addonBefore) && <span className={styles.lable}> {addonBefore} </span>}
+
+      {typeof addonBefore === 'function' &&
+        <span className={styles.lableFunction}> {addonBefore()}  </span>}
+
+      {prefix && <span>{prefix}</span>}
       <input
-        type={type}
+        type={_type}
         disabled={disabled}
         onBlur={_onBlur}
         maxLength={maxLength}
@@ -153,11 +120,37 @@ const Input = React.forwardRef((props, ref) => {
         placeholder={placeholder}
         className={styleClassName}
       />
-      {suffix && <span ref={suffixRef}>{suffix}</span>}
+
+      {suffix && <span>{suffix}</span>}
+
+      {type === 'Password' && <span onClick={handleEyesOpen}>
+        {typeof visibilityToggle.iconRender === 'function' ? visibilityToggle.iconRender(showEyesOpen) : showEyesOpen ?
+          <EyesOpen/> : <EyesClosed/>}
+      </span>}
+      {['string', 'number'].includes(typeof addonAfter) && <span className={styles.lable}> {addonAfter} </span>}
+
+      {typeof addonAfter === 'function' && <span className={styles.lableFunction}> {addonAfter()}  </span>}
+
     </div>
   );
-})
+}
 
+const TextArea = ({
+                    style,
+                    value = '',
+                    defaultValue = '',
+                    onChange = () => {
+                    }
+                  }) => {
+  const [valueInner, setValue] = useState(value || defaultValue);
+  const _onChange = (e) => {
+    setValue(e.target.value)
+    onChange(e.target.value)
+  }
+  return <textarea className={styles.warp} value={valueInner} style={style} onChange={_onChange}></textarea>
+
+}
+Input.TextArea = TextArea;
 Input.displayName = 'Input';
 
 export default Input;

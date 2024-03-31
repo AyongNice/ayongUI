@@ -7,13 +7,14 @@ import Option from './components/option/index.tsx';
 import LeftIcon from './components/lefticon/index.tsx';
 import Single from './components/single/index.tsx';
 
-const CustomSelect = (props: React.FC<SelectProps>) => {
+const Select = (props: React.FC<SelectProps>) => {
   const {
     mode = 'single',
     style,
+    bordered = true,
     value,
     search,
-    options,
+    options = [],
     disabled,
     className = '',
     clearable,
@@ -22,10 +23,27 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
     optionHeaderRender = null,
     onChange = () => {
     },
+    children
   } = props;
   const _style = {...style};
   const optionsMap: Map<keyValue, keyValue> = new Map();
-  options.forEach((item) => optionsMap.set(item.value, item.label));
+
+  let _options = options;
+
+  if (!_options.length) {
+    _options = React.Children.map(children, (child) => {
+      if (React.isValidElement(child)) {
+        return {
+          value: child.props.value,
+          label: child.props.children,
+          disabled: child.props.disabled,
+        };
+      }
+    })
+  }
+
+
+  _options.forEach((item) => optionsMap.set(item.value, item.label));
   /** 搜索选项 **/
   const [searchTerm, setSearchTerm] = useState<string>('')
   /** 选择值 **/
@@ -38,7 +56,6 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
 
   const dropdownRef = useRef(null);
   const [clcikTarget, setClcikTarget] = useState<boolean>(true);
-  console.log(selectedValues, defaultValue)
   // useEffect(() => {
   //   const handleScroll = () => {
   //     const options = dropdownRef.current.querySelectorAll('option');
@@ -102,7 +119,6 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
       }
 
       if (mode === 'single') {
-        console.log('single', value)
         setSelectedValues(value)
         setSearchTerm('')
       }
@@ -187,14 +203,16 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
   /**
    * 清除多选选项
    */
-  const clearValue = () => {
+  const onClearValue = () => {
     setSelectedValues(Array.isArray(selectedValues) && mode !== 'single' ? [] : '')
+
     onChange(Array.isArray(selectedValues) && mode !== 'single' ? [] : '')
   }
 
   const onSearchChange = (e): void => {
     setSearchTerm(e.target.value)
   }
+
 
   return (
     <div style={_style} className={getWarpClassname()}>
@@ -203,6 +221,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setShowClearable(false)}
         onClick={handleSelectClick}
+        style={{border: !bordered && 'none'}}
       >
         {['multiple', 'tag'].includes(mode) ? (
           <React.Fragment>
@@ -219,7 +238,9 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
             />
 
             <LeftIcon
-              {...props}
+              search={search}
+              onClearValue={onClearValue}
+              showClearable={showClearable}
               isDropdownVisible={isDropdownVisible}
             />
           </React.Fragment>
@@ -237,7 +258,9 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
               handleDeltselectedValues={handleDeltselectedValues}
             />
             <LeftIcon
-              {...props}
+              search={search}
+              onClearValue={onClearValue}
+              showClearable={showClearable}
               isDropdownVisible={isDropdownVisible}
             />
 
@@ -254,7 +277,7 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
         )}
         <Option
           mode={mode}
-          options={options}
+          options={_options}
           search={search}
           optionRender={optionRender}
           searchTerm={searchTerm}
@@ -265,4 +288,4 @@ const CustomSelect = (props: React.FC<SelectProps>) => {
     </div>
   )
 }
-export default CustomSelect
+export default Select
