@@ -1,6 +1,6 @@
-import Trigger from './components/trigger/trigger.tsx';
+import {useState} from 'react'
 import { TooltipProps } from './tooltip.d.ts';
-import toolTip from './tooltip.module.less';
+import styles from './tooltip.module.less';
 
 const defaultPopup: React.FC = () => <span>defaultPopup</span>;
 
@@ -12,6 +12,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 		shape = 'default',
 		children,
 		href = '',
+		title,
 		htmlType = 'button',
 		className = '',
 		disabled,
@@ -22,20 +23,42 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 		trigger = ['hover'],
 		placement = 'top',
 		popup = defaultPopup,
+		
 	} = props;
 
-	const styleClassName: string = `${toolTip.ayongTooltip} ${className} ${
-		toolTip[size]
-	} ${toolTip[type]} ${toolTip[shape]}  ${disabled && toolTip.notAllowed} `;
+	const styleClassName: string = `${styles.tooltipContainer}  ${styles[size]} ${styles[type]} ${disabled && styles.notAllowed} ${className} `;
+	const [showTooltip, setShowTooltip] = useState(false);
+
+	const handleMouseEnter = () => {
+	  setShowTooltip(true);
+	};
+  
+	const handleMouseLeave = () => {
+	  setShowTooltip(false);
+	};
+  
+	const getTooltipStyle = () => {
+	  switch (placement) {
+		case 'top':
+		  return { top: '-30px', left: '50%', transform: 'translateX(-50%)' };
+		case 'bottom':
+		  return { bottom: '-30px', left: '50%', transform: 'translateX(-50%)' };
+		case 'left':
+		  return { top: '50%', left: '-110px', transform: 'translateY(-50%)' };
+		case 'right':
+		  return { top: '50%', right: '-110px', transform: 'translateY(-50%)' };
+		default:
+		  return { top: '-30px', left: '50%', transform: 'translateX(-50%)' };
+	  }
+	};
+  
 	return (
-		<Trigger
-			popup={popup}
-			popupPlacement={placement}
-			popupClassName={styleClassName}
-			{...props}
-		>
-			{children}
-		</Trigger>
+	  <div className={styleClassName} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+		{children}
+		{showTooltip &&  <div className={`${styles.tooltip} ${placement}`} style={getTooltipStyle()}>
+			{title}
+		  </div>}
+	  </div>
 	);
 };
 

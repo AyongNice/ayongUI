@@ -142,16 +142,16 @@ const Pagination: FC<PaginationProps> = (props) => {
         />}
 
         {showQuickJumper && <div className={PaginationCss.jumpBox}>
-           跳至
+           <span style={{whiteSpace:'nowrap'}}>跳至</span>
            <Input
-              style={{padding: paddingMode[size]}}
+              style={{padding: paddingMode[size],margin:'0 10px'}}
               disabled={disabled}
               onChangeBefore={onChangeBefore}
               value={selectedIndex}
               className={PaginationCss.pageSizeInput}
               onBlur={onBlur}
            />
-           页
+           <span> 页 </span>
         </div>}
     </div>
 }
