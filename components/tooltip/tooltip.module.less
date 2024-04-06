@@ -7,12 +7,11 @@
   position: absolute;
   padding: 8px;
   border-radius: 4px;
-  background-color:var(--ayong-bolck);
   color: #fff;
   font-size: 14px;
   z-index: 999;
   transition: opacity 0.3s ease;
-  white-space: nowrap;
+  // white-space: nowrap;
   animation: show .5s;
 }
 
@@ -130,7 +129,7 @@
 
  .tooltipArrow.top {
   border-width: 8px 8px 0 8px;
-  border-color: var(--ayong-bolck) transparent transparent transparent;
+  //border-color: var(--ayong-bolck) transparent transparent transparent;
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
@@ -138,7 +137,7 @@
 
  .tooltipArrow.bottom {
   border-width: 0 8px 8px 8px;
-  border-color: transparent transparent var(--ayong-bolck) transparent;
+  //border-color: transparent transparent var(--ayong-bolck) transparent;
   top: -8px;
   left: 50%;
   transform: translateX(-50%);
@@ -146,7 +145,7 @@
 
  .tooltipArrow.left {
   border-width: 8px 0 8px 8px;
-  border-color: transparent transparent transparent var(--ayong-bolck);
+  //border-color: transparent transparent transparent var(--ayong-bolck);
   top: 50%;
   right: -8px;
   transform: translateY(-50%);
@@ -154,9 +153,23 @@
 
  .tooltipArrow.right {
   border-width: 8px 8px 8px 0;
-  border-color: transparent var(--ayong-bolck) transparent transparent;
+  //border-color: transparent var(--ayong-bolck) transparent transparent;
   top: 50%;
   left: -8px;
   transform: translateY(-50%);
 }
+//超出2行换行省略
+.tooltip .tooltip-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
+
+
+
 
