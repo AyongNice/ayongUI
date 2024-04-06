@@ -7,12 +7,24 @@
   position: absolute;
   padding: 8px;
   border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color:var(--ayong-bolck);
   color: #fff;
   font-size: 14px;
   z-index: 999;
   transition: opacity 0.3s ease;
+  white-space: nowrap;
+  animation: show .5s;
 }
+
+@keyframes show{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
 
 .tooltip::before {
   // content: '';
@@ -59,7 +71,7 @@
 }
 
 .primary {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-primary);
   background: var(--ayong-primary);
 }
@@ -74,21 +86,21 @@
 
 //危险按钮
 .error {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-error);
   background: var(--ayong-error);
 }
 
 //警告按钮
 .warn {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-warn);
   background: var(--ayong-warn);
 }
 
 //安全健康按钮
 .safe {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-safe);
   background: var(--ayong-safe);
 }
@@ -107,5 +119,44 @@
 .mini {
   font-size: var(--ayong-font-mini-size);
   padding: var(--ayong-mini-size);
+}
+
+.tooltipArrow {
+  position: absolute;
+  width:0;
+  height:0;
+  border-style: solid;
+}
+
+ .tooltipArrow.top {
+  border-width: 8px 8px 0 8px;
+  border-color: var(--ayong-bolck) transparent transparent transparent;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+ .tooltipArrow.bottom {
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent var(--ayong-bolck) transparent;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+ .tooltipArrow.left {
+  border-width: 8px 0 8px 8px;
+  border-color: transparent transparent transparent var(--ayong-bolck);
+  top: 50%;
+  right: -8px;
+  transform: translateY(-50%);
+}
+
+ .tooltipArrow.right {
+  border-width: 8px 8px 8px 0;
+  border-color: transparent var(--ayong-bolck) transparent transparent;
+  top: 50%;
+  left: -8px;
+  transform: translateY(-50%);
 }
 

@@ -40,22 +40,37 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
 	const getTooltipStyle = () => {
 	  switch (placement) {
 		case 'top':
-		  return { top: '-30px', left: '50%', transform: 'translateX(-50%)' };
+		  return { top: '-40px', left: '50%', transform: 'translateX(-50%)' };
 		case 'bottom':
-		  return { bottom: '-30px', left: '50%', transform: 'translateX(-50%)' };
+		  return { bottom: '-40px', left: '50%', transform: 'translateX(-50%)' };
 		case 'left':
-		  return { top: '50%', left: '-110px', transform: 'translateY(-50%)' };
+		  return { top: '50%', left: '-77px', transform: 'translateY(-50%)' };
 		case 'right':
-		  return { top: '50%', right: '-110px', transform: 'translateY(-50%)' };
+		  return { top: '50%', right: '-77px', transform: 'translateY(-50%)' };
 		default:
 		  return { top: '-30px', left: '50%', transform: 'translateX(-50%)' };
 	  }
 	};
+	const getArrowStyle = () => {
+		switch (placement) {
+		  case 'top':
+			return { bottom: '-8px', left: '50%', transform: 'translateX(-50%)' };
+		  case 'bottom':
+			return { top: '-8px', left: '50%', transform: 'translateX(-50%)' };
+		  case 'left':
+			return { top: '50%', right: '-8px', transform: 'translateY(-50%)' };
+		  case 'right':
+			return { top: '50%', left: '-8px', transform: 'translateY(-50%)' };
+		  default:
+			return { bottom: '-8px', left: '50%', transform: 'translateX(-50%)' };
+		}
+	  };
   
 	return (
 	  <div className={styleClassName} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
 		{children}
-		{showTooltip &&  <div className={`${styles.tooltip} ${placement}`} style={getTooltipStyle()}>
+		{showTooltip &&  <div className={`${styles.tooltip} `} style={getTooltipStyle()}>
+		<div  className={`${styles.tooltipArrow} ${styles[placement]} `} style={getArrowStyle()}></div>
 			{title}
 		  </div>}
 	  </div>
