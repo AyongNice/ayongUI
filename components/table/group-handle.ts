@@ -25,6 +25,8 @@ export function groupHandle({columns, children}: GroupHandleProps): Group {
             dataIndex: child.props.dataIndex,
             render: child.props.render,
             key: child.key,
+            width:child.props.width,
+            showOverflowTooltip:child.props.showOverflowTooltip
           };
         }
         if (child.type.displayName === 'ColumnGroup') {

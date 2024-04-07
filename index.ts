@@ -201,7 +201,7 @@ export {
 export type {IconProps} from './components/icon';
 
 export {default as Table} from './components/table/index.tsx';
-export type {TableProps, DataItem} from './components/table/index.d';
+export type {TableProps, DataItem,Column,ColumnGroup} from './components/table/index.d';
 
 export {default as Input} from './components/input/index.tsx';
 export type {InputProps} from './components/input/index.d';

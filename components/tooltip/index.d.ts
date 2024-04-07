@@ -34,22 +34,19 @@ import React from 'react';
 // }
 
 export interface TooltipProps {
-	title?: string;//title为空 不显示
-	style?: React.CSSProperties; // 自定义样式
-	className?: string; // 自定义样式类名
-	children: React.ReactNode; // 按钮内容
-	disabled?: boolean; // 禁用
+  title?: string; //title为空 不显示
+  style?: React.CSSProperties; // 自定义样式
+  className?: string; // 自定义样式类名
+  children: React.ReactNode; // 按钮内容
+  disabled?: boolean; // 禁用
   width?: string; // 宽度
   color?: string; // 颜色
   whiteSpace?: 'normal' | 'nowrap'; // 换行
-	arrow?: boolean;
+  arrow?: boolean;
+  size?: string; //大小
   open?: boolean; //  是否打开, 默认false
   onOpenChange?: (open: boolean) => void; // 打开关闭回调
-	placement?:
-		| 'top'
-		| 'bottom'
-		| 'left'
-		| 'right';
+  placement?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 declare const ToolTip: React.FC<TooltipProps>;

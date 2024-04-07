@@ -2,28 +2,25 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { TooltipProps } from './index.d';
 import styles from './tooltip.module.less';
 
-const defaultPopup: React.FC = () => <span>defaultPopup</span>;
-
 const Tooltip: React.FC<TooltipProps> = (props) => {
   const {
     children,
-    open,
-	style,
-    size = 'default',
+    style,
+    title,
+    open = false,
     color = 'var(--ayong-bolck)',
     arrow = true,
-    title,
     className = '',
     disabled,
     whiteSpace = 'nowrap',
     width = 'max-width',
     placement = 'top',
-	onOpenChange=()=>{}
+    onOpenChange = () => {},
   } = props;
 
   const styleClassName: string = `${styles.tooltipContainer}  ${
-    styles[size]
-  }  ${disabled && styles.notAllowed} ${className} `;
+    disabled && styles.notAllowed
+  } ${className} `;
   const [showTooltip, setShowTooltip] = useState(open);
 
   const handleMouseEnter = () => {
@@ -35,7 +32,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
   };
   useEffect(() => {
     setShowTooltip(open);
-	onOpenChange(open)
+    onOpenChange(open);
   }, [open]);
   /**
    * 换行省略
@@ -62,9 +59,8 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
     if (textRef.current) {
       setTextHegith(textRef.current.offsetHeight);
       setTextWidth(textRef.current.offsetWidth);
-      console.log(textRef.current.offsetWidth);
     }
-  }, [textRef]);
+  }, [textRef, showTooltip]);
   const getTop = useMemo(() => -40 - (textHegith - 36) + 'px', [textHegith]);
 
   const getLeft = useMemo(() => -textWidth - 10 + 'px', [textWidth]);
@@ -79,7 +75,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
           top: getTop,
           left: '50%',
           transform: 'translateX(-50%)',
-		  ...style
+          ...style,
         };
       case 'bottom':
         return {
@@ -90,8 +86,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
           bottom: getTop,
           left: '50%',
           transform: 'translateX(-50%)',
-		  ...style
-
+          ...style,
         };
       case 'left':
         return {
@@ -102,8 +97,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
           top: '50%',
           left: getLeft,
           transform: 'translateY(-50%)',
-		  ...style
-
+          ...style,
         };
       case 'right':
         return {
@@ -114,8 +108,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
           top: '50%',
           right: getLeft,
           transform: 'translateY(-50%)',
-		  ...style
-
+          ...style,
         };
       default:
         return {
@@ -126,8 +119,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
           top: '-30px',
           left: '50%',
           transform: 'translateX(-50%)',
-		  ...style
-
+          ...style,
         };
     }
   };

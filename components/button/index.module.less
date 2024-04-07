@@ -6,19 +6,21 @@
   padding: var(--ayong-default-size);
   border: 1px solid var(--ayong-grey);
   color: var(--ayong-dark-green-gray);
-
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
   background: none;
   margin: 0;
   cursor: pointer;
-  transition: all .5;
-
-  &:hover {
-    border: 1px solid var(--ayong-primary);
-  }
+  transition: all 0.5;
 }
 
+.icon{
+  margin-right: 8px;
+}
 .mutual {
-  &:hover { //触摸颜色变浅色
+  &:hover {
+    //触摸颜色变浅色
     opacity: 0.9;
   }
 
@@ -32,14 +34,14 @@
 .notAllowed {
   cursor: not-allowed;
 
-  &:active { //重置按压变化
+  &:active {
+    //重置按压变化
     opacity: 1;
   }
 }
 
 //button大小 使用padding 通过组件props参数枚举到对应 className
 .default {
-
 }
 
 .primary {
@@ -53,9 +55,10 @@
   border: 1px dashed var(--ayong-primary);
   color: var(--ayong-primary);
   background: none;
-
 }
-
+.text {
+  border: 0;
+}
 //危险按钮
 .error {
   color: var(--ayong-font-light);
@@ -76,7 +79,6 @@
   border: 1px solid var(--ayong-safe);
   background: var(--ayong-safe);
 }
-
 
 .small {
   font-size: var(--ayong-font-small-size);
@@ -105,11 +107,9 @@
   border-radius: 0;
 }
 
-
 .round {
   border-radius: 999px;
 }
-
 
 .button-container {
   position: relative;
@@ -154,4 +154,3 @@ button::before {
   transform: scale(2); /* 残影扩散效果 */
   opacity: 1;
 }
-
