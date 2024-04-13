@@ -268,7 +268,7 @@ const Form = React.forwardRef(
     };
 
     //组件ref
-    const itemRef = {};
+    const itemRef = useRef();
 
     // 表单数据
     const [formData, setFormData] = useState();
