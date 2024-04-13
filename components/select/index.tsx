@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Options, SelectProps, keyValue } from './index.d';
-import selectStyle from './index.module.less';
+import React, { useEffect, useRef, useState } from "react";
+import { Options, SelectProps, keyValue } from "./index.d";
+import selectStyle from "./index.module.less";
 
-import LeftIcon from './components/lefticon/index.tsx';
-import Multiple from './components/multiple/index.tsx';
-import Option from './components/option/index.tsx';
-import Single from './components/single/index.tsx';
+import LeftIcon from "./components/lefticon/index.tsx";
+import Multiple from "./components/multiple/index.tsx";
+import Option from "./components/option/index.tsx";
+import Single from "./components/single/index.tsx";
 
 const Select = (props: React.FC<SelectProps>) => {
   const {
-    mode = 'single',
+    mode = "single",
     style,
     bordered = true,
     value,
     search,
     options = [],
     disabled,
-    className = '',
+    className = "",
     clearable,
     defaultValue,
     optionRender = null,
@@ -31,7 +31,7 @@ const Select = (props: React.FC<SelectProps>) => {
 
   if (!_options.length) {
     const _optionsList = React.Children.map(children, (child) => {
-      if (React.isValidElement(child) && child.type.displayName === 'Option') {
+      if (React.isValidElement(child) && child.type.displayName === "Option") {
         return {
           value: child.props.value,
           label: child.props.children || child.props.label,
@@ -47,57 +47,31 @@ const Select = (props: React.FC<SelectProps>) => {
 
   _options.forEach((item) => optionsMap.set(item.value, item.label));
   /** 搜索选项 **/
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
   /** 选择值 **/
-  const [selectedValues, setSelectedValues] = useState<string | string[]>(
-    defaultValue,
-  );
+  const [selectedValues, setSelectedValues] = useState<string | string[]>(defaultValue);
   /** 是否显示下拉框 **/
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
   /** 是否显示清除按钮 **/
   const [showClearable, setShowClearable] = useState<boolean>(false);
-  const select = useRef(null);
 
   const dropdownRef = useRef(null);
-  const [clcikTarget, setClcikTarget] = useState<boolean>(true);
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const options = dropdownRef.current.querySelectorAll('option');
-  //     const stickyOption = options[8]; // 假设要将第三个选项置顶
-  //
-  //     const selectTop = dropdownRef.current.getBoundingClientRect().top;
-  //     const stickyOptionTop = stickyOption.getBoundingClientRect().top;
-  //
-  //     if (stickyOptionTop < selectTop) {
-  //       stickyOption.style.position = 'sticky';
-  //       stickyOption.style.top = `${selectTop}px`;
-  //     } else {
-  //       stickyOption.style.position = 'static';
-  //       stickyOption.style.top = 'auto';
-  //     }
-  //     console.log('handleScroll',options)
-  //   };
-  //
-  //   dropdownRef.current.addEventListener('scroll', handleScroll);
-  //
-  //   return () => {
-  //     dropdownRef.current.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
+
+
+  const selectRef = useRef(null);
 
   useEffect(() => {
-    const handleOutsideClick = () => {
-      if (clcikTarget) {
+    const handleOutsideClick = (e) => {
+      if (selectRef.current && !selectRef.current.contains(e.target)) {
         setIsDropdownVisible(false);
       }
-      setClcikTarget(true);
     };
-    document.addEventListener('click', handleOutsideClick);
+    document.addEventListener("click", handleOutsideClick);
 
     return () => {
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     };
-  }, [clcikTarget]);
+  }, []);
 
   const isFrist = useRef(true);
   useEffect(() => {
@@ -106,7 +80,7 @@ const Select = (props: React.FC<SelectProps>) => {
       isFrist.current = false;
       return;
     }
-    if (['multiple', 'tag'].includes(mode)) {
+    if (["multiple", "tag"].includes(mode)) {
       defaultValue.forEach((_) => {
         if (!options.find((item) => item.value === _).disabled) {
           handleOptionClick(_);
@@ -114,14 +88,14 @@ const Select = (props: React.FC<SelectProps>) => {
       });
       if (Array.isArray(value) && value.length) {
         setSelectedValues(value);
-        setSearchTerm('');
+        setSearchTerm("");
       }
       setIsDropdownVisible(false);
     }
 
-    if (mode === 'single') {
+    if (mode === "single") {
       setSelectedValues(value);
-      setSearchTerm('');
+      setSearchTerm("");
     }
   }, [value]);
 
@@ -132,21 +106,24 @@ const Select = (props: React.FC<SelectProps>) => {
   const handleOptionClick = (option: Options, disabled: boolean) => {
     if (disabled) return;
     setSelectedValues((prevValues: string | string[]) => {
-      if (Array.isArray(prevValues) && mode !== 'single') {
+      if (Array.isArray(prevValues) && mode !== "single") {
         return Array.from(new Set([...prevValues, option.value]));
       }
       return option.value;
     });
-    setSearchTerm('');
+    setSearchTerm("");
     onChange(option.value);
-    if (mode === 'single') setIsDropdownVisible(false);
+    if (mode === "single") setIsDropdownVisible(false);
   };
 
-  const handleSelectClick = () => {
+
+  const handleSelectClick = (e) => {
+    e.stopPropagation();
     if (disabled) return;
-    setClcikTarget(false);
     setIsDropdownVisible(!isDropdownVisible);
   };
+
+ 
 
   /**
    *  搜索输入框输入
@@ -179,17 +156,15 @@ const Select = (props: React.FC<SelectProps>) => {
    * 获取select外层外套的className
    */
   const getWarpClassname = (): string => {
-    const disabledName: string = disabled ? selectStyle.disabled : '';
+    const disabledName: string = disabled ? selectStyle.disabled : "";
     return `${selectStyle.customSelect} ${disabledName} ${className}`;
   };
   /**
    * 获取select main标签的className
    */
   const getMainClassname = (): string => {
-    const hover = disabled ? '' : selectStyle.mainHover;
-    return isDropdownVisible
-      ? `${selectStyle.main} ${hover} ${selectStyle.active}  `
-      : `${selectStyle.main} ${hover} `;
+    const hover = disabled ? "" : selectStyle.mainHover;
+    return isDropdownVisible ? `${selectStyle.main} ${hover} ${selectStyle.active}  ` : `${selectStyle.main} ${hover} `;
   };
   /**
    * 鼠标移入显示清除按钮
@@ -202,31 +177,29 @@ const Select = (props: React.FC<SelectProps>) => {
    * 清除多选选项
    */
   const onClearValue = () => {
-    setSelectedValues(
-      Array.isArray(selectedValues) && mode !== 'single' ? [] : '',
-    );
+    setSelectedValues(Array.isArray(selectedValues) && mode !== "single" ? [] : "");
 
-    onChange(Array.isArray(selectedValues) && mode !== 'single' ? [] : '');
+    onChange(Array.isArray(selectedValues) && mode !== "single" ? [] : "");
   };
 
   const onSearchChange = (e): void => {
     setSearchTerm(e.target.value);
   };
-
   return (
     <div style={_style} className={getWarpClassname()}>
       <main
+        ref={selectRef}
+        onClick={handleSelectClick}
         className={getMainClassname()}
         onMouseEnter={onMouseEnter}
         onMouseLeave={() => setShowClearable(false)}
-        onClick={handleSelectClick}
-        style={{ border: !bordered && 'none' }}
+        style={{ border: !bordered && "none" }}
       >
-        {['multiple', 'tag'].includes(mode) ? (
+        {["multiple", "tag"].includes(mode) ? (
           <React.Fragment>
             <Multiple
               {...props}
-              value={searchTerm}
+              searchTerm={searchTerm}
               optionsMap={optionsMap}
               showClearable={showClearable}
               selectedValues={selectedValues}
@@ -236,24 +209,13 @@ const Select = (props: React.FC<SelectProps>) => {
               handleDeltselectedValues={handleDeltselectedValues}
             />
 
-            <LeftIcon
-              search={search}
-              onClearValue={onClearValue}
-              showClearable={showClearable}
-              isDropdownVisible={isDropdownVisible}
-            />
+            <LeftIcon search={search} onClearValue={onClearValue} showClearable={showClearable} isDropdownVisible={isDropdownVisible} />
           </React.Fragment>
         ) : (
-          <div
-            className={
-              mode === 'single'
-                ? selectStyle.singleBox
-                : selectStyle.multipleBox
-            }
-          >
+          <div className={mode === "single" ? selectStyle.singleBox : selectStyle.multipleBox}>
             <Single
               {...props}
-              value={searchTerm}
+              searchTerm={searchTerm}
               optionsMap={optionsMap}
               showClearable={showClearable}
               selectedValues={selectedValues}
@@ -262,44 +224,22 @@ const Select = (props: React.FC<SelectProps>) => {
               onChange={handleInputChange}
               handleDeltselectedValues={handleDeltselectedValues}
             />
-            <LeftIcon
-              search={search}
-              onClearValue={onClearValue}
-              showClearable={showClearable}
-              isDropdownVisible={isDropdownVisible}
-            />
+            <LeftIcon search={search} onClearValue={onClearValue} showClearable={showClearable} isDropdownVisible={isDropdownVisible} />
           </div>
         )}
       </main>
 
-      <ul
-        ref={dropdownRef}
-        className={`${selectStyle.dropdown} ${
-          isDropdownVisible
-            ? selectStyle.dropdownOpen
-            : selectStyle.dropdownClose
-        }`}
-      >
-        {typeof optionHeaderRender === 'function' && (
-          <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>
-        )}
-        <Option
-          mode={mode}
-          options={_options}
-          search={search}
-          optionRender={optionRender}
-          searchTerm={searchTerm}
-          selectedValues={selectedValues}
-          onClick={handleOptionClick}
-        />
+      <ul ref={dropdownRef} className={`${selectStyle.dropdown} ${isDropdownVisible ? selectStyle.dropdownOpen : selectStyle.dropdownClose}`}>
+        {typeof optionHeaderRender === "function" && <div className={selectStyle.optionHeader}>{optionHeaderRender()}</div>}
+        <Option mode={mode} options={_options} search={search} optionRender={optionRender} searchTerm={searchTerm} selectedValues={selectedValues} onClick={handleOptionClick} />
       </ul>
     </div>
   );
 };
 
-Select.displayName = 'Select';
+Select.displayName = "Select";
 Select.Option = () => {
   return <></>;
 };
-Select.Option.displayName = 'Option';
+Select.Option.displayName = "Option";
 export default Select;
