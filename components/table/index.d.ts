@@ -71,6 +71,7 @@ export interface GroupTbodyProps {
   item: DataItem[];
   activeTD: string | null;// 当前拖拽的列
   tbodyStyle: string;
+  columnWidths:number[]; //每一列的分配宽度列表
 }
 
 // 定义数据项的类型
@@ -81,10 +82,17 @@ export interface DataItem {
 
 // 定义列的类型
 export interface Column {
+  width?:string;
   key: string | number;
   title: string;
   dataIndex: string;
-  render?: (data: any, record: DataItem) => ReactNode;
+  showOverflowTooltip?:boolean;
+  firstName?:string;//表头分组第一个表头名称
+  lastName?:string;//表头分组最后一个表头名称
+  tags?:string[];//表头分组 的分组 对应的标签显示
+  defaultSortOrder?:"ascend"|'descend';//升序 降序
+  sorter? :(row: DataItem, row: DataItem) => boolean;//自定义业务逻辑排序函数
+  render?: (data: any, record: DataItem) => ReactNode;//自定义渲染函数
 }
 
 export interface ColumnGroup {

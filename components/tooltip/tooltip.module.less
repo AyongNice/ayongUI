@@ -1,39 +1,76 @@
-@import "../../config/style.module.less";
-
-.ayongTooltip {
-  font-size: var(--ayong-font-size);
-  border-radius: var(--ayong-border-radius);
-  padding: var(--ayong-default-size);
-//   border: 1px solid var(--ayong-primary);
-  color: var(--ayong-primary);
-  background: var(--ayong-tooltip-bg-color);
-
-
-  &:active { //按压颜色变浅色
-    opacity: 0.5;
-  }
-
-  &:hover { //触摸颜色变浅色
-    // opacity: 0.8;
-  }
+.tooltipContainer {
+  position: relative;
+  display: inline-block;
 }
 
-//禁用手图标
-.notAllowed {
-  cursor: not-allowed;
+.tooltip {
+  position: absolute;
+  padding: 8px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  z-index: 999;
+  transition: opacity 0.3s ease;
+  // white-space: nowrap;
+  animation: show .5s;
+}
 
-  &:active { //重置按压变化
+@keyframes show{
+  0%{
+    opacity: 0;
+  }
+  100%{
     opacity: 1;
   }
 }
 
-//button大小 使用padding 通过组件props参数枚举到对应 className
-.default {
 
+.tooltip::before {
+  // content: '';
+  // position: absolute;
+  // width: 0;
+  // height: 0;
+  // border-style: solid;
+}
+
+.tooltip.top::before {
+  top: 100%;
+  left: 50%;
+  border-width: 8px 8px 0 8px;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  transform: translateX(-50%);
+}
+
+.tooltip.bottom::before {
+  bottom: 100%;
+  left: 50%;
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+  transform: translateX(-50%);
+}
+
+.tooltip.left::before {
+  top: 50%;
+  right: 100%;
+  border-width: 8px 8px 8px 0;
+  border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+  transform: translateY(-50%);
+}
+
+.tooltip.right::before {
+  top: 50%;
+  left: 100%;
+  border-width: 8px 0 8px 8px;
+  border-color: transparent transparent transparent rgba(0, 0, 0, 0.8);
+  transform: translateY(-50%);
+}
+
+.tooltip-container:hover .tooltip {
+  opacity: 1;
 }
 
 .primary {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-primary);
   background: var(--ayong-primary);
 }
@@ -47,93 +84,92 @@
 }
 
 //危险按钮
-.dangerous {
-  color: var(--ayong-font-light-color);
-  border: 1px solid var(--ayong-dangerous);
-  background: var(--ayong-dangerous);
+.error {
+  color: var(--ayong-font-light);
+  border: 1px solid var(--ayong-error);
+  background: var(--ayong-error);
 }
 
 //警告按钮
 .warn {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-warn);
   background: var(--ayong-warn);
 }
 
 //安全健康按钮
 .safe {
-  color: var(--ayong-font-light-color);
+  color: var(--ayong-font-light);
   border: 1px solid var(--ayong-safe);
   background: var(--ayong-safe);
 }
 
 
 .small {
+  font-size: var(--ayong-font-small-size);
   padding: var(--ayong-small-size);
 }
 
 .large {
   padding: var(--ayong-large-size);
+  font-size: var(--ayong-large-font-size);
 }
-.mini{
+
+.mini {
+  font-size: var(--ayong-font-mini-size);
   padding: var(--ayong-mini-size);
 }
-.circle {
-  //自适应圆形 通过padding
-  padding: 10px 10px;
-  border-radius: 50%;
-}
 
-//直角按钮
-
-.strong {
-  border-radius: 0;
-}
-
-
-.round {
-  border-radius: 999px;
-}
-
-
-.button-container {
-  position: relative;
-  text-align: center;
-}
-
-
-//button {
-//  padding: 10px 20px;
-//  font-size: 16px;
-//  background-color: #0074cc;
-//  color: #fff;
-//  border: none;
-//  cursor: pointer;
-//  position: relative;
-//  overflow: hidden;
-//  z-index: 1;
-//  transition: transform 0.3s, opacity 0.3s;
-//}
-
-/* 按钮点击效果 */
-button::before {
-  content: '';
+.tooltipArrow {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 116, 204, 0.5);
-  border-radius: 5px;
-  transform: scale(0);
-  opacity: 0;
-  transition: transform 0.3s, opacity 0.3s;
+  width:0;
+  height:0;
+  border-style: solid;
 }
 
-.button-container.clicked button {
-  transform: scale(1.2); /* 按钮主体扩散效果 */
+ .tooltipArrow.top {
+  border-width: 8px 8px 0 8px;
+  //border-color: var(--ayong-bolck) transparent transparent transparent;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.button-container.clicked button::before {
-  transform: scale(2); /* 残影扩散效果 */
-  opacity: 1;
+ .tooltipArrow.bottom {
+  border-width: 0 8px 8px 8px;
+  //border-color: transparent transparent var(--ayong-bolck) transparent;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
+ .tooltipArrow.left {
+  border-width: 8px 0 8px 8px;
+  //border-color: transparent transparent transparent var(--ayong-bolck);
+  top: 50%;
+  right: -8px;
+  transform: translateY(-50%);
+}
+
+ .tooltipArrow.right {
+  border-width: 8px 8px 8px 0;
+  //border-color: transparent var(--ayong-bolck) transparent transparent;
+  top: 50%;
+  left: -8px;
+  transform: translateY(-50%);
+}
+//超出2行换行省略
+.tooltip .tooltip-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
+
+
+
 

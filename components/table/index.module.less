@@ -6,7 +6,6 @@
   margin: 20px 0;
   padding: 10px;
   box-sizing: border-box;
-  overflow: hidden;
   border-spacing: 0;
   border-collapse: collapse;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -23,7 +22,7 @@
     border: none;
     font-weight: 600;
     text-align: left;
-    background-color: var(--ayong-light);
+    background-color: var(--ayong-grey-crescent);
 
     tr {
       box-sizing: border-box;
@@ -66,7 +65,7 @@
       &:hover {
         //字体颜色加深 透明度降低
         color: var(--ayong-carbon-gray);
-        opacity: 0.5;
+        // opacity: 0.5;
         background-color: var(--ayong-premium-grey);
       }
     }
@@ -107,3 +106,10 @@
   color: #8aabec;
 }
 
+
+.showOverflowTooltip{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

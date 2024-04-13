@@ -130,7 +130,7 @@ const TimePicker: TimePickerProps = ({
       </div>
 
 
-      <div style={{display: 'flex', justifyContent: "flex-end"}}>
+      <div style={{display: 'flex', justifyContent: "flex-end",marginBottom:'8px'}}>
         <Button size='mini' style={{marginRight: '10px'}} onClick={onCancel}>取消</Button>
         <Button size='mini' type='primary' onClick={onSure}>确定</Button>
       </div>

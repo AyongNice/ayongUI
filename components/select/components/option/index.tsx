@@ -1,10 +1,10 @@
 import {Options, OptionsParma} from "../../../index.d";
 import selectStyle from "./index.module.less";
 import {Right, Empty} from '../../../icon/icon.ts'
-import React, {useEffect} from "react";
+import React from "react";
 
 
-const Option = ({options, mode, optionRender, search, searchTerm, onClick, selectedValues = []}: OptionsParma) => {
+const Option = ({options,optionRender, search, searchTerm, onClick, selectedValues = []}: OptionsParma) => {
 
     const getClassName = (option: Options, index: number): string => {
       if (!Array.isArray(selectedValues)) {
@@ -26,7 +26,7 @@ const Option = ({options, mode, optionRender, search, searchTerm, onClick, selec
       onClick(option);
     }
     const filteredOptions = search ? options.filter(option =>
-      option.value.toLowerCase().includes(searchTerm.toLowerCase())
+      option.value.toLowerCase().includes(searchTerm?.toLowerCase())
     ) : options;
     return (
       <>
