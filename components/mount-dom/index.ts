@@ -1,8 +1,6 @@
 import React, {isValidElement, DetailedReactHTMLElement, ReactNode, FunctionComponent, HTMLAttributes} from "react";
-// import {createRoot} from "react-dom/client";
-
-import ReactDOM from 'react-dom'
-
+import {createRoot} from "react-dom/client";
+import ReactDOM from 'react-dom';
 import {MountProps} from './index.d';
 
 let id = 'notification-portal'
@@ -63,7 +61,6 @@ const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPl
       ...props,
       style: {[YAxisPlacement]: initialTop + 'px', ...props.style},
     })
-
     ReactDOM.render(notification,cloneNode)
     // const root = createRoot(cloneNode as HTMLElement);
     // root.render(notification);
