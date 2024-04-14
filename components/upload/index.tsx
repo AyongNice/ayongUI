@@ -13,8 +13,8 @@ import messages from '../message/index.tsx'
 
 
 const templateMode = {
-    'default': ({handleButtonClick, uplaodText, disabled}) => {
-        return <Button disabled={disabled} onClick={handleButtonClick}><Uploads/> {uplaodText}
+    'default': ({handleButtonClick,size, uplaodText, disabled}) => {
+        return <Button size={size} disabled={disabled} onClick={handleButtonClick}><Uploads/> {uplaodText}
         </Button>
     },
     'avatar': ({handleButtonClick, disabled}) => {
@@ -31,6 +31,7 @@ const Upload: React.FC<UploadProps> = ({
                                            maxFileSize = null,
                                            accept = '',
                                            data = {},
+                                           size,
                                            multiple = false,
                                            disabled = false,
                                            maxCount = null,
@@ -240,7 +241,8 @@ const Upload: React.FC<UploadProps> = ({
         {typeof uplaodRender === 'function' ? uplaodRender(handleButtonClick) : templateMode[mode]({
             handleButtonClick,
             uplaodText,
-            disabled
+            disabled,
+            size
         })}
         {
             mode === 'avatar' ? <AvatarList
