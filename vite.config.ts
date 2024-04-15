@@ -41,7 +41,6 @@ export default defineConfig({
     ],
     //打包压缩
     build: {
-        outDir: 'ayongUI',
         lib: {
             entry: path.resolve(__dirname, './index.ts'), // 组件库入口文件
             name: 'AyongUI', // 组件库的全局名称
