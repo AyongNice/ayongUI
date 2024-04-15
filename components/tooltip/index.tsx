@@ -46,9 +46,7 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
     '-webkit-box-orient': 'vertical',
   };
 
-  useEffect(() => {
-    console.log(color);
-  }, [color]);
+ 
   const textRef = useRef(null);
 
   const [textHegith, setTextHegith] = useState(36);

@@ -87,7 +87,6 @@ export class FormStore {
     this.store = {...this.store, ...values};
     if (this.updateValue) this.updateValue(this.store, 'set');
 
-    console.log('setFieldsValue', this.store,values)
   }
   setCallbacks = (callbacks: { [key: string]: Function }) => {
   };

@@ -20,9 +20,7 @@ export default defineConfig({
                 for (const fileName in bundle) {
                     if (bundle[fileName].type === 'chunk') {
                         const format = fileName.split('.')[1]; // 提取格式
-                        console.log('format', format)
                         const outputDir = formatOutputDirs[format];
-                        console.log('outputDir', outputDir)
 
 
                         if (outputDir) {

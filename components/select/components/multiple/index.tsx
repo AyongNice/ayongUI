@@ -40,9 +40,7 @@ const Multiple = ({
     event.stopPropagation();
     handleDeltselectedValues(index)
   }
-  useEffect(() => {
-    console.log(searchTerm);
-  }, [searchTerm]);
+   
   // const selectedValuesList = ? selectedValues : selectedValues
 
   return <div onClick={focus} className={selectStyle.customSelectSelector}>

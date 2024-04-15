@@ -43,9 +43,7 @@ const List = React.forwardRef(({
     }
   };
 
-  useEffect(() => {
-    console.log(pageArr)
-  }, [pageArr])
+ 
 
   useImperativeHandle(ref, () => ({handleSkipForward, handleSkipBackward}))
   const renderPageNumbers = () => {

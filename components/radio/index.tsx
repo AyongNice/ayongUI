@@ -135,7 +135,6 @@ const RadioGroup = ({
 }: RadioProps) => {
   const [select, setSelect] = useState(value);
   const length = React.Children.count(children) - 1;
-  console.log('size', size);
 
   const _onChange = (_value) => {
     onChange(_value);

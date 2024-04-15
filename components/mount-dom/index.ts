@@ -57,7 +57,6 @@ const MountDom = (props: MountDomProps) => {
     const length = notificationState.filter(_ => _.container.getAttribute('make') === make).length
 
     const initialTop: number = length * baseHieght; // 设置初始top值，乘机基础高度根据需求调整
-   console.log('props.style',props.style);
    
     const notification: DetailedReactHTMLElement<any, HTMLElement> = React.createElement(props.element, {
       onAyongClose,
