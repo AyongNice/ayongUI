@@ -10,12 +10,13 @@
   align-items: center;
   justify-content: space-between;
   background: none;
+  outline: none !important;
   margin: 0;
   cursor: pointer;
   transition: all 0.5;
 }
 
-.icon{
+.icon {
   margin-right: 8px;
 }
 .mutual {
@@ -57,7 +58,7 @@
   background: none;
 }
 .text {
-  border: 0;
+  border: 1px solid var(--ayong-primary);
   padding: 10px 0;
   color: var(--ayong-primary);
 }
@@ -146,11 +147,11 @@
 //   transform: scale(0);
 // }
 
-.button-container.clicked button {
-  transform: scale(1.2); /* 按钮主体扩散效果 */
-}
+// .button-container.clicked button {
+//   transform: scale(1.2); /* 按钮主体扩散效果 */
+// }
 
-.button-container.clicked button::before {
-  transform: scale(2); /* 残影扩散效果 */
-  opacity: 1;
-}
+// .button-container.clicked button::before {
+//   transform: scale(2); /* 残影扩散效果 */
+//   opacity: 1;
+// }

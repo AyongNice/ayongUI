@@ -64,7 +64,7 @@ const Button = (props: ButtonProps) => {
     >
       {loading && <Loading />}
       {icon && React.createElement(icon.type, { className: but.icon })}{' '}
-      {children}
+      {children || text}
     </button>
   );
 };
