@@ -8,7 +8,6 @@ import { useDebounce } from '../../utils/index.ts';
 import { Loading } from '../icon/icon.ts';
 import { ButtonProps } from './index.d';
 
-
 const Button = (props: ButtonProps) => {
   const {
     style = {},
@@ -63,7 +62,10 @@ const Button = (props: ButtonProps) => {
       type={htmlType}
     >
       {loading && <Loading />}
-      {icon && React.createElement(icon.type, { className: but.icon })}{' '}
+      {icon &&
+        React.createElement(icon.type, {
+          className: `${type !== 'default' ? but.iconWihe : but.icon}`,
+        })}{' '}
       {children || text}
     </button>
   );

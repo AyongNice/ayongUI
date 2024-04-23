@@ -1,6 +1,6 @@
 {
   "name": "ayongui",
-  "version": "0.0.7",
+  "version": "1.0.3",
   "main": "./cjs/index.js",
   "module": "./es/index.js",
   "browser": "./umd/index.js",
