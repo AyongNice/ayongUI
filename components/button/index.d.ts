@@ -4,6 +4,7 @@ export interface ButtonProps {
   style?: React.CSSProperties; // 自定义样式
   time?: number; // 防抖时间设置 0 为不防抖
   href?: string; // 跳转连接
+  text?: string; // 按钮文案
   className?: string; // 自定义样式类名
   children: React.ReactNode; // 按钮内容
   disabled?: boolean; // 禁用

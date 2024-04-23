@@ -110,7 +110,6 @@ const CloneElement = forwardRef(
         itemRef[FatherName][childName] = React.createRef();
         return [FatherName, childName];
       } else {
-        console.log(itemRef, child.props.name);
 
         itemRef[child.props.name] = React.createRef();
         _fromDate[child.props.name] = initialValues[child.props.name] || value;

@@ -1,7 +1,6 @@
-import React, {isValidElement, DetailedReactHTMLElement, ReactNode, FunctionComponent, HTMLAttributes} from "react";
-import {createRoot} from "react-dom/client";
+import React, { DetailedReactHTMLElement} from "react";
 import ReactDOM from 'react-dom';
-import {MountProps} from './index.d';
+import {MountProps,MountDomProps} from './index.d';
 
 let id = 'notification-portal'
 
@@ -26,8 +25,10 @@ const createNotificationPortal = async (make) => {
 };
 
 
+
+
 const notificationState: MountProps[] = [];
-const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPlacement?: string; }) => {
+const MountDom = (props: MountDomProps) => {
   const {YAxisPlacement = 'top'} = props;
   const make = props.placement || 'message';
   const baseHieght: number = props.baseHieght || 70
@@ -56,6 +57,7 @@ const MountDom = (props: { onClose?: any; element?: any; style?: Object; YAxisPl
     const length = notificationState.filter(_ => _.container.getAttribute('make') === make).length
 
     const initialTop: number = length * baseHieght; // 设置初始top值，乘机基础高度根据需求调整
+   
     const notification: DetailedReactHTMLElement<any, HTMLElement> = React.createElement(props.element, {
       onAyongClose,
       ...props,

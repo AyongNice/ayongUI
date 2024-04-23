@@ -1,14 +1,13 @@
 {
-  "name": "ayongUI",
-  "version": "1.0.0",
+  "name": "ayongui",
+  "version": "1.0.3",
   "main": "./cjs/index.js",
   "module": "./es/index.js",
   "browser": "./umd/index.js",
   "typings": "./index.d.ts",
   "style": "./style.css",
   "scripts": {
-    "build": "vite build",
-    "prepublishOnly": "npm run build"
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
@@ -31,23 +30,17 @@
     "react组件库"
   ],
   "license": "ISC",
-  "files": [
-    "dist",
-    "package.json",
-    "index.d.ts",
-    "README.md"
-  ],
-  "devDependencies":{
+  "devDependencies": {
     "@vitejs/plugin-react-refresh": "^1.3.6",
     "vite": "^4.5.0",
     "vite-plugin-dts": "^3.6.3",
     "vite-plugin-style-import": "^2.0.0"
   },
   "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "react": ">=16.8.3",
+    "react-dom": ">=16.8.3"
   },
   "dependencies": {
-    
   }
+
 }

@@ -62,8 +62,11 @@ const Button = (props: ButtonProps) => {
       type={htmlType}
     >
       {loading && <Loading />}
-      {icon && React.createElement(icon.type, { className: but.icon })}{' '}
-      {children}
+      {icon &&
+        React.createElement(icon.type, {
+          className: `${type !== 'default' ? but.iconWihe : but.icon}`,
+        })}{' '}
+      {children || text}
     </button>
   );
 };

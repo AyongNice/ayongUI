@@ -38,13 +38,11 @@ const UnfoldButton = ({
               </React.Fragment>
               : (
                 <Button
-                  size="mini"
                   style={{
                     width: '15px',
                     height: '15px',
-                    lineHeight: '15px',
-                    textAlign: 'center',
                     padding: 0,
+                    display: 'inline-block'
                   }}
                   key={rowKeysIndex}
                   onClick={() => onClickExpand(index)}

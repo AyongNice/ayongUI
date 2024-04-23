@@ -95,13 +95,11 @@ const Input = (props: InputProps) => {
   const [isComposing, setIsComposing] = useState(false);
 
   const handleCompositionStart = () => {
-    console.log('start', isComposing)
     setIsComposing(true);
   };
 
   const handleCompositionEnd = () => {
     setIsComposing(false);
-    console.log('end', isComposing)
     // 延迟一段时间后再触发 onChange 方法
 
   };

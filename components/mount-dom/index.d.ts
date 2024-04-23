@@ -4,8 +4,15 @@
  *@param  element 传入的组件中 必须有onAyongClose方法
  */
 export interface MountProps {
-    onClose?: () => void;
-    element: (options: {
-        onAyongClose: () => void;
-    }) => React.ReactNode;
+  onClose?: () => void;
+  element: (options: { onAyongClose: () => void }) => React.ReactNode;
+}
+
+
+export interface MountDomProps {
+  [key: string]: any;
+  onClose?: () => void; //关闭方法
+  element?: HTMLElement; //挂载的函数组件
+  style?: React.CSSProperties; //样式
+  YAxisPlacement?: 'top' | 'bottom'; // 挂载Dom在界面的定位 类型 top 从上面出现、、、
 }

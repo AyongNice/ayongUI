@@ -30,7 +30,7 @@ interface EventModal {
   onCancel: Function;//点击取消按钮
 }
 
-export interface ConfirmProps implements ModalProps, EventModal {
+export interface ConfirmProps extends ModalProps, EventModal {
   content: string;//API调用弹框内容
   okText: string;//API调用弹框确定按钮
   cancelText: string;//API调用弹框取消按钮

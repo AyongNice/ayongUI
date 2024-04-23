@@ -22,7 +22,6 @@ const reactCloneElement = ({
   onChange,
   props,
 }: CloneElementProps) => {
-  console.log('props', props);
 
   if (Array.isArray(childSource)) {
     return React.Children.map(childSource, (child) => {
@@ -292,7 +291,6 @@ const FormItem = React.forwardRef(
 
     // 处理完规则后再克隆子元素
     let clonedChild = {};
-    console.log('children', size);
 
     if (typeof children === 'function') {
       clonedChild = children({
