@@ -3,7 +3,6 @@
   position: relative;
   display: inline-block;
 }
-
 .main {
   width: max-content;
   height: 35px;
@@ -16,102 +15,65 @@
   font: 400 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   border: 1px solid var(--ayong-grey);
   position: relative;
-
-
-  input {
-    outline: none;
-    border: none;
-    background: transparent;
-    color: var(--ayong-dark-green-gray);
-
-  }
-
-  &:hover {
-    border: 1px solid var(--ayong-primary);
-
-    .pickerCollapse, .pickerWrong {
-      fill: var(--ayong-primary);
-    }
-  }
-
-
 }
-
-.hoverActive {
-
-
-  &::after {
-    transition: all .5s;
-    position: absolute;
-    content: '';
-    width: 40%;
-    height: 1px;
-    bottom: 0;
-    background: var(--ayong-primary);
-  }
+.main input {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: var(--ayong-dark-green-gray);
 }
-
-.hoverActiveLeft {
-  &::after {
-    transform: translateX(120%);
-  }
+.main:hover {
+  border: 1px solid var(--ayong-primary);
 }
-
-.hoverActiveRight {
-  &::after {
-    transform: translateX(0);
-  }
+.main:hover .pickerCollapse,
+.main:hover .pickerWrong {
+  fill: var(--ayong-primary);
 }
-
-.startInput {
-  //width: 123px;
+.hoverActive::after {
+  transition: all 0.5s;
+  position: absolute;
+  content: '';
+  width: 40%;
+  height: 1px;
+  bottom: 0;
+  background: var(--ayong-primary);
 }
-
+.hoverActiveLeft::after {
+  transform: translateX(120%);
+}
+.hoverActiveRight::after {
+  transform: translateX(0);
+}
 .swapright {
   position: relative;
   right: 10px;
 }
-
 .pickerWrong {
   display: none;
-
 }
-
-.hoverMain&:hover {
-  & {
-    .pickerCollapse {
-      display: none;
-    }
-  }
-
-  & {
-    .pickerWrong {
-      display: block;
-    }
-  }
+.hoverMain:hover .pickerCollapse {
+  display: none;
 }
-
-
+.hoverMain:hover .pickerWrong {
+  display: block;
+}
 /** **/
 .baseCalendar {
   display: block;
-  transition: all .5s;
+  transition: all 0.5s;
   position: absolute;
   left: 0;
   top: 55px;
   overflow: hidden;
 }
-
 .baseCalendarNone {
   height: 0;
   padding: 0;
   border: 0 !important;
 }
-
 .baseCalendarShow {
   height: max-content;
 }
-
 .dropdown {
   display: flex;
   justify-content: space-between;
@@ -122,27 +84,19 @@
   z-index: var(--ayong-zindex3);
   overflow: hidden;
   background: var(--ayong-light);
-
-  .transverseBox {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
 }
-
+.dropdown .transverseBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .startInput {
   position: relative;
-
-  &::after {
-    position: absolute;
-    content: '';
-    width: 100px;
-    height: 1px;
-    background: var(--ayong-primary);
-
-  }
 }
-
-.SHM {
-  //background: #8e8e8e;
+.startInput::after {
+  position: absolute;
+  content: '';
+  width: 100px;
+  height: 1px;
+  background: var(--ayong-primary);
 }

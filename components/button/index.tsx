@@ -1,7 +1,6 @@
 import React from 'react';
 import but from './index.module.less';
-//封装Button组件
-// @ts-ignore
+ 
 
 import coomStlye from '../../config/style.module.less';
 import { useDebounce } from '../../utils/index.ts';
@@ -47,7 +46,7 @@ const Button = (props: ButtonProps) => {
 
   const styleClassName: string = Object.values(dynamicStyles).join(' ');
 
-  // if()
+ 
   return (
     <button
       style={{

@@ -1,5 +1,3 @@
-//@import "../../config/style.module.less";
-
 .button {
   font-size: var(--ayong-default-font-size);
   border-radius: var(--ayong-border-radius);
@@ -15,7 +13,6 @@
   cursor: pointer;
   transition: all 0.5;
 }
-
 .icon {
   fill: var(--ayong-dark-green-gray) !important;
   margin-right: 8px;
@@ -24,40 +21,24 @@
   fill: var(--ayong-font-light) !important;
   margin-right: 8px;
 }
-.mutual {
-  &:hover {
-    //触摸颜色变浅色
-    opacity: 0.9;
-  }
-
-  &:active {
-    //css颜色变亮
-    filter: brightness(1.1);
-  }
+.mutual:hover {
+  opacity: 0.9;
 }
-
-//禁用手图标
+.mutual:active {
+  filter: brightness(1.1);
+}
 .notAllowed {
   cursor: not-allowed;
-
-  &:active {
-    //重置按压变化
-    opacity: 1;
-  }
 }
-
-//button大小 使用padding 通过组件props参数枚举到对应 className
-.default {
+.notAllowed:active {
+  opacity: 1;
 }
-
 .primary {
   color: var(--ayong-font-light);
   border: 1px solid var(--ayong-primary);
   background: var(--ayong-primary);
 }
-
 .dashed {
-  //虚线 边框
   border: 1px dashed var(--ayong-primary);
   color: var(--ayong-primary);
   background: none;
@@ -66,96 +47,54 @@
   border: 0;
   color: var(--ayong-primary);
 }
-//危险按钮
 .error {
   color: var(--ayong-font-light);
   border: 1px solid var(--ayong-error);
   background: var(--ayong-error);
 }
-
-//警告按钮
 .warn {
   color: var(--ayong-font-light);
   border: 1px solid var(--ayong-warn);
   background: var(--ayong-warn);
 }
-
-//安全健康按钮
 .safe {
   color: var(--ayong-font-light);
   border: 1px solid var(--ayong-safe);
   background: var(--ayong-safe);
 }
-
 .small {
   font-size: var(--ayong-font-small-size);
   padding: var(--ayong-small-size);
 }
-
 .large {
   padding: var(--ayong-large-size);
   font-size: var(--ayong-large-font-size);
 }
-
 .mini {
   font-size: var(--ayong-font-mini-size);
   padding: var(--ayong-mini-size);
 }
-
 .circle {
-  //自适应圆形 通过padding
   padding: 10px 10px;
   border-radius: 50%;
 }
-
-//直角按钮
-
 .strong {
   border-radius: 0;
 }
-
 .round {
   border-radius: 999px;
 }
-
 .button-container {
   position: relative;
   text-align: center;
 }
-
 .loading {
   opacity: 0.7;
 }
 
-//button {
-//  padding: 10px 20px;
-//  font-size: 16px;
-//  background-color: #0074cc;
-//  color: #fff;
-//  border: none;
-//  cursor: pointer;
-//  position: relative;
-//  overflow: hidden;
-//  z-index: 1;
-//  transition: transform 0.3s, opacity 0.3s;
-//}
-
+.qwe {
+  a {
+    color: beige;
+  }
+}
 /* 按钮点击效果 */
-// .button::before {
-//   content: '';
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   background: rgba(0, 116, 204, 0.5);
-//   border-radius: 5px;
-//   transform: scale(0);
-// }
-
-// .button-container.clicked button {
-//   transform: scale(1.2); /* 按钮主体扩散效果 */
-// }
-
-// .button-container.clicked button::before {
-//   transform: scale(2); /* 残影扩散效果 */
-//   opacity: 1;
-// }

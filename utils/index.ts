@@ -31,7 +31,7 @@ export const log = (test: boolean, ...arg: any[]) => {
   console.log(arg)
 }
 // @ts-ignore
-export const isPromise = async (Fun: (() => boolean) | (() => Promise<boolean>) = () => false, ...args: any[]) => {
+export const isPromise = async (Fun: () => Promise<boolean> | boolean, ...args: any[]) => {
   //return 函数结果 并且判断是否是promise
   //判断 是否Promise类型
   return new Promise(async (resolve, reject) => {

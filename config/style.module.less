@@ -1,116 +1,88 @@
-//全局公共样式文件
-
-//主题色
-@theme: #8aabec;
-
-//安全
-@safe: #8e8e8e;
-
-//危险
-@dangerous: #ad0000;
-
-//警告
-@warn: #d6af0c;
-
-@font-color: #fff;
-@font-size: 15px;
 :root {
-  --ayong-primary: #8aabec; /* 全局主题色 */
-  --ayong-normal-height: 32px; /* 默认高度 */
-  --ayong-large-height: 40px; /* 大尺度 */
-  --ayong-small-height: 24px; /* 小尺度 */
+  --ayong-primary: #8aabec;
+  /* 全局主题色 */
+  --ayong-normal-height: 32px;
+  /* 默认高度 */
+  --ayong-large-height: 40px;
+  /* 大尺度 */
+  --ayong-small-height: 24px;
+  /* 小尺度 */
   --ayong-font-size14: 14px;
   --ayong-safe: #8e8e8e;
   --ayong-error: #ff4d4f;
   --ayong-warn: #d6af0c;
   --ayong-info: #1677ff;
-  --ayong-radius: 5px; //所有组件圆角
-  --ayong-selected-font-color: #ffffff; /* 选中文字色 */
-  --ayong-selected-bg-color: #8aabec; /* 选中背景色 */
-  --ayong-disabled-font-color: rgba(0, 0, 0, 0.25); /* 禁用文字色 */
-  --ayong-disabled-bg-color: rgba(0, 0, 0, 0.04); /* 禁用背景色 */
-  --ayong-font-light: #fff; //深色背景中的字体色
-  --ayong-font-dark: #373c45; //浅色背景中的字体色
+  --ayong-radius: 5px;
+  --ayong-selected-font-color: #ffffff;
+  /* 选中文字色 */
+  --ayong-selected-bg-color: #8aabec;
+  /* 选中背景色 */
+  --ayong-disabled-font-color: rgba(0, 0, 0, 0.25);
+  /* 禁用文字色 */
+  --ayong-disabled-bg-color: rgba(0, 0, 0, 0.04);
+  /* 禁用背景色 */
+  --ayong-font-light: #fff;
+  --ayong-font-dark: #373c45;
   --ayong-light: #fff;
-  --ayong-bolck: #000; //黑夜色
-
+  --ayong-bolck: #000;
   --ayong-font-size: 15px;
-
-  --ayong-mini-size: 4px 10px; /* 最小尺度 */
+  --ayong-mini-size: 4px 10px;
+  /* 最小尺度 */
   --ayong-font-mini-size: 10px;
-  
-
   --ayong-font-small-size: 12px;
   --ayong-small-size: 3px 5px;
-
   --ayong-large-size: 10px 25px;
   --ayong-large-font-size: 17px;
-
   --ayong-default-input-size: 5px 3px;
   --ayong-small-input-size: 3px 3px;
   --ayong-large-input-size: 10px 3px;
   --ayong-default-size: 5px 17px;
   --ayong-default-font-size: 14px;
-  --ayong-ss-hh-mm-button-size:4px 10px;
-
-
+  --ayong-ss-hh-mm-button-size: 4px 10px;
   --ayong-midle-size: 8px;
   --ayong-border-radius: 5px;
-  --ayong-icon-size: 15px; //不许动它的大小!!!!⚠️15px
+  --ayong-icon-size: 15px;
   --ayong-table-thead-color: #f5f5f5;
   --ayong-tooltip-bg-color: rgba(0, 0, 0, 0.6);
-  --ayong-beige: #EDF9E6FF; //米黄 message组件
-  --ayong-leaf-yellow: #d1eac1; //叶黄  message组件
-  --ayong-apricot-yellow: #58BA2DFF; //杏黄  message组件
+  --ayong-beige: #EDF9E6FF;
+  --ayong-leaf-yellow: #d1eac1;
+  --ayong-apricot-yellow: #58BA2DFF;
   --ayong-message-error: #f79797;
-  --ayong-grey: #dcdfe6; //灰色
-  --ayong-plaster-grey: #d3d5dc; //墙灰色
+  --ayong-grey: #dcdfe6;
+  --ayong-plaster-grey: #d3d5dc;
   --ayong-primary-grey: #e4ecff;
-  --ayong-primary-grey: #f0f4fd; //主题灰
-  --ayong-premium-grey: #ededed; //高级灰
-  --ayong-stone-gray: #9b9ea4; //石灰色 字体颜色 边框颜色  select字体
-  --ayong-dark-green-gray: #747679; //浅莲灰  table字体
-  --ayong-grey-crescent: #f4f4f5; //月牙灰色
-  --ayong-carbon-gray: #222731; //碳灰色
-  --ayong-zindex0: 666; //全局z-index1
-  --ayong-zindex1: 888; //全局z-index1
-  --ayong-zindex2: 999; //全局z-index2
-  --ayong-zindex3: 1111; //全局z-index3
-
+  --ayong-primary-grey: #f0f4fd;
+  --ayong-premium-grey: #ededed;
+  --ayong-stone-gray: #9b9ea4;
+  --ayong-dark-green-gray: #747679;
+  --ayong-grey-crescent: #f4f4f5;
+  --ayong-carbon-gray: #222731;
+  --ayong-zindex0: 666;
+  --ayong-zindex1: 888;
+  --ayong-zindex2: 999;
+  --ayong-zindex3: 1111;
 }
-
 a {
   text-decoration: inherit;
 }
-
-//button {
-//  cursor: pointer;
-//  border: none;
-//  //取消默认样式
-//}
-
 .textOverflow {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .disabled {
-  //background: var(--ayong-grey-crescent);
   filter: brightness(0.9);
   color: var(--ayong-grey) !important;
   cursor: not-allowed !important;
 }
-
 /**
 // 导出变量 可以在 JSX中 引入该 less变量 通过 命名空间
 例如
  import styles from '../../config/style.module.less';
  styles.theme
  */
-
 :export {
-  theme: @theme;
-  dangerous: @dangerous;
-  warn: @warn;
+  theme: #8aabec;
+  dangerous: #ad0000;
+  warn: #d6af0c;
 }

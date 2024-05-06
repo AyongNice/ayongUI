@@ -1,29 +1,23 @@
-
 .warp {
   width: 200px;
   display: flex;
 }
-
 .rotor {
   position: relative;
   width: 12%;
   padding-bottom: 10%;
   animation: rotato 1s infinite linear;
   -webkit-animation: rotato 4s infinite ease-in-out alternate;
-  transition: all .5s ease-in-out;
-
-  &:hover {
-    transform: scale(1.2);
-  }
+  transition: all 0.5s ease-in-out;
 }
-
+.rotor:hover {
+  transform: scale(1.2);
+}
 .beam {
-
   position: absolute;
   width: 60%;
   height: 85%;
 }
-
 .beam:after {
   position: absolute;
   content: '';
@@ -32,47 +26,35 @@
   background-image: linear-gradient(45deg, transparent 40%, var(--ayong-grey) 41%);
   border-radius: 20%;
   transform: rotate(45deg);
-  //animation: twinkle 1s infinite alternate ease-out;
-  //-webkit-animation: twinkle 1s infinite alternate ease-out;
 }
-
 .active:after {
   background-image: linear-gradient(45deg, transparent 40%, var(--color) 41%);
 }
-
-
-.icon{
+.icon {
   width: 25px;
   height: 25px;
 }
 .divIcon {
   fill: var(--ayong-grey);
 }
-
 .divIconActive {
   fill: gold;
 }
-
 .north {
   transform: rotate(270deg) scaleY(0.5);
 }
-
 .northwest {
   transform: rotate(198deg) scaleY(0.5);
 }
-
 .northeast {
   transform: rotate(342deg) scaleY(0.5);
 }
-
 .west {
   transform: rotate(126deg) scaleY(0.5);
 }
-
 .east {
   transform: rotate(54deg) scaleY(0.5);
 }
-
 @keyframes twinkle {
   0% {
     border-radius: 5px;
@@ -81,7 +63,6 @@
     border-radius: 50px;
   }
 }
-
 @-webkit-keyframes twinkle {
   0% {
     border-radius: 5px;
@@ -90,23 +71,3 @@
     border-radius: 50px;
   }
 }
-
-//@keyframes rotato {
-//  0% {
-//    transform: rotate(0deg);
-//  }
-//  100% {
-//    transform: rotate(72deg);
-//  }
-//}
-//@-webkit-keyframes rotato {
-//  0% {
-//    transform: rotate(0deg);
-//  }
-//  50% {
-//    transform: rotate(72deg);
-//  }
-//  100% {
-//    transform: rotate(-72deg);
-//  }
-//}

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import drawerStyle from './index.module.less'
-import Button from '../button/index.tsx';
 import {Wrongs} from '../icon/icon.ts'
 import {DrawerProps} from "./index.d";
 import ReactDOM from 'react-dom';
