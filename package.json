@@ -1,6 +1,6 @@
 {
   "name": "ayongui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./cjs/index.js",
   "module": "./es/index.js",
   "browser": "./umd/index.js",
@@ -37,10 +37,9 @@
     "vite-plugin-style-import": "^2.0.0"
   },
   "peerDependencies": {
+    "@types/react": "^18.3.1",
     "react": ">=16.8.3",
     "react-dom": ">=16.8.3"
-  },
-  "dependencies": {
   }
 
 }
