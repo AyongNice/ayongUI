@@ -165,11 +165,19 @@ const RangePicker = (props: CalendarProps) => {
       <Input style={{border: 'none'}} className={pickerStyle.startInput} disabled={disabled} value={endValue}
              onChange={() => {
              }} placeholder='请选择结束日期' onFocus={rightFocus}/>
-      <Wrong
-        onClick={onWrong}
-        className={pickerStyle.pickerWrong}
-      />
-      <Cendas className={pickerStyle.pickerCollapse}/>
+      <div style={{
+        width: '26px',
+        height: '26px',
+        display: 'flex',
+        textAlign: 'center',
+        alignItems: "center",
+      }}>
+        <Wrong
+          onClick={onWrong}
+          className={pickerStyle.pickerWrong}
+        />
+        <Cendas className={pickerStyle.pickerCollapse}/>
+      </div>
     </main>
 
     <div
