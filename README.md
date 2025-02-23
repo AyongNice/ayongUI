@@ -3,8 +3,8 @@
 ###### <img width="294" alt="image" src="https://a-yongnice.gitee.io/ayonguidocs/images/AyongUI.png">
 
 ## 在线 组件使用文档 官网地址
+ https://ayongnice.github.io/ayonguidocs
 
-https://a-yongnice.gitee.io/ayonguidocs
 
 ## 关注微信公众号 阿勇学前端
 
