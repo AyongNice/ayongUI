@@ -204,7 +204,7 @@ Modal.error = (props: ModalProps) => {
     element: (data: ModalProps) => <Component {...data} />,
     ...props,
     open: true,
-    style: { width: '30%', top: topMode[placement], ...props.style },
+    style: { width: '30%', top: topMode[props.placement], ...props.style },
     type: 'error',
   });
 };
